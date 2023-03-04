@@ -1,0 +1,85 @@
+.sidebar{
+    .szh-accordion__item-btn{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        font-weight: 600;
+        color: #4154f1;
+        background: #f6f9ff;
+        padding: 10px 15px;
+        border-radius: 4px;
+        border: none;
+    }
+    .szh-accordion__item-panel{
+        ul{
+            li{
+                background-color: transparent;
+            }
+        }
+    }
+}
+.sidebar-menu{
+    font-family: 'Tilt Neon', cursive !important;
+    a{
+        color: #000;
+    }
+    color: black !important;
+}
+.sidebar-data{
+    background-color: #cddfff;
+    font-family: 'Tilt Neon', cursive !important;
+    .sale, .revenue{
+        background-color: white;
+        width: 45%;
+        padding: 20px;
+        font-size: larger;
+        border-radius: 10px;
+        .bscart-p{
+            background-color: #f6f6fe;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50px;
+            .bscart{
+                color: #4154f1;
+                font-size: 40px;
+            }
+        }
+        .bsdollar-p{
+            background-color: #e0f8e9;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50px;
+            .bsdollar{
+                color: #2eca6a;
+                font-size: 40px;
+            }
+        }
+    }
+.user{
+    background-color: white;
+    padding: 20px;
+    font-size: larger;
+    border-radius: 10px;
+    width: 93.5%;
+    margin-top: 20px;
+    .bsuser-p{
+        background-color: #ffecdf;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50px;
+        .bsuser{
+            color: #ff771d;
+            font-size: 40px;
+        }
+    }
+}    
+
+}
+//
+
+
+
+
+
+
