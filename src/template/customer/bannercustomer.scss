@@ -1,0 +1,84 @@
+.banner{
+    position: relative;
+    // min-height: 1800px;
+    .banner-img{
+        // min-height: 1800px;
+        min-height: 500px;
+        background-image: url('../../../public/image/banner/bannermain.jpg');
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        position: relative;
+        
+    }
+    .banner-parent{
+        padding: 10px;
+        height: 150px;
+        .banner-child{
+            background: white;
+            border-radius: 10px;
+            width: 95%;
+            margin: auto;
+            padding: 0;
+            position: relative;
+            top: -161px;
+        }
+    }
+    .carousel-inner{
+        padding: 5px;
+        border-radius: 10px;
+
+        img{
+            border-radius: 10px;
+            
+        }
+    }
+    .slider-mini1, .slider-mini2{
+        height: 50%;
+        img{
+            border-radius: 10px;
+        }
+    }
+    .slider-mini1{
+        padding: 5px 5px 2px 2px;
+    }
+    .slider-mini2{
+        padding: 2px 5px 5px 2px;
+    }
+    .slider{
+        // height: 100%;
+        padding: 20px;
+
+        .slick-prev{
+            left: 4px;
+            &::before{
+                color: rgb(106, 106, 106);
+                opacity: 1 !important;
+            }
+            z-index: 1;
+        }
+        .slick-next{
+            right: 4px;
+            &::before{
+                color: rgb(106, 106, 106);
+                opacity: 1 !important;
+            }
+        }
+        .slick-prev, .slick-next{
+            top: 50%;
+            background-color: #ffffff;
+            opacity: 0.5;
+            border: 2px solid #d7d7d7;
+            height: 50px;
+            width: 50px;
+            &:hover{
+                opacity: 1;
+                background-color: #ffffff;
+            }
+        }
+        .slider-child{
+            // height: 100%;
+            padding: 0 5px;
+        }
+    }
+}

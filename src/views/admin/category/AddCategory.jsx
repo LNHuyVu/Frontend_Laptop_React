@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import categoryService from "../../../services/category.service";
+import { useNavigate } from "react-router-dom";
 const AddCategory = () => {
+  const navigate = useNavigate();
   const slugname = require('slug')
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
+  // const [slug, setSlug] = useState("");
   const [parentid, setParentid] = useState("0");
   const [status, setStatus] = useState("0");
   const saveUser = (e) => {
@@ -20,53 +22,73 @@ const AddCategory = () => {
       .create(category_create)
       .then((response) => {
         console.log("Created User Successflly!", response.data);
-        // navigate("/", { replace: true });
+        navigate("/dashboard/category", { replace: true });
       })
       .catch((error) => {
         console.log("Songthing went wrong", error);
       });
   };
+  //Clear
+  const handleClear=()=>{
+    setName('');
+  }
+  //Load parentid
+  const [category, setCategory] = useState([]);
+  useEffect(() => {
+    init();
+  }, []);
+  const init = () => {
+    categoryService
+      .getAll("ALL")
+      .then((response) => {
+        console.log("Get Data OK", response.data);
+        setCategory(response.data.category);
+      })
+      .catch((error) => {
+        console.log("Get Data Failed");
+      });
+  };
+  console.log("category", category);
   return (
     <div>
       <h3 className="text-center">Thêm Mới Danh Mục Sản Phẩm</h3>
       <div className="row">
         <div className="col-md-6">
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">
+          <div className="mb-3">
+            <label for="exampleInputEmail1" className="form-label">
               Tên danh mục
             </label>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <div class="mb-3">
-            <label for="" class="form-label">
+          <div className="mb-3">
+            <label for="" className="form-label">
               Chọn cấp cha
             </label>
             <select
-              class="form-select"
+              className="form-select"
               aria-label="Default select example"
               name="parentid"
               onChange={(e) => setParentid(e.target.value)}
             >
-              {/* <option selected>Parentid</option> */}
               <option value="0">Nomal</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              {category.map(item=>(
+                <option value={item.id}>{item.name}</option>
+              ))}
             </select>
           </div>
 
-          <div class="mb-3">
-            <label for="" class="form-label">
+          <div className="mb-3">
+            <label for="" className="form-label">
               Trạng thái
             </label>
             <select
-              class="form-select"
+              className="form-select"
               aria-label="Default select example"
               name="status"
               onChange={(e) => setStatus(e.target.value)}
@@ -85,7 +107,7 @@ const AddCategory = () => {
           >
             Save
           </button>
-          <button className="btn btn-danger w-100 m-1">Clear</button>
+          <button onClick={()=>{handleClear()}} className="btn btn-danger w-100 m-1">Clear</button>
         </div>
       </div>
     </div>

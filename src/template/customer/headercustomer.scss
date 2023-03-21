@@ -1,0 +1,59 @@
+.header{
+    background-color: rgb(0, 94, 255);
+    color: white;
+    font-size: large;
+    font-weight: bold;
+    .nav-pills .nav-link
+    {
+        color: white;
+    }
+    .row{
+        align-items: center;
+        .col-md-8{
+            max-width: 770px;
+        }
+    }
+    .logo{
+        img{
+            max-height: 56px;
+        }
+    }
+    .search{
+        background-color: #f7d800;
+        // border: 1px solid orange;
+        width: 40%;
+        margin:auto;
+        padding:5px 0;
+        border-radius: 50px;
+        justify-content: center;
+        align-items: center;
+        input{
+            width: 95%;
+            background: transparent;
+            border: none;
+            &:focus{
+                background-color: none;
+                outline: none;
+            }
+        }
+        .icon-search{
+        }
+        div{
+            padding: 0;
+        }
+        
+    }
+    .account-cart{
+        .link{
+            display: grid;
+        }
+        span{
+            padding-left: 20px;
+            border-radius: 5px;
+            // background: white;
+            font-size: 14px;
+            // font-weight: bold;
+
+        }
+    }
+}

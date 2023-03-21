@@ -7,12 +7,11 @@ import HeaderCustomer from './HeaderCustomer'
 import HomeCustomer from './HomeCustomer'
 
 
-
 const RouteCustomer = () => {
   return (
     <>
     <HeaderCustomer/>
-    <div className="main-content container-xxl">
+    <div className="main-content container-xxl p-0">
     <Routes>
       <Route path="/" element={<HomeCustomer/>} />
       <Route path="/product" element={<ProductListCus/>} />
