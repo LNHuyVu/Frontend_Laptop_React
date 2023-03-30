@@ -6,6 +6,9 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import "./listproduct.scss";
 import productService from "../../../services/product.service";
+import productImgService from "../../../services/productImg.service";
+import productOptionService from "../../../services/productOption.service";
+import productStoreService from "../../../services/productStore.service";
 import productValueService from "../../../services/productValue.service";
 import { Link } from "react-router-dom";
 const ListProduct = () => {
@@ -15,7 +18,7 @@ const ListProduct = () => {
   useEffect(() => {
     init();
     initValue();
-  },[]);
+  }, []);
   const initValue = () => {
     productValueService
       .getAll("ALL")
@@ -26,10 +29,7 @@ const ListProduct = () => {
         console.log(error);
       });
   };
-  console.log("Value", productValue);
-  // useEffect(() => {
-  //   init();
-  // }, []);
+  // console.log("Value", productValue);
   const init = () => {
     productService
       .getAll("ALL")
@@ -42,7 +42,7 @@ const ListProduct = () => {
       });
   };
 
-  console.log("product", product);
+  // console.log("product", product);
   //handle status
   const handleStatus = (e, id, status) => {
     e.preventDefault();
@@ -53,7 +53,7 @@ const ListProduct = () => {
     productService
       .update(product_update)
       .then((response) => {
-        console.log("data updated successfuly", response.data);
+        // console.log("data updated successfuly", response.data);
         // navigate("/", { replace: true });
         init();
       })
@@ -62,11 +62,38 @@ const ListProduct = () => {
       });
   };
   //Handle Delete
-  const handleDelete = (id) => {
+  const handleDelete = (id, proId) => {
     productService
       .remove(id)
       .then((reponse) => {
         console.log("Delete OK", reponse.data);
+        init();
+      })
+      .catch((error) => {
+        console.log("Delete Not OK", error);
+      });
+    productOptionService
+      .remove(proId)
+      .then((reponse) => {
+        console.log("Delete Option OK", reponse.data);
+        init();
+      })
+      .catch((error) => {
+        console.log("Delete Not OK", error);
+      });
+    productImgService
+      .remove(proId)
+      .then((reponse) => {
+        console.log("Delete IMG OK", reponse.data);
+        init();
+      })
+      .catch((error) => {
+        console.log("Delete Not OK", error);
+      });
+    productStoreService
+      .remove(proId)
+      .then((reponse) => {
+        console.log("Delete Store OK", reponse.data);
         init();
       })
       .catch((error) => {
@@ -77,7 +104,7 @@ const ListProduct = () => {
     productValueService
       .remove(id)
       .then((reponse) => {
-        console.log("Delete OK", reponse.data);
+        // console.log("Delete OK", reponse.data);
         init();
       })
       .catch((error) => {
@@ -89,7 +116,7 @@ const ListProduct = () => {
     <div className="card-body">
       <div className="add-item text-end m-1">
         <Link to="./add-product">
-          <button className="btn-info">Thêm Sản Phẩm </button>
+          <button className="btn btn-info">Thêm Sản Phẩm </button>
         </Link>
       </div>
       <Tabs
@@ -117,9 +144,15 @@ const ListProduct = () => {
                   <td class="text-center">
                     <input name="checkid" type="checkbox" />
                   </td>
-                  <td>Hình</td>
+                  <td style={{ "max-width": 80 }}>
+                    <img
+                      className="w-100 h-100"
+                      src={item.imgData.link[0]}
+                      alt=""
+                    />
+                  </td>
                   <td>{item.nameProduct}</td>
-                  <td>Giá</td>
+                  <td>{item.price}</td>
                   <td class="text-center date">Sale</td>
                   <td className="text-center action">
                     <div class="d-grid gap-2 d-md-block">
@@ -149,7 +182,7 @@ const ListProduct = () => {
                         </button>
                       </Link>
                       <button
-                        onClick={(e) => handleDelete(item.id)}
+                        onClick={(e) => handleDelete(item.id, item.proId)}
                         class="btn btn-danger m-1 text-center"
                         type="button"
                       >
@@ -169,7 +202,7 @@ const ListProduct = () => {
           Khuyến mãi
         </Tab>
         <Tab eventKey="contact" title="Cấu hình">
-        <table class="table table-bordered" id="myTable">
+          <table class="table table-bordered" id="myTable">
             <thead>
               <th class="text-center" style={{ width: 20 }}>
                 #

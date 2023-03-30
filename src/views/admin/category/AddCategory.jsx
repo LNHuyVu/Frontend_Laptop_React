@@ -6,7 +6,8 @@ const AddCategory = () => {
   const slugname = require('slug')
   const [name, setName] = useState("");
   // const [slug, setSlug] = useState("");
-  const [parentid, setParentid] = useState("0");
+  const [parentId, setParentId] = useState("0");
+  const [createdBy, setCreatedBy] = useState("1");
   const [status, setStatus] = useState("0");
   const saveUser = (e) => {
     e.preventDefault();
@@ -14,10 +15,11 @@ const AddCategory = () => {
     const category_create = {
       name,
       slug:slugname(name),
-      parentid,
+      parentId,
+      createdBy,
       status,
     };
-    console.log(category_create);
+    console.log('Category new',category_create);
     categoryService
       .create(category_create)
       .then((response) => {
@@ -74,7 +76,7 @@ const AddCategory = () => {
               className="form-select"
               aria-label="Default select example"
               name="parentid"
-              onChange={(e) => setParentid(e.target.value)}
+              onChange={(e) => setParentId(e.target.value)}
             >
               <option value="0">Nomal</option>
               {category.map(item=>(

@@ -1,19 +1,17 @@
 import httpClient from "../http-common";
 const getAll = (id) => {
-  return httpClient.get(`/get-all-product?id=${id}`);
+  return httpClient.get(`/get-all-productoption?id=${id}`);
 };
 const create = (data) => {
-  console.log("http", httpClient);
-
-  return httpClient.post("/create-new-product", data);
+  return httpClient.post("/create-new-productoption", data);
 };
 const update = (data) => {
 //   console.log('update', data)
-  return httpClient.put("/edit-product", data);
+  return httpClient.put("/edit-productoption", data);
 };
 const remove = (userId) => {
 //   console.log("data", userId);
-  return httpClient.delete("/delete-product", {
+  return httpClient.delete("/delete-productoption", {
     data: {
       id: userId
     }

@@ -14,14 +14,14 @@ const ListCategory = () => {
     categoryService
       .getAll("ALL")
       .then((response) => {
-        console.log("Get Data OK", response.data);
+        // console.log("Get Data OK", response.data);
         setCategory(response.data.category);
       })
       .catch((error) => {
         console.log("Get Data Failed");
       });
   };
-  console.log("category", category);
+  // console.log("category", category);
   //handle status
   const handleStatus = (e, id, status) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ const ListCategory = () => {
     categoryService
       .update(category_update)
       .then((response) => {
-        console.log("data updated successfully", response.data);
+        // console.log("data updated successfully", response.data);
         // navigate("/", { replace: true });
         init();
       })
@@ -45,7 +45,7 @@ const ListCategory = () => {
     categoryService
       .remove(id)
       .then((reponse) => {
-        console.log("Delete OK", reponse.data);
+        // console.log("Delete OK", reponse.data);
         init();
       })
       .catch((error) => {
@@ -113,7 +113,7 @@ const ListCategory = () => {
                 </div>
               </td>
               <td class="text-center">
-                {item.id}--{item.parentid}
+                {item.id}--{item.parentId}
               </td>
             </tr>
           ))}

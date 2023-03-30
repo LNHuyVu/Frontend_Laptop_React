@@ -82,9 +82,6 @@ const AdminHeader = () => {
                 <Link to="./product/add-product">
                   <li className="nav-link ">Thêm sản phẩm</li>
                 </Link>
-                <Link to="./product/add-product-configuration">
-                  <li className="nav-link ">Thêm cấu hình</li>
-                </Link>
               </ul>
             </AccordionItem>
 

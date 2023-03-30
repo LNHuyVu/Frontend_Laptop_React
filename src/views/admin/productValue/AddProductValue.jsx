@@ -2,12 +2,42 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import productValueService from "../../../services/productValue.service";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+
+///
 const AddProductValue = () => {
   const navigate = useNavigate();
   const [nameValue, setNameValue] = useState("");
   const [parentIdValue, setParentIdValue] = useState("0");
+  const [createdBy, setCreatedBy] = useState("1");
   const [statusValue, setStatusValue] = useState("0");
   const [productValue, setProductValue] = useState([]);
+  //
+  const notifySuccess = () =>
+    toast.success("Thành công!", {
+      position: "top-right",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    const notifyError = () =>
+    toast.error("Thất bại!", {
+      position: "top-right",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  //
   useEffect(() => {
     init();
   }, []);
@@ -27,6 +57,7 @@ const AddProductValue = () => {
     if (parentIdValue == "") setParentIdValue(0);
     const data = {
       nameValue,
+      createdBy,
       parentIdValue,
       statusValue,
     };
@@ -36,10 +67,13 @@ const AddProductValue = () => {
       .then((response) => {
         console.log(response.data);
         console.log("Success OK");
-        navigate("/dashboard/product-configuration", { replace: true });
+
+        notifySuccess();
+        // navigate("/dashboard/product-configuration", { replace: true });
       })
       .catch((error) => {
-        alert('Đã tồn tại cấu hình trên')
+        // alert("Đã tồn tại cấu hình trên");
+        notifyError();
         console.log(error);
       });
   };
@@ -103,6 +137,18 @@ const AddProductValue = () => {
           Lưu
         </button>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

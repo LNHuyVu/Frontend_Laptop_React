@@ -1,0 +1,16 @@
+.product-type {
+  border: 3px solid rgb(3, 254, 41);
+  margin-top: 0.2%;
+  border-radius: 20px;
+  padding: 10px;
+}
+.product-type h3 {
+  border-bottom: 10px double rgb(0, 255, 251);
+}
+
+.product-today {
+  margin: auto;
+}
+.product-today .row {
+  margin: auto;
+}/*# sourceMappingURL=homecustomer.css.map */

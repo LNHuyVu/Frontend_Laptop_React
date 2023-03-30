@@ -1,26 +1,8 @@
-.header {
-  background-color: rgb(0, 94, 255);
-}
-.header .search {
-  background-color: #f7d800;
-  width: 30%;
+.home {
   margin: auto;
-  padding: 5px 0;
-  border-radius: 50px;
-  justify-content: center;
-  align-items: center;
 }
-.header .search input {
-  width: 90%;
-  background: transparent;
-  border: none;
-}
-.header .search input:focus {
-  background-color: none;
-  outline: none;
-}
-.header .search div {
-  padding: 0;
+.home .row {
+  margin: auto;
 }
 
 .footer a {

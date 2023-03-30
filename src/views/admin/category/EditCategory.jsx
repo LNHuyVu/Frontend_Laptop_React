@@ -14,7 +14,7 @@ const EditCategory = () => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   // const [slug, setSlug] = useState("");
-  const [parentid, setParentid] = useState("");
+  const [parentId, setParentId] = useState("");
   const [parentidName, setParentidName] = useState("");
   const [status, setStatus] = useState("0");
   const [category, setCategory] = useState([]);
@@ -30,7 +30,7 @@ const EditCategory = () => {
       .getAll(id)
       .then((response) => {
         setName(response.data.category.name);
-        setParentid(response.data.category.parentid);
+        setParentId(response.data.category.parentId);
         setStatus(response.data.category.status);
       })
       .catch((error) => {
@@ -53,7 +53,7 @@ const EditCategory = () => {
     const category_update = {
       name,
       slug:slugname(name),
-      parentid,
+      parentId,
       status,
       id,
     };
@@ -103,16 +103,16 @@ const EditCategory = () => {
               className="form-select"
               aria-label="Default select example"
               name="parentid"
-              onChange={(e) => setParentid(e.target.value)}
+              onChange={(e) => setParentId(e.target.value)}
             >
               {category
                 .filter((child) => {
-                  return child.id === parentid;
+                  return child.id === parentId;
                 })
                 .map((child, index) => {
                   return (
-                    <option selected value={parentid===0?(0):parentid}>
-                      {parentid === 0 ? ("Nomal") : child.name}
+                    <option selected value={parentId===0?(0):parentId}>
+                      {parentId === 0 ? ("Nomal") : child.name}
                     </option>
                   );
                 })}

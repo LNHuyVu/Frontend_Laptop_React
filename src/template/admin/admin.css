@@ -22,52 +22,8 @@
   color: #000;
 }
 
-.sidebar-data {
-  background-color: #cddfff;
-  font-family: "Tilt Neon", cursive !important;
-}
-.sidebar-data .sale, .sidebar-data .revenue {
-  background-color: white;
-  width: 45%;
-  padding: 20px;
-  font-size: larger;
-  border-radius: 10px;
-}
-.sidebar-data .sale .bscart-p, .sidebar-data .revenue .bscart-p {
-  background-color: #f6f6fe;
-  display: inline-block;
-  padding: 10px;
-  border-radius: 50px;
-}
-.sidebar-data .sale .bscart-p .bscart, .sidebar-data .revenue .bscart-p .bscart {
-  color: #4154f1;
-  font-size: 40px;
-}
-.sidebar-data .sale .bsdollar-p, .sidebar-data .revenue .bsdollar-p {
-  background-color: #e0f8e9;
-  display: inline-block;
-  padding: 10px;
-  border-radius: 50px;
-}
-.sidebar-data .sale .bsdollar-p .bsdollar, .sidebar-data .revenue .bsdollar-p .bsdollar {
-  color: #2eca6a;
-  font-size: 40px;
-}
-.sidebar-data .user {
-  background-color: white;
-  padding: 20px;
-  font-size: larger;
-  border-radius: 10px;
-  width: 93.5%;
-  margin-top: 20px;
-}
-.sidebar-data .user .bsuser-p {
-  background-color: #ffecdf;
-  display: inline-block;
-  padding: 10px;
-  border-radius: 50px;
-}
-.sidebar-data .user .bsuser-p .bsuser {
-  color: #ff771d;
-  font-size: 40px;
+@media only screen and (min-width: 960px) {
+  .bi-list {
+    display: none;
+  }
 }/*# sourceMappingURL=admin.css.map */
