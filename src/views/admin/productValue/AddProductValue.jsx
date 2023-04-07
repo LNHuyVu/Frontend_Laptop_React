@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import productValueService from "../../../services/productValue.service";
 import { ToastContainer, toast } from "react-toastify";
+import { FcPlus } from "react-icons/fc";
+import { TiArrowBackOutline } from "react-icons/ti";
+import { Link } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,7 +29,7 @@ const AddProductValue = () => {
       progress: undefined,
       theme: "dark",
     });
-    const notifyError = () =>
+  const notifyError = () =>
     toast.error("Thất bại!", {
       position: "top-right",
       autoClose: 500,
@@ -80,6 +83,29 @@ const AddProductValue = () => {
   //   console.log('productValue:',productValue)
   return (
     <div className="row">
+      <div className="text-center d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <Link to="/dashboard/product-configuration">
+            <button className="btn border border-3 border-primary d-flex ">
+              <TiArrowBackOutline className="fs-4 text-primary" />
+              Quay xe
+            </button>
+          </Link>
+        </div>
+
+        <div>
+          <h2>Thêm Mới Tài Khoản</h2>
+        </div>
+        <div>
+          <button
+            onClick={(e) => handleSubmit(e)}
+            className="btn border border-3 border-success d-flex "
+          >
+            <FcPlus className="fs-4" />
+            <span className="Lưu bài viết">Lưu bài viết</span>
+          </button>
+        </div>
+      </div>
       <div className="col-md-6">
         <label for="exampleInputEmail1" className="form-label">
           Tên cấu hình

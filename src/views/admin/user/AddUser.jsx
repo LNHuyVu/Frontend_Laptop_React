@@ -5,6 +5,10 @@ import { BsCameraFill, BsFillTrashFill } from "react-icons/bs";
 import productImgService from "../../../services/productImg.service";
 import Loading from "../../../component/loading/Loading";
 import "./listuser.scss";
+import { FcPlus } from "react-icons/fc";
+import { TiArrowBackOutline } from "react-icons/ti";
+import { Link } from "react-router-dom";
+
 const AddUser = () => {
   const [imagesPreview, setImagesPreview] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -132,7 +136,29 @@ const AddUser = () => {
   //Load parentid
   return (
     <div>
-      <h3 className="text-center">Thêm Mới Tài Khoản</h3>
+      <div className="text-center d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <Link to="/dashboard/user">
+            <button className="btn border border-3 border-primary d-flex ">
+              <TiArrowBackOutline className="fs-4 text-primary" />
+              Quay xe
+            </button>
+          </Link>
+        </div>
+
+        <div>
+          <h2>Thêm Mới Tài Khoản</h2>
+        </div>
+        <div>
+          <button
+            onClick={(e) => saveUser(e)}
+            className="btn border border-3 border-success d-flex "
+          >
+            <FcPlus className="fs-4" />
+            <span className="Lưu bài viết">Lưu bài viết</span>
+          </button>
+        </div>
+      </div>
       <div className="row">
         <div className="col-md-3">
           <div className="row">

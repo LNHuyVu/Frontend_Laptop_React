@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import AdminHome from "./AdminHome";
 import AdminHeader from "./AdminHeader";
 import ListUser from "../../views/admin/user/ListUser";
@@ -17,7 +17,29 @@ import AddProductValue from "../../views/admin/productValue/AddProductValue";
 import EditProductValue from "../../views/admin/productValue/EditProductValue";
 import AddUser from "../../views/admin/user/AddUser";
 import EditUser from "../../views/admin/user/EditUser";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import ListTopic from "../../views/admin/topic/ListTopic";
+import AddTopic from "../../views/admin/topic/AddTopic";
+import EditTopic from "../../views/admin/topic/EditTopic";
+import ListPost from "../../views/admin/post/ListPost";
+import AddPost from "../../views/admin/post/AddPost";
+import EditPost from "../../views/admin/post/EditPost";
+import ListSlider from "../../views/admin/slider/ListSlider";
+import AddSlider from "../../views/admin/slider/AddSlider";
+import EditSlider from "../../views/admin/slider/EditSlider";
+
 const AdminRoute = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userRD) {
+      navigate("/login");
+    }
+    if (userRD.user.roles == "T3") {
+      navigate("../");
+    }
+  }, []);
   return (
     <div className="px-2">
       <AdminHeader />
@@ -38,7 +60,10 @@ const AdminRoute = () => {
               <Route path="/" element={<AdminHome />} />
               <Route path="/category" element={<ListCategory />} />
               <Route path="/category/add-category" element={<AddCategory />} />
-              <Route path="/category/edit-category/:id" element={<EditCategory />} />
+              <Route
+                path="/category/edit-category/:id"
+                element={<EditCategory />}
+              />
               {/* User */}
               <Route path="/user/*" element={<ListUser />} />
               <Route path="/user/add-user" element={<AddUser />} />
@@ -47,15 +72,39 @@ const AdminRoute = () => {
               {/* Product */}
               <Route path="/product" element={<ListProduct />} />
               <Route path="/product/add-product" element={<AddProduct />} />
-              <Route path="/product/edit-product/:id" element={<EditProduct />} />
+              <Route
+                path="/product/edit-product/:id"
+                element={<EditProduct />}
+              />
               <Route
                 path="/product/productdetail"
                 element={<ProductDetail />}
               />
               {/* ProductValue */}
-              <Route path="/product-configuration" element={<ListproductValue />} />
-              <Route path="/product-configuration/add-product-configuration" element={<AddProductValue />} />
-              <Route path="/product-configuration/edit-product/:id" element={<EditProductValue />} />
+              <Route
+                path="/product-configuration"
+                element={<ListproductValue />}
+              />
+              <Route
+                path="/product-configuration/add-product-configuration"
+                element={<AddProductValue />}
+              />
+              <Route
+                path="/product-configuration/edit-product/:id"
+                element={<EditProductValue />}
+              />
+              {/* Topic */}
+              <Route path="/topic" element={<ListTopic />} />
+              <Route path="/topic/add-topic" element={<AddTopic />} />
+              <Route path="/topic/edit-topic/:id" element={<EditTopic />} />
+              {/* Post */}
+              <Route path="/post" element={<ListPost />} />
+              <Route path="/post/add-post" element={<AddPost />} />
+              <Route path="/post/edit-post/:id" element={<EditPost />} />
+              {/* Slider */}
+              <Route path="/slider" element={<ListSlider />} />
+              <Route path="/slider/add-slider" element={<AddSlider />} />
+              <Route path="/slider/edit-slider/:id" element={<EditSlider />} />
             </Routes>
           </div>
         </section>

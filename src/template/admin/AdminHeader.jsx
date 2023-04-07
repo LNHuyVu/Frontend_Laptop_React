@@ -1,8 +1,18 @@
 import React from "react";
 import { useState } from "react";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/apiRequest";
 const AdminHeader = () => {
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  //Logout
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logoutUser(dispatch, navigate);
+  };
+  //
   var [togglesidebar, setTogglesidebart] = useState("toggle-sidebar-btn");
   const handletogglesidebar = () => {
     if (togglesidebar === "toggle-sidebar-btn") {
@@ -13,7 +23,7 @@ const AdminHeader = () => {
     }
   };
   return (
-    <section className={togglesidebar + " header"} >
+    <section className={togglesidebar + " header"}>
       <header
         id="header"
         className="header fixed-top d-flex align-items-center"
@@ -49,7 +59,7 @@ const AdminHeader = () => {
 
         <nav className="header-nav ms-auto px-3">
           <ul className="d-flex align-items-center fw-bold">
-            <li>Name User</li>
+            <li>{user?.user.name}</li>
           </ul>
         </nav>
       </header>
@@ -107,20 +117,38 @@ const AdminHeader = () => {
             </AccordionItem>
             <AccordionItem header="Danh mục bài viết" className="nav-item ">
               <ul>
-                <li className="nav-link ">Tất cả danh mục</li>
-                <li className="nav-link ">Thêm danh mục</li>
+                <Link to="./topic">
+                  <li className="nav-link ">Tất cả danh mục</li>
+                </Link>
+                <Link to="./topic/add-topic">
+                  <li className="nav-link ">Thêm danh mục</li>
+                </Link>
               </ul>
             </AccordionItem>
             <AccordionItem header="Bài viết" className="nav-item ">
               <ul>
-                <li className="nav-link ">Tất cả bài viết</li>
-                <li className="nav-link ">Thêm bài viết</li>
+                <Link to="./post">
+                  <li className="nav-link ">Tất cả bài viết</li>
+                </Link>
+                <Link to="./post/add-post">
+                  <li className="nav-link ">Thêm bài viết</li>
+                </Link>
               </ul>
             </AccordionItem>
             <AccordionItem header="Menu" className="nav-item ">
               <ul>
                 <li className="nav-link ">Tất cả menu</li>
                 <li className="nav-link ">Thêm bài menu</li>
+              </ul>
+            </AccordionItem>
+            <AccordionItem header="Slider" className="nav-item ">
+              <ul>
+                <Link to="./slider">
+                  <li className="nav-link ">Tất cả Slider</li>
+                </Link>
+                <Link to="./slider/add-slider">
+                  <li className="nav-link ">Thêm Slider</li>
+                </Link>
               </ul>
             </AccordionItem>
           </Accordion>
@@ -130,12 +158,6 @@ const AdminHeader = () => {
             <a className="nav-link collapsed" href="users-profile.html">
               <i className="bi bi-person"></i>
               <span>Profile</span>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link collapsed" href="pages-blank.html">
-              <i className="bi bi-file-earmark"></i>
-              <span>Slider</span>
             </a>
           </li>
           <li className="nav-item">
@@ -152,11 +174,11 @@ const AdminHeader = () => {
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link collapsed" href="pages-login.html">
+          <li className="nav-item" onClick={handleLogout}>
+            <ul className="nav-link collapsed">
               <i className="bi bi-box-arrow-in-right"></i>
               <span>Đăng xuất</span>
-            </a>
+            </ul>
           </li>
         </ul>
       </aside>

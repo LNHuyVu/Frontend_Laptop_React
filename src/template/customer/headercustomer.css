@@ -1,22 +1,19 @@
-.header {
+.header1 {
   background-color: rgb(0, 94, 255);
   color: white;
   font-size: large;
   font-weight: bold;
 }
-.header .nav-pills .nav-link {
+.header1 .nav-pills .nav-link {
   color: white;
 }
-.header .row {
+.header1 .row {
   align-items: center;
 }
-.header .row .col-md-8 {
-  max-width: 770px;
-}
-.header .logo img {
+.header1 .logo img {
   max-height: 56px;
 }
-.header .search {
+.header1 .search {
   background-color: #f7d800;
   width: 40%;
   margin: auto;
@@ -25,23 +22,36 @@
   justify-content: center;
   align-items: center;
 }
-.header .search input {
+.header1 .search input {
   width: 95%;
   background: transparent;
   border: none;
 }
-.header .search input:focus {
+.header1 .search input:focus {
   background-color: none;
   outline: none;
 }
-.header .search div {
+.header1 .search div {
   padding: 0;
 }
-.header .account-cart .link {
+.header1 .me-auto {
+  margin-right: 0 !important;
+}
+.header1 #basic-nav-dropdown {
+  color: white;
+}
+.header1 .account-cart {
+  border-left: 2px solid #f7d800;
+  border-right: 2px solid #f7d800;
+}
+.header1 .account-cart .link {
   display: grid;
 }
-.header .account-cart span {
+.header1 .account-cart span {
   padding-left: 20px;
   border-radius: 5px;
   font-size: 14px;
+}
+.header1 .account-cart span:hover {
+  cursor: pointer;
 }/*# sourceMappingURL=headercustomer.css.map */

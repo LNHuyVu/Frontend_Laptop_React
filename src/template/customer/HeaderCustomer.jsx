@@ -1,12 +1,23 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaShoppingCart, FaUserAlt } from "react-icons/fa";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import "./headercustomer.scss";
-
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/apiRequest";
 const HeaderCustomer = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    logoutUser(dispatch, navigate);
+  };
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+  console.log(userRD);
+  const [user, setUser] = useState("Hihi");
   const menu = [
     {
       id: 1,
@@ -21,6 +32,11 @@ const HeaderCustomer = () => {
     {
       id: 3,
       name: "Phụ kiện",
+      parentid: 0,
+    },
+    {
+      id: 10,
+      name: "Bài viết",
       parentid: 0,
     },
     {
@@ -53,140 +69,125 @@ const HeaderCustomer = () => {
       name: "USB",
       parentid: 3,
     },
+    {
+      id: 11,
+      name: "Khuyến mãi",
+      parentid: 10,
+    },
+    {
+      id: 12,
+      name: "Công nghệ",
+      parentid: 10,
+    },
   ];
   console.log(menu);
   return (
-    <div className="container-xxl header px-0">
-      <div className="row m-0 h-100 p-0">
-        <div className="col-md-1 col-sm-3 col-3 text-center logo p-0">
+    <div className="container-xxl header1 px-0">
+      <div className="row py-1">
+        <div className="col-md-2 text-center">
           <img className="w-50" src="image/logo/LOGOLTW.png" alt="" />
         </div>
-        <div className="col-md-8 col-sm-5 col-4 p-0">
-          <Nav variant="pills" activeKey="">
-            <Nav.Item>
-              <Nav.Link eventKey="2" title="Item">
-                <Link className="text-white" to="/">
-                  Trang chủ
-                </Link>
-              </Nav.Link>
-            </Nav.Item>
+        <div className="col-md-4">
+          <div className="search row w-100">
+            <div className="col-2 text-center">
+              <BsSearch className="icon-search" />
+            </div>
+            <div className="col-10">
+              <input type="text" placeholder="Xinh đẹp tuyệt vời" />
+            </div>
+          </div>
+        </div>
+        <div className="col-md-2 ">
+          <Link to="/" className="link text-white">
+            <span>
+              <FaUserAlt className="mx-1" />
+              Hoi Dap
+            </span>
+          </Link>
+        </div>
+        <div className="col-md-2 account-cart px-2">
+          {!userRD ? (
+            <>
+              <Link to="./login" className="link text-white">
+                <span>
+                  <FaUserAlt className="mx-1" />
+                  Đăng nhập
+                </span>
+              </Link>
+              <Link to="./register" className="link text-white">
+                <span>
+                  <FaShoppingCart className="mx-1" />
+                  Đăng ký
+                </span>
+              </Link>
+            </>
+          ) : (
+            <>
+              <span className="w-100" style={{ display: "inline-block" }}>
+                <FaUserAlt className="mx-1" />
+                {userRD?.user.name}
+              </span>
 
+              <span onClick={handleLogout}>
+                <FaShoppingCart className="mx-1" />
+                Đăng xuất
+              </span>
+            </>
+          )}
+        </div>
+        <div className="col-md-2">
+          <Link to="/" className="link text-white">
+            <span>
+              <FaShoppingCart className="mx-1" />
+              Gio hang
+            </span>
+          </Link>
+        </div>
+      </div>
+      {/* Navbar */}
+      <Navbar className="p-0" bg="dark" expand="lg">
+        <Container>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="d-flex justify-content-evenly"
+          >
+            <Nav.Link as={Link} to="/">
+              Trang chủ
+            </Nav.Link>
             {menu
               .filter((item) => {
                 return item.parentid === 0;
               })
               .map((item, index) => {
                 return (
-                  <NavDropdown title={item.name} id="nav-dropdown">
-                    {/*  */}
-                    {menu
-                      .filter((child) => {
-                        return child.parentid === item.id;
-                      })
-                      .map((child, index) => {
-                        return (
-                          <NavDropdown.Item eventKey="4.1">
-                            {child.name}
-                          </NavDropdown.Item>
-                        );
-                      })}
-                    {/*  */}
-                  </NavDropdown>
+                  <Nav className="me-auto">
+                    <NavDropdown
+                      title={item.name}
+                      className="m-0"
+                      id="basic-nav-dropdown"
+                    >
+                      {menu
+                        .filter((child) => {
+                          return child.parentid === item.id;
+                        })
+                        .map((child, index) => {
+                          return (
+                            <NavDropdown.Item as={Link} to="/">
+                              {child.name}
+                            </NavDropdown.Item>
+                          );
+                        })}
+                    </NavDropdown>
+                  </Nav>
                 );
               })}
-            <div className="search row">
-              <div className="col-2 text-center">
-                <BsSearch className="icon-search" />
-              </div>
-              <div className="col-10">
-                <input type="text" placeholder="Xinh đẹp tuyệt vời" />
-              </div>
-            </div>
-          </Nav>
-
-          {/* <nav className="navbar navbar-expand-lg navbar-light">
-            <div className="container">
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div
-                className="collapse navbar-collapse"
-                id="navbarSupportedContent"
-              >
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link active text-white fw-bold text-white"
-                      aria-current="page"
-                      to="/"
-                    >
-                      Trang chủ
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link active text-white fw-bold text-white"
-                      aria-current="page"
-                      to="#"
-                    >
-                      Bài viết
-                    </Link>
-                  </li>
-                  
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link active text-white fw-bold text-white"
-                      aria-current="page"
-                      to="#"
-                    >
-                      Sản phẩm
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link active text-white fw-bold text-white"
-                      aria-current="page"
-                      to="#"
-                    >
-                      Liên hệ
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="search row">
-                <div className="col-2 text-center">
-                  <BsSearch className="icon-search" />
-                </div>
-                <div className="col-10">
-                  <input type="text" placeholder="Xinh đẹp tuyệt vời" />
-                </div>
-              </div>
-            </div>
-          </nav> */}
-        </div>
-        <div className="col-md-2 col-sm-2 col-3 account-cart">
-          <Link to="/" className="link text-white">
-            <span>
-              <FaUserAlt className="mx-1" />
-              Đăng nhập
-            </span>
-          </Link>
-          <Link to="/" className="link text-white">
-            <span>
-              <FaShoppingCart className="mx-1" />
-              Giỏ hàng
-            </span>
-          </Link>
-        </div>
-      </div>
+            <Nav.Link as={Link} to="/">
+              Giới thiệu
+            </Nav.Link>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     </div>
   );
 };

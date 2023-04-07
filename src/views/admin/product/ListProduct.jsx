@@ -11,7 +11,11 @@ import productOptionService from "../../../services/productOption.service";
 import productStoreService from "../../../services/productStore.service";
 import productValueService from "../../../services/productValue.service";
 import { Link } from "react-router-dom";
+import { Input, Table } from "antd";
+
 const ListProduct = () => {
+  const [search, setSearch] = useState("");
+
   const [key, setKey] = useState("home");
   const [product, setProduct] = useState([]);
   const [productValue, setProductValue] = useState([]);
@@ -111,134 +115,156 @@ const ListProduct = () => {
         console.log("Delete Not OK", error);
       });
   };
-
-  return (
-    <div className="card-body">
-      <div className="add-item text-end m-1">
-        <Link to="./add-product">
-          <button className="btn btn-info">Thêm Sản Phẩm </button>
+  //Table colums
+  const columns = [
+    {
+      title: "Hình ảnh",
+      dataIndex: "image",
+    },
+    {
+      title: "Tên sản phẩm",
+      dataIndex: "nameProduct",
+      filteredValue: [search],
+      onFilter: (value, record) => {
+        return String(record.nameProduct)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "Slug",
+      dataIndex: "slugProduct",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "createdAt",
+    },
+    ,
+    {
+      title: "Chức năng",
+      dataIndex: "action",
+    },
+    {
+      title: "Id",
+      dataIndex: "id",
+    },
+  ];
+  for (const element of product) {
+    element.image = (
+      <img
+        style={{ maxWidth: 80 }}
+        className=""
+        src={element.imgData.link[0]}
+        alt=""
+      />
+    );
+    element.action = (
+      <div class="d-grid gap-2 d-md-block">
+        {element.status === 1 ? (
+          <button
+            class="btn btn-success m-1 text-center"
+            type="button"
+            onClick={(e) => handleStatus(e, element.id, element.status)}
+          >
+            <BsToggleOn className="text-white" />
+          </button>
+        ) : (
+          <button
+            class="btn btn-danger m-1 text-center"
+            type="button"
+            onClick={(e) => handleStatus(e, element.id, element.status)}
+          >
+            <BsToggleOff className="text-white" />
+          </button>
+        )}
+        <Link to={"./edit-product/" + element.id}>
+          <button class="btn btn-warning m-1 text-center" type="button">
+            <AiFillEdit className="text-white" />
+          </button>
         </Link>
+        <button
+          onClick={(e) => handleDelete(element.id)}
+          class="btn btn-danger m-1 text-center"
+          type="button"
+        >
+          <FaTrashAlt className="text-white" />
+        </button>
       </div>
-      <Tabs
-        id="controlled-tab-example"
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
-        className="mb-3"
-      >
-        <Tab eventKey="home" title="Tất cả sản phẩm">
-          <table class="table table-bordered" id="myTable">
-            <thead>
-              <th class="text-center" style={{ width: 20 }}>
-                #
-              </th>
-              <th>Img</th>
-              <th>Tên sản phẩm</th>
-              <th>Giá</th>
-              <th>Sale</th>
-              <th>Chức năng</th>
-              <th>ID</th>
-            </thead>
-            <tbody>
-              {product.map((item) => (
-                <tr>
-                  <td class="text-center">
-                    <input name="checkid" type="checkbox" />
-                  </td>
-                  <td style={{ "max-width": 80 }}>
-                    <img
-                      className="w-100 h-100"
-                      src={item.imgData.link[0]}
-                      alt=""
-                    />
-                  </td>
-                  <td>{item.nameProduct}</td>
-                  <td>{item.price}</td>
-                  <td class="text-center date">Sale</td>
-                  <td className="text-center action">
-                    <div class="d-grid gap-2 d-md-block">
-                      {item.status === 1 ? (
+    );
+  }
+  return (
+    <>
+      <div className="card-body">
+        <div className="add-item text-end m-1">
+          <Link to="./add-product">
+            <button className="btn btn-info">Thêm Sản Phẩm </button>
+          </Link>
+        </div>
+        <Tabs
+          id="controlled-tab-example"
+          activeKey={key}
+          onSelect={(k) => setKey(k)}
+          className="mb-3"
+        >
+          <Tab eventKey="home" title="Tất cả sản phẩm">
+            <Input.Search
+              style={{
+                paddingLeft: "20%",
+                paddingRight: "20%",
+                marginBottom: 10,
+              }}
+              onSearch={(value) => {
+                setSearch(value);
+              }}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              placehoder="Search here..."
+            />
+            <Table columns={columns} dataSource={product}></Table>
+          </Tab>
+          <Tab eventKey="profile" title="Sản phẩm khuyến mãi">
+            Khuyến mãi
+          </Tab>
+          <Tab eventKey="contact" title="Cấu hình">
+            <table class="table table-bordered" id="myTable">
+              <thead>
+                <th class="text-center" style={{ width: 20 }}>
+                  #
+                </th>
+                <th>Tên</th>
+                <th>Chức năng</th>
+                <th>ID</th>
+              </thead>
+              <tbody>
+                {productValue.map((item) => (
+                  <tr>
+                    <td class="text-center">
+                      <input name="checkid" type="checkbox" />
+                    </td>
+                    <td>{item.nameValue}</td>
+                    <td className="text-center action">
+                      <div class="d-grid gap-2 d-md-block">
                         <button
-                          class="btn btn-success m-1 text-center"
-                          type="button"
-                          onClick={(e) => handleStatus(e, item.id, item.status)}
-                        >
-                          <BsToggleOn className="text-white" />
-                        </button>
-                      ) : (
-                        <button
+                          onClick={(e) => handleDeleteProductValue(item.id)}
                           class="btn btn-danger m-1 text-center"
                           type="button"
-                          onClick={(e) => handleStatus(e, item.id, item.status)}
                         >
-                          <BsToggleOff className="text-white" />
+                          <FaTrashAlt className="text-white" />
                         </button>
-                      )}
-                      <Link to={"./edit-product/" + item.id}>
-                        <button
-                          class="btn btn-warning m-1 text-center"
-                          type="button"
-                        >
-                          <AiFillEdit className="text-white" />
-                        </button>
-                      </Link>
-                      <button
-                        onClick={(e) => handleDelete(item.id, item.proId)}
-                        class="btn btn-danger m-1 text-center"
-                        type="button"
-                      >
-                        <FaTrashAlt className="text-white" />
-                      </button>
-                    </div>
-                  </td>
-                  <td class="text-center">
-                    {item.id}--{item.catId}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Tab>
-        <Tab eventKey="profile" title="Sản phẩm khuyến mãi">
-          Khuyến mãi
-        </Tab>
-        <Tab eventKey="contact" title="Cấu hình">
-          <table class="table table-bordered" id="myTable">
-            <thead>
-              <th class="text-center" style={{ width: 20 }}>
-                #
-              </th>
-              <th>Tên</th>
-              <th>Chức năng</th>
-              <th>ID</th>
-            </thead>
-            <tbody>
-              {productValue.map((item) => (
-                <tr>
-                  <td class="text-center">
-                    <input name="checkid" type="checkbox" />
-                  </td>
-                  <td>{item.nameValue}</td>
-                  <td className="text-center action">
-                    <div class="d-grid gap-2 d-md-block">
-                      <button
-                        onClick={(e) => handleDeleteProductValue(item.id)}
-                        class="btn btn-danger m-1 text-center"
-                        type="button"
-                      >
-                        <FaTrashAlt className="text-white" />
-                      </button>
-                    </div>
-                  </td>
-                  <td class="text-center">
-                    {item.id}--{item.parentIdValue}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Tab>
-      </Tabs>
-    </div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      {item.id}--{item.parentIdValue}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Tab>
+        </Tabs>
+      </div>
+    </>
   );
 };
 

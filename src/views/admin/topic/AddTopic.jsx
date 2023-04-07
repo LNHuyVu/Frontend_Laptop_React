@@ -1,105 +1,82 @@
 import React, { useState, useEffect } from "react";
-import categoryService from "../../../services/category.service";
+// import categoryService from "../../../services/category.service";
+import topicService from "../../../services/topic.service";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { FcPlus } from "react-icons/fc";
-import { TiArrowBackOutline } from "react-icons/ti";
-import { Link } from "react-router-dom";
-
-const AddCategory = () => {
-  const userRD = useSelector((state) => state.auth.login?.currentUser);
-
+const AddTopic = () => {
   const navigate = useNavigate();
   const slugname = require("slug");
   const [name, setName] = useState("");
   // const [slug, setSlug] = useState("");
   const [parentId, setParentId] = useState("0");
+  const [createdBy, setCreatedBy] = useState("1");
   const [status, setStatus] = useState("0");
   const saveUser = (e) => {
     e.preventDefault();
     //create
-    const category_create = {
+    const Topic_create = {
       name,
       slug: slugname(name),
       parentId,
-      createdBy: String(userRD?.user.id),
+      createdBy,
       status,
     };
-    console.log("Category new", category_create);
-    if (CheckValidate) {
-      categoryService
-        .create(category_create)
+    console.log("Topic new", Topic_create);
+    if (CheckValidate()) {
+      topicService
+        .create(Topic_create)
         .then((response) => {
-          console.log("Created User Successflly!", response.data);
-          navigate("/dashboard/category", { replace: true });
+          console.log("Created Topic Successflly!", response.data);
+          navigate("/dashboard/topic", { replace: true });
         })
         .catch((error) => {
-          console.log("Songthing went wrong", error);
+          console.log("Songthing went wrong Topic", error);
         });
+    } else {
+      console.log("Vui lòng kiểm tra lại thông tin topic");
     }
+  };
+  //Check
+  const CheckValidate = () => {
+    let isValue = true;
+    const check = {
+      "Tên danh mục": name,
+      "Danh mục": parentId,
+      "Người tạo": createdBy,
+    };
+    console.log("count", check.length);
+    for (const item in check) {
+      if (!check[item] || check[item] == "") {
+        isValue = false;
+        alert("Vui lòng chọn:" + item);
+        break;
+      }
+    }
+    return isValue;
   };
   //Clear
   const handleClear = () => {
     setName("");
   };
   //Load parentid
-  const [category, setCategory] = useState([]);
+  const [topic, setTopic] = useState([]);
   useEffect(() => {
     init();
   }, []);
   const init = () => {
-    categoryService
+    topicService
       .getAll("ALL")
       .then((response) => {
         console.log("Get Data OK", response.data);
-        setCategory(response.data.category);
+        setTopic(response.data.topic);
       })
       .catch((error) => {
         console.log("Get Data Failed");
       });
   };
-  const CheckValidate = () => {
-    let isValue = true;
-    const check = {
-      "Trạng thái": status,
-      "Danh mục": parentId,
-      "Tên danh mục": name,
-    };
-    for (const item in check) {
-      if (!check[item] || check[item] == "") {
-        isValue = false;
-        // console.log("Ngu", item);
-        alert("Vui lòng nhập:" + item);
-        break;
-      }
-    }
-    return isValue;
-  };
+  console.log("topic", topic);
   return (
     <div>
-      <div className="text-center d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <Link to="/dashboard/category">
-            <button className="btn border border-3 border-primary d-flex ">
-              <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
-            </button>
-          </Link>
-        </div>
-
-        <div>
-          <h2>Thêm Danh Mục Sản Phẩm</h2>
-        </div>
-        <div>
-          <button
-            onClick={(e) => saveUser(e)}
-            className="btn border border-3 border-success d-flex "
-          >
-            <FcPlus className="fs-4" />
-            <span className="Lưu bài viết">Lưu bài viết</span>
-          </button>
-        </div>
-      </div>
+      <h3 className="text-center">Thêm Mới Danh Mục Bài Viết</h3>
       <div className="row">
         <div className="col-md-6">
           <div className="mb-3">
@@ -116,7 +93,7 @@ const AddCategory = () => {
           </div>
           <div className="mb-3">
             <label for="" className="form-label">
-              Chọn cấp cha
+              Chọn danh mục
             </label>
             <select
               className="form-select"
@@ -125,7 +102,7 @@ const AddCategory = () => {
               onChange={(e) => setParentId(e.target.value)}
             >
               <option value="0">Nomal</option>
-              {category.map((item) => (
+              {topic.map((item) => (
                 <option value={item.id}>{item.name}</option>
               ))}
             </select>
@@ -169,4 +146,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default AddTopic;

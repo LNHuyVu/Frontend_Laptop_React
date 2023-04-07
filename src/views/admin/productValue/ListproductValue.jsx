@@ -17,6 +17,7 @@ const ListproductValue = () => {
     productValueService
       .getAll("ALL")
       .then((response) => {
+        console.log(response.data.productvalue);
         setProductValue(response.data.productvalue);
       })
       .catch((error) => {
@@ -52,6 +53,7 @@ const ListproductValue = () => {
         console.log("Delete Not OK", error);
       });
   };
+  const test="";
   return (
     <div>
       <Tabs
@@ -72,63 +74,716 @@ const ListproductValue = () => {
               <th>ID</th>
             </thead>
             <tbody>
-              {productValue.map((item) => (
-                <tr>
-                  <td class="text-center">
-                    <input name="checkid" type="checkbox" />
-                  </td>
-                  <td>{item.nameValue}</td>
-                  <td className="text-center action">
-                    <div class="d-grid gap-2 d-md-block">
-                      {item.statusValue == 1 ? (
-                        <button
-                          class="btn btn-success m-1 text-center"
-                          type="button"
-                          onClick={(e) =>
-                            handleStatus(e, item.id, item.statusValue)
-                          }
-                        >
-                          <BsToggleOn className="text-white" />
-                        </button>
-                      ) : (
-                        <button
-                          class="btn btn-danger m-1 text-center"
-                          type="button"
-                          onClick={(e) =>
-                            handleStatus(e, item.id, item.statusValue)
-                          }
-                        >
-                          <BsToggleOff className="text-white" />
-                        </button>
-                      )}
-                      <Link to={"./edit-product/" + item.id}>
-                        <button
-                          class="btn btn-warning m-1 text-center"
-                          type="button"
-                        >
-                          <AiFillEdit className="text-white" />
-                        </button>
-                      </Link>
-                      <button
-                        onClick={(e) => handleDelete(item.id)}
-                        class="btn btn-danger m-1 text-center"
-                        type="button"
-                      >
-                        <FaTrashAlt className="text-white" />
-                      </button>
-                    </div>
-                  </td>
-                  <td class="text-center">
-                    {item.id}--{item.parentIdValue}
-                  </td>
-                </tr>
-              ))}
+              {productValue
+                .filter((item) => {
+                  return item.parentIdValue == "0";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </Tab>
-        <Tab eventKey="profile" title="Thống kê">
-          2
+        {productValue
+          .filter((child) => {
+            return child.parentIdValue == "0" && child.statusValue == "1";
+          })
+          .map((child, index) => {
+            return (
+              <Tab eventKey={child.nameValue} title={child.nameValue}>
+                <table class="table table-bordered" id="myTable">
+                  <thead>
+                    <th class="text-center" style={{ width: 20 }}>
+                      #
+                    </th>
+                    <th>Tên cấu hình</th>
+                    <th>Chức năng</th>
+                    <th>ID</th>
+                  </thead>
+                  <tbody>
+                    {test==child.id}
+                    {productValue
+                      .filter((item) => {
+                        return (
+                          item.statusValue == "1" && item.parentIdValue == test
+                        );
+                      })
+                      .map((item, index) => {
+                        return (
+                          <tr>
+                            <td class="text-center">
+                              <input name="checkid" type="checkbox" />
+                            </td>
+                            <td>{item.nameValue}</td>
+                            <td className="text-center action">
+                              <div class="d-grid gap-2 d-md-block">
+                                {item.statusValue == 1 ? (
+                                  <button
+                                    class="btn btn-success m-1 text-center"
+                                    type="button"
+                                    onClick={(e) =>
+                                      handleStatus(e, item.id, item.statusValue)
+                                    }
+                                  >
+                                    <BsToggleOn className="text-white" />
+                                  </button>
+                                ) : (
+                                  <button
+                                    class="btn btn-danger m-1 text-center"
+                                    type="button"
+                                    onClick={(e) =>
+                                      handleStatus(e, item.id, item.statusValue)
+                                    }
+                                  >
+                                    <BsToggleOff className="text-white" />
+                                  </button>
+                                )}
+                                <Link to={"./edit-product/" + item.id}>
+                                  <button
+                                    class="btn btn-warning m-1 text-center"
+                                    type="button"
+                                  >
+                                    <AiFillEdit className="text-white" />
+                                  </button>
+                                </Link>
+                                <button
+                                  onClick={(e) => handleDelete(item.id)}
+                                  class="btn btn-danger m-1 text-center"
+                                  type="button"
+                                >
+                                  <FaTrashAlt className="text-white" />
+                                </button>
+                              </div>
+                            </td>
+                            <td class="text-center">
+                              {item.id}--{item.parentIdValue}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </Tab>
+            );
+          })}
+        {/* <Tab eventKey="CPU" title="CPU">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "1";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
         </Tab>
+        <Tab eventKey="RAM" title="RAM">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "2";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab>
+        <Tab eventKey="Screen" title="Màn hình">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "3";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab>
+        <Tab eventKey="HDrive" title="Ổ cứng">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "4";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab>
+        <Tab eventKey="CPUGen" title="Thế hệ CPU">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "5";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab>
+        <Tab eventKey="System" title="Hệ thống">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "6";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab>
+        <Tab eventKey="Demand" title="Nhu cầu">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "7";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab>
+        <Tab eventKey="Card" title="Card Màn hình">
+          <table class="table table-bordered" id="myTable">
+            <thead>
+              <th class="text-center" style={{ width: 20 }}>
+                #
+              </th>
+              <th>Tên cấu hình</th>
+              <th>Chức năng</th>
+              <th>ID</th>
+            </thead>
+            <tbody>
+              {productValue
+                .filter((item) => {
+                  return item.statusValue == "1" && item.parentIdValue == "8";
+                })
+                .map((item, index) => {
+                  return (
+                    <tr>
+                      <td class="text-center">
+                        <input name="checkid" type="checkbox" />
+                      </td>
+                      <td>{item.nameValue}</td>
+                      <td className="text-center action">
+                        <div class="d-grid gap-2 d-md-block">
+                          {item.statusValue == 1 ? (
+                            <button
+                              class="btn btn-success m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOn className="text-white" />
+                            </button>
+                          ) : (
+                            <button
+                              class="btn btn-danger m-1 text-center"
+                              type="button"
+                              onClick={(e) =>
+                                handleStatus(e, item.id, item.statusValue)
+                              }
+                            >
+                              <BsToggleOff className="text-white" />
+                            </button>
+                          )}
+                          <Link to={"./edit-product/" + item.id}>
+                            <button
+                              class="btn btn-warning m-1 text-center"
+                              type="button"
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={(e) => handleDelete(item.id)}
+                            class="btn btn-danger m-1 text-center"
+                            type="button"
+                          >
+                            <FaTrashAlt className="text-white" />
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        {item.id}--{item.parentIdValue}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Tab> */}
       </Tabs>
     </div>
   );

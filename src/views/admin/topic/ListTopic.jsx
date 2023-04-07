@@ -2,53 +2,36 @@ import React, { useEffect, useState } from "react";
 import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
-import "./listuser.scss";
+// import "./listcategory.scss";
+// import categoryService from "../../../services/category.service";
+import topicService from "../../../services/topic.service";
 import { Link } from "react-router-dom";
-import userService from "../../../services/user.service";
-import { useDispatch, useSelector } from "react-redux";
-//RefreshToken
-import {createAxiosRefreshJWT} from "../../../services/createRefreshJWT.service";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import { loginSuccess } from "../../../redux/authSlice";
-//
-const ListUser = () => {
-  //RefreshToken
-  const dispatch=useDispatch();
-  //
-
-  const userRD=useSelector((state)=>state.auth.login?.currentUser);
-  console.log(userRD);
-  console.log(userRD.accessToken);
-
-  // let axiosJWT=createAxiosRefreshJWT(userRD, dispatch, loginSuccess)
-
-  
-  const [user, setUser] = useState([]);
+const ListTopic = () => {
+  const [topic, setTopic] = useState([]);
   useEffect(() => {
     init();
   }, []);
   const init = () => {
-    userService
-      .getAll("ALL", userRD)
+    topicService
+      .getAll("ALL")
       .then((response) => {
-        console.log("Get Data OK", response.data);
-        setUser(response.data.users);
+        // console.log("Get Data OK", response.data);
+        setTopic(response.data.topic);
       })
       .catch((error) => {
-        console.log("Get Data Failed", error);
+        console.log("Get Data Failed");
       });
   };
   // console.log("category", category);
   //handle status
   const handleStatus = (e, id, status) => {
     e.preventDefault();
-    const user_update = {
+    const topic_update = {
       status: status === 1 ? 0 : 1,
       id,
     };
-    userService
-      .update(user_update)
+    topicService
+      .update(topic_update)
       .then((response) => {
         // console.log("data updated successfully", response.data);
         // navigate("/", { replace: true });
@@ -60,10 +43,10 @@ const ListUser = () => {
   };
   //Handle Delete
   const handleDelete = (id) => {
-    userService
-      .remove(id, userRD)
+    topicService
+      .remove(id)
       .then((reponse) => {
-        console.log("Delete OK", reponse.data);
+        // console.log("Delete OK", reponse.data);
         init();
       })
       .catch((error) => {
@@ -73,8 +56,8 @@ const ListUser = () => {
   return (
     <div className="card-body">
       <div className="add-item text-end m-1">
-        <Link to="./add-user">
-         <button className="btn-info btn">Thêm tài khoản</button>
+        <Link to="./add-topic">
+         <button className="btn-info">Thêm danh mục</button>
         </Link>
       </div>
       <table class="table table-bordered" id="myTable">
@@ -82,24 +65,20 @@ const ListUser = () => {
           <th class="text-center" style={{ width: 20 }}>
             #
           </th>
-          <th>Hình ảnh</th>
-          <th>Tên tài khoản</th>
-          <th>Email</th>
-          <th>Địa chỉ</th>
+          <th>Tên danh mục</th>
+          <th>Slug</th>
           <th>Ngày tạo</th>
           <th>Chức năng</th>
           <th>ID</th>
         </thead>
         <tbody>
-          {user.map((item) => (
+          {topic.map((item) => (
             <tr>
               <td class="text-center">
                 <input name="checkid" type="checkbox" />
               </td>
-              <td style={{maxWidth: 100}}><img className="w-100 h-100" src={item.img[0]} alt="" /></td>
               <td>{item.name}</td>
-              <td style={{maxWidth: 140}}><span>{item.email}</span></td>
-              <td>{item.address}</td>
+              <td>{item.slug}</td>
               <td class="text-center date">{item.createdAt}</td>
               <td className="text-center action">
                 <div class="d-grid gap-2 d-md-block">
@@ -120,7 +99,7 @@ const ListUser = () => {
                       <BsToggleOff className="text-white" />
                     </button>
                   )}
-                  <Link to={"./edit-user/" + item.id}>
+                  <Link to={"./edit-topic/" + item.id}>
                     <button class="btn btn-warning m-1 text-center" type="button">
                       <AiFillEdit className="text-white" />
                     </button>
@@ -135,7 +114,7 @@ const ListUser = () => {
                 </div>
               </td>
               <td class="text-center">
-                {item.id}
+                {item.id}--{item.parentId}
               </td>
             </tr>
           ))}
@@ -145,4 +124,4 @@ const ListUser = () => {
   );
 };
 
-export default ListUser;
+export default ListTopic;

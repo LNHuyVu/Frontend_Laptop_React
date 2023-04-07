@@ -11,7 +11,18 @@ import Loading from "../../../component/loading/Loading";
 import productOptionService from "../../../services/productOption.service";
 import productStoreService from "../../../services/productStore.service";
 import productImgService from "../../../services/productImg.service";
+import { FcPlus } from "react-icons/fc";
+import { TiArrowBackOutline } from "react-icons/ti";
+import { Link } from "react-router-dom";
+
+//QuillJs
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
+
 const AddProduct = () => {
+  // Quilljs
+  const { quill, quillRef } = useQuill();
+  //
   const d = new Date();
   let code = d.getTime();
   const [key, setKey] = useState("home");
@@ -107,8 +118,6 @@ const AddProduct = () => {
     setIsLoading(false);
     setImagesPreview((prev) => [...prev, ...images]);
   };
-  // console.log("IMGPRE:", imagesPreview);
-  // console.log(process.env.REACT_APP_UPLOAD_ASSETS_NAME);
   const handleDeleteImagePreview = (image) => {
     setImagesPreview((prev) => prev.filter((item) => item !== image));
   };
@@ -119,6 +128,10 @@ const AddProduct = () => {
   };
   //Check ValidateLT
   const CheckValidateLT = () => {
+    let content = quillRef.current.firstChild.innerHTML;
+    if (content == "<p><br></p>") {
+      content = "";
+    }
     setProId(code);
     setStoreId(code);
     setoptionId(code);
@@ -135,6 +148,7 @@ const AddProduct = () => {
       "Card đồ họa": card,
       "Hệ điều hành": system,
       "Tên sản phẩm": nameProduct,
+      "Nội dung": content,
       slugProduct,
       Giá: price,
       "Danh mục": catId,
@@ -156,6 +170,10 @@ const AddProduct = () => {
   };
   //CheckValidatePK
   const CheckValidatePK = () => {
+    let content = quillRef.current.firstChild.innerHTML;
+    if (content == "<p><br></p>") {
+      content = "";
+    }
     setProId(code);
     setStoreId(code);
     setImgId(code);
@@ -170,6 +188,7 @@ const AddProduct = () => {
       "Hình ảnh": imagesPreview,
       "Giá nhập": importPrices,
       "Số lượng": number,
+      "Nội dung": content,
     };
     console.log("count", check.length);
     for (const item in check) {
@@ -192,7 +211,7 @@ const AddProduct = () => {
       slugProduct,
       catId,
       price,
-      detail,
+      detail: quillRef.current.firstChild.innerHTML,
       type,
       proId: code,
       createdBy: "VIP",
@@ -225,8 +244,7 @@ const AddProduct = () => {
       number,
     };
     console.log("Store: ", product_store);
-    if(type=='LT')
-    {
+    if (type == "LT") {
       if (CheckValidateLT()) {
         productService
           .create(product)
@@ -266,8 +284,7 @@ const AddProduct = () => {
       } else {
         console.log(false);
       }
-    }
-    else{
+    } else {
       if (CheckValidatePK()) {
         productService
           .create(product)
@@ -305,10 +322,32 @@ const AddProduct = () => {
     setType(type == "LT" ? "PK" : "LT");
     setDisable(disabled ? false : true);
   };
-  console.log(type, disabled);
+  // console.log(type, disabled);
   return (
     <div>
-      <h3>Thêm mới sản phẩm</h3>
+      <div className="text-center d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <Link to="/dashboard/product">
+            <button className="btn border border-3 border-primary d-flex ">
+              <TiArrowBackOutline className="fs-4 text-primary" />
+              Quay xe
+            </button>
+          </Link>
+        </div>
+
+        <div>
+          <h2>Thêm Sản Phẩm</h2>
+        </div>
+        <div>
+          <button
+            onClick={(e) => handleSubmit()}
+            className="btn border border-3 border-success d-flex "
+          >
+            <FcPlus className="fs-4" />
+            <span className="Lưu bài viết">Lưu bài viết</span>
+          </button>
+        </div>
+      </div>
       <Tabs
         id="controlled-tab-example"
         activeKey={key}
@@ -369,25 +408,37 @@ const AddProduct = () => {
                 onChange={(e) => setCatId(e.target.value)}
               >
                 <option value="0">Nomal</option>
-                {category
-                  .filter((child) => {
-                    return child.status == 1 && child.parentId != 0;
-                  })
-                  .map((child, index) => {
-                    return <option value={child.id}>{child.name}</option>;
-                  })}
+                {type == "LT" ? (
+                  <>
+                    {category
+                      .filter((child) => {
+                        return child.status == 1 && child.parentId == 5;
+                      })
+                      .map((child, index) => {
+                        return <option value={child.id}>{child.name}</option>;
+                      })}
+                  </>
+                ) : (
+                  <>
+                    {category
+                      .filter((child) => {
+                        return child.status == 1 && child.parentId == 6;
+                      })
+                      .map((child, index) => {
+                        return <option value={child.id}>{child.name}</option>;
+                      })}
+                  </>
+                )}
+               
               </select>
             </div>
             <div className="col-md-12">
               <label for="exampleInputEmail1" className="form-label">
                 Mô tả chi tiết
               </label>
-              <textarea
-                value={detail}
-                onChange={(e) => setDetail(e.target.value)}
-                id="detail"
-                name="detail"
-              ></textarea>
+              <div style={{ width: "100%", height: 350, background: "#fff" }}>
+                <div ref={quillRef} />
+              </div>
             </div>
           </div>
         </Tab>

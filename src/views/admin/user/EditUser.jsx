@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../component/loading/Loading";
 import { BsCameraFill, BsFillTrashFill } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
 import productImgService from "../../../services/productImg.service";
 
 const EditUser = () => {
@@ -30,15 +31,15 @@ const EditUser = () => {
   const ROLES = [
     {
       value: "T2",
-      nameGender: "Nhân viên",
+      name: "Nhân viên",
     },
     {
       value: "T1",
-      nameGender: "Admin",
+      name: "Admin",
     },
     {
       value: "T3",
-      nameGender: "Khách hàng",
+      name: "Khách hàng",
     },
   ];
   ///
@@ -57,16 +58,18 @@ const EditUser = () => {
   useEffect(() => {
     init();
   }, []);
+  const userRD=useSelector((state)=>state.auth.login?.currentUser);
 
   const init = () => {
     //GET ID
     userService
-      .getAll(id)
+      .getAll(id,userRD)
       .then((response) => {
         console.log("User", response.data);
         setName(response.data.users.name);
         setAddress(response.data.users.address);
         setRoles(response.data.users.roles);
+        setGender(response.data.users.gender);
         setPhone(response.data.users.phone);
         setImagesPreview(response.data.users.img);
         setStatus(response.data.users.status);
@@ -75,9 +78,6 @@ const EditUser = () => {
       .catch((error) => {
         console.log("Get Data Failed ID");
       });
-  };
-  const handleClear = () => {
-    setName("");
   };
   const handleFiles = async (e) => {
     setIsLoading(true);
@@ -224,7 +224,9 @@ const EditUser = () => {
                 onChange={(e) => setGender(e.target.value)}
               >
                 {GENDER.map((item) => {
-                  return <option value={item.value}>{item.nameGender}</option>;
+                  return (
+                    item.value==gender?(<option value={item.value} selected>{item.nameGender}</option>):(<option value={item.value}>{item.nameGender}</option>)
+                  );
                 })}
               </select>
             </div>
@@ -279,7 +281,9 @@ const EditUser = () => {
                 onChange={(e) => setRoles(e.target.value)}
               >
                 {ROLES.map((item) => {
-                  return <option value={item.value}>{item.nameGender}</option>;
+                  return (
+                    item.value==roles?(<option value={item.value} selected>{item.name}</option>):(<option value={item.value}>{item.name}</option>)
+                  )
                 })}
               </select>
             </div>
