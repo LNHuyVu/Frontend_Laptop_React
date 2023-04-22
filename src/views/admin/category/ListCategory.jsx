@@ -7,15 +7,28 @@ import categoryService from "../../../services/category.service";
 import { Link } from "react-router-dom";
 import { FcPlus } from "react-icons/fc";
 import { Input, Table } from "antd";
+import { useSelector } from "react-redux";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 const ListCategory = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+  const [search, setSearch] = useState("");
   const [category, setCategory] = useState([]);
+  //
+  const [show, setShow] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  //
   useEffect(() => {
     init();
   }, []);
   const init = () => {
     categoryService
-      .getAll("ALL")
+      .getAll("ALL", userRD)
       .then((response) => {
         setCategory(response.data.category);
       })
@@ -32,7 +45,7 @@ const ListCategory = () => {
       id,
     };
     categoryService
-      .update(category_update)
+      .update(category_update, userRD)
       .then((response) => {
         // console.log("data updated successfully", response.data);
         // navigate("/", { replace: true });
@@ -43,20 +56,29 @@ const ListCategory = () => {
       });
   };
   //Handle Delete
-  const handleDelete = (id) => {
-    categoryService
-      .remove(id)
-      .then((reponse) => {
-        // console.log("Delete OK", reponse.data);
-        init();
-      })
-      .catch((error) => {
-        console.log("Delete Not OK", error);
-      });
+  const handleDeleteClose = (value) => {
+    handleClose();
+    if (value == true) {
+      categoryService
+        .remove(deleteId, userRD)
+        .then((reponse) => {
+          init();
+        })
+        .catch((error) => {
+          console.log("Delete Not OK", error);
+        });
+      setDeleteId("");
+    }
   };
-
-  const [search, setSearch] = useState("");
+  const handleDeleteOpen = (id) => {
+    handleShow();
+    setDeleteId(id);
+  };
   const columns = [
+    {
+      title: "Hình ảnh",
+      dataIndex: "img",
+    },
     {
       title: "Tên danh mục",
       dataIndex: "name",
@@ -84,6 +106,14 @@ const ListCategory = () => {
     },
   ];
   for (const element of category) {
+    element.img = (
+      <img
+        style={{ maxWidth: 80 }}
+        className=""
+        src={element.image[0]}
+        alt=""
+      />
+    );
     element.action = (
       <div class="d-grid gap-2 d-md-block">
         {element.status === 1 ? (
@@ -109,7 +139,7 @@ const ListCategory = () => {
           </button>
         </Link>
         <button
-          onClick={(e) => handleDelete(element.id)}
+          onClick={(e) => handleDeleteOpen(element.id)}
           class="btn btn-danger m-1 text-center"
           type="button"
         >
@@ -131,7 +161,7 @@ const ListCategory = () => {
           <Link to="./add-category">
             <button className="btn border border-3 border-success d-flex ">
               <FcPlus className="fs-4" />
-              <span className="">Thêm danh mục</span>
+              <span className="">Thêm mới</span>
             </button>
           </Link>
         </div>
@@ -147,6 +177,20 @@ const ListCategory = () => {
         placehoder="Search here..."
       />
       <Table columns={columns} dataSource={category}></Table>
+      <Modal show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thông báo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn xóa phần tử này!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => handleDeleteClose(true)}>
+            Đồng ý
+          </Button>
+          <Button variant="danger" onClick={() => handleDeleteClose(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

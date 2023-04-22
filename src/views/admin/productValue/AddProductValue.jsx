@@ -8,13 +8,16 @@ import { TiArrowBackOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
-
+import { useSelector } from "react-redux";
 ///
 const AddProductValue = () => {
+  const userRD=useSelector((state)=>state.auth.login?.currentUser);
+  const slugname = require("slug");
+
   const navigate = useNavigate();
   const [nameValue, setNameValue] = useState("");
   const [parentIdValue, setParentIdValue] = useState("0");
-  const [createdBy, setCreatedBy] = useState("1");
+  const [createdBy, setCreatedBy] = useState("");
   const [statusValue, setStatusValue] = useState("0");
   const [productValue, setProductValue] = useState([]);
   //
@@ -46,7 +49,7 @@ const AddProductValue = () => {
   }, []);
   const init = () => {
     productValueService
-      .getAll("ALL")
+      .getAll("ALL", userRD)
       .then((response) => {
         setProductValue(response.data.productvalue);
       })
@@ -60,13 +63,14 @@ const AddProductValue = () => {
     if (parentIdValue == "") setParentIdValue(0);
     const data = {
       nameValue,
-      createdBy,
+      slug:slugname(nameValue),
+      createdBy: String(userRD?.user.id),
       parentIdValue,
       statusValue,
     };
     console.log(data);
     productValueService
-      .create(data)
+      .create(data, userRD)
       .then((response) => {
         console.log(response.data);
         console.log("Success OK");
@@ -128,9 +132,6 @@ const AddProductValue = () => {
           name="parentIdValue"
           onChange={(e) => setParentIdValue(e.target.value)}
         >
-          {/* <option value="1">CPU</option>
-          <option value="2">RAM</option>
-          <option value="3">MÀNG HÌNH</option> */}
           <option value="0">Nomal</option>
           {productValue
             .filter((child) => {

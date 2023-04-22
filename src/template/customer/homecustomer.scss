@@ -1,15 +1,109 @@
 .product-type{
-    border: 3px solid rgb(3, 254, 41);
+    // border: 3px solid rgb(3, 254, 41);
     margin-top: 0.2%;
     border-radius: 20px;
     padding: 10px;
-    h3{
-        border-bottom: 10px double rgb(0, 255, 251);
+    .box-zoom-out{
+        overflow: hidden;
+        position: relative;
+        img { 
+            vertical-align:middle; 
+            max-width: 100%;
+            padding:1%;
+            transition: all 1s;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
+    }
+    .card{
+        .card-text-home{
+            &:hover{
+                font-weight: bold !important;
+                color: blue !important;
+                transition: 0.3s;
+            }
+            
+        }
+        &:hover{
+            img{
+                -webkit-transform: scale(1.1);
+                transform: scale(1.1);
+            }
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }  
     }
 }
+
 .product-today{
     margin: auto;
     .row{
         margin: auto;
     }
 }
+.card-text-home{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.title-demand{
+    border-bottom: 10px double rgb(0, 255, 251);
+    .link{  
+        position: relative;
+        &:before {
+            opacity: 1;
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: 10px;
+            margin: -5px 0;
+            background-color: rgb(19, 3, 255);
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.4s ease-in-out 0s;
+        }
+        &:hover:before {
+            opacity: 1;
+            visibility: visible;
+            transform: scaleX(1);
+        }
+    }
+}
+.slider{
+    // height: 100%;
+    padding: 20px;
+
+    .slick-prev{
+        left: 4px;
+        &::before{
+            color: rgb(106, 106, 106);
+            opacity: 1 !important;
+        }
+        z-index: 1;
+    }
+    .slick-next{
+        right: 4px;
+        &::before{
+            color: rgb(106, 106, 106);
+            opacity: 1 !important;
+        }
+    }
+    .slick-prev, .slick-next{
+        top: 50%;
+        background-color: #ffffff;
+        opacity: 0.5;
+        border: 2px solid #d7d7d7;
+        height: 50px;
+        width: 50px;
+        &:hover{
+            opacity: 1;
+            background-color: #ffffff;
+        }
+    }
+    .slider-child{
+        // height: 100%;
+        padding: 0 5px;
+    }
+}
+

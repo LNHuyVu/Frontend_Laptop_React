@@ -7,7 +7,6 @@ import Loading from "../../../component/loading/Loading";
 import { BsCameraFill, BsFillTrashFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import productImgService from "../../../services/productImg.service";
-
 const EditUser = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -112,7 +111,6 @@ const EditUser = () => {
     const check = {
       "Tên người dùng": name,
       "Tài khoản email": email,
-      "Hình ảnh": imagesPreview,
       "Địa chỉ": address,
       "Số điện thoại": phone,
     };
@@ -144,7 +142,7 @@ const EditUser = () => {
     console.log("User Update", user_edit);
     if (CheckValidate()) {
       userService
-        .update(user_edit)
+        .update(user_edit, userRD)
         .then((response) => {
           console.log("Created User Successflly!", response.data);
           navigate("/dashboard/user", { replace: true });

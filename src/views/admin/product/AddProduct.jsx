@@ -14,12 +14,30 @@ import productImgService from "../../../services/productImg.service";
 import { FcPlus } from "react-icons/fc";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { NumericFormat } from "react-number-format";
+import { useSelector } from "react-redux";
 //QuillJs
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 
 const AddProduct = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+
+  //
+  const notifyError = () =>
+    toast.error("Thất bại!", {
+      position: "top-right",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  //
   // Quilljs
   const { quill, quillRef } = useQuill();
   //
@@ -35,7 +53,7 @@ const AddProduct = () => {
   const slugname = require("slug");
   const [nameProduct, setNameProduct] = useState("");
   const [slugProduct, setSlugProduct] = useState("");
-  const [catId, setCatId] = useState("");
+  const [catId, setCatId] = useState("0");
   const [detail, setDetail] = useState("");
   const [proId, setProId] = useState("");
   const [type, setType] = useState("LT");
@@ -54,7 +72,7 @@ const AddProduct = () => {
   // Product Store
   const [storeId, setStoreId] = useState("");
   const [importPrices, setImportPrices] = useState("");
-  const [number, setNumber] = useState("");
+  const [number, setNumber] = useState("10");
   // Product Image
   const [link, setLink] = useState("");
   const [imgId, setImgId] = useState("");
@@ -73,7 +91,7 @@ const AddProduct = () => {
   }, []);
   const init = () => {
     categoryService
-      .getAll("ALL")
+      .getAll("ALL", userRD)
       .then((response) => {
         // console.log("Get Data OK", response.data);
         setCategory(response.data.category);
@@ -85,7 +103,7 @@ const AddProduct = () => {
   // console.log("category", category);
   const initProValue = () => {
     productValueService
-      .getAll("ALL")
+      .getAll("ALL", userRD)
       .then((response) => {
         // console.log("Get Data OK", response.data);
         setProductValue(response.data.productvalue);
@@ -210,7 +228,7 @@ const AddProduct = () => {
       nameProduct,
       slugProduct,
       catId,
-      price,
+      price: parseInt(price.replace(/,/g, "")),
       detail: quillRef.current.firstChild.innerHTML,
       type,
       proId: code,
@@ -240,7 +258,7 @@ const AddProduct = () => {
     console.log("Option: ", product_option);
     const product_store = {
       storeId: code,
-      importPrices,
+      importPrices: parseInt(importPrices.replace(/,/g, "")),
       number,
     };
     console.log("Store: ", product_store);
@@ -277,8 +295,10 @@ const AddProduct = () => {
               .catch((error) => {
                 console.log(error);
               });
+            navigate("/dashboard/product", { replace: true });
           })
           .catch((error) => {
+            notifyError();
             console.log(error);
           });
       } else {
@@ -308,8 +328,10 @@ const AddProduct = () => {
               .catch((error) => {
                 console.log(error);
               });
+            navigate("/dashboard/product", { replace: true });
           })
           .catch((error) => {
+            notifyError();
             console.log(error);
           });
       } else {
@@ -322,7 +344,8 @@ const AddProduct = () => {
     setType(type == "LT" ? "PK" : "LT");
     setDisable(disabled ? false : true);
   };
-  // console.log(type, disabled);
+  console.log("Gia ban", parseInt(price.replace(/,/g, "")));
+  console.log("Gia nhap", parseInt(importPrices.replace(/,/g, "")));
   return (
     <div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
@@ -412,7 +435,7 @@ const AddProduct = () => {
                   <>
                     {category
                       .filter((child) => {
-                        return child.status == 1 && child.parentId == 5;
+                        return child.status == 1 && child.parentId == 1;
                       })
                       .map((child, index) => {
                         return <option value={child.id}>{child.name}</option>;
@@ -422,14 +445,13 @@ const AddProduct = () => {
                   <>
                     {category
                       .filter((child) => {
-                        return child.status == 1 && child.parentId == 6;
+                        return child.status == 1 && child.parentId == 2;
                       })
                       .map((child, index) => {
                         return <option value={child.id}>{child.name}</option>;
                       })}
                   </>
                 )}
-               
               </select>
             </div>
             <div className="col-md-12">
@@ -654,35 +676,39 @@ const AddProduct = () => {
               <label for="exampleInputEmail1" className="form-label">
                 Giá nhập
               </label>
-              <input
-                type="text"
+              <NumericFormat
                 className="form-control"
-                name="name"
+                thousandSeparator={true}
                 value={importPrices}
                 onChange={(e) => setImportPrices(e.target.value)}
               />
+              <span>
+                <i>
+                  <b>Lưu ý:</b> Sử dụng đơn vị tiền tệ <b>VND</b>(Việt Nam Đồng)
+                </i>
+              </span>
             </div>
             <div className="col-md-6">
               <label for="exampleInputEmail1" className="form-label">
                 Giá bán
               </label>
-              <input
-                type="text"
+              <NumericFormat
                 className="form-control"
-                name="name"
+                thousandSeparator={true}
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6 mt-2">
               <label for="exampleInputEmail1" className="form-label">
                 Số lượng
               </label>
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 name="name"
                 value={number}
+                pattern="([0-9]{1,3}).([0-9]{1,3})"
                 onChange={(e) => setNumber(e.target.value)}
               />
             </div>
@@ -696,6 +722,18 @@ const AddProduct = () => {
           </button>
         </Tab>
       </Tabs>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

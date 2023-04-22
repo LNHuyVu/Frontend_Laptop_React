@@ -2,12 +2,26 @@ import React, { useEffect, useState } from "react";
 import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
+import { Input, Table } from "antd";
+import { FcPlus } from "react-icons/fc";
+//Modal
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
 // import "./listcategory.scss";
 // import categoryService from "../../../services/category.service";
 import topicService from "../../../services/topic.service";
 import { Link } from "react-router-dom";
 const ListTopic = () => {
+  const [search, setSearch] = useState("");
   const [topic, setTopic] = useState([]);
+
+  const [deleteId, setDeleteId] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     init();
   }, []);
@@ -53,73 +67,129 @@ const ListTopic = () => {
         console.log("Delete Not OK", error);
       });
   };
+  //Handle Delete
+  const handleDeleteClose = (value) => {
+    handleClose();
+    if (value == true) {
+      topicService
+        .remove(deleteId)
+        .then((reponse) => {
+          init();
+        })
+        .catch((error) => {
+          console.log("Delete Not OK", error);
+        });
+      setDeleteId("");
+    }
+  };
+  const handleDeleteOpen = (id) => {
+    handleShow();
+    setDeleteId(id);
+  };
+  const columns = [
+    {
+      title: "Tên danh mục",
+      dataIndex: "name",
+      filteredValue: [search],
+      onFilter: (value, record) => {
+        return String(record.name).toLowerCase().includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "Slug",
+      dataIndex: "slug",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "createdAt",
+    },
+    ,
+    {
+      title: "Chức năng",
+      dataIndex: "action",
+    },
+    {
+      title: "Id",
+      dataIndex: "id",
+    },
+  ];
+  for (const element of topic) {
+    element.action = (
+      <div class="d-grid gap-2 d-md-block">
+        {element.status === 1 ? (
+          <button
+            class="btn btn-success m-1 text-center"
+            type="button"
+            onClick={(e) => handleStatus(e, element.id, element.status)}
+          >
+            <BsToggleOn className="text-white" />
+          </button>
+        ) : (
+          <button
+            class="btn btn-danger m-1 text-center"
+            type="button"
+            onClick={(e) => handleStatus(e, element.id, element.status)}
+          >
+            <BsToggleOff className="text-white" />
+          </button>
+        )}
+        <Link to={"./edit-topic/" + element.id}>
+          <button class="btn btn-warning m-1 text-center" type="button">
+            <AiFillEdit className="text-white" />
+          </button>
+        </Link>
+        <button
+          onClick={(e) => handleDeleteOpen(element.id)}
+          class="btn btn-danger m-1 text-center"
+          type="button"
+        >
+          <FaTrashAlt className="text-white" />
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="card-body">
-      <div className="add-item text-end m-1">
-        <Link to="./add-topic">
-         <button className="btn-info">Thêm danh mục</button>
-        </Link>
+      <div className="text-center d-flex justify-content-between align-items-center mb-3">
+        <div></div>
+
+        <div>
+          <h2>Danh Mục Bài Viết</h2>
+        </div>
+        <div>
+          <Link to="./add-topic">
+            <button className="btn border border-3 border-success d-flex ">
+              <FcPlus className="fs-4" />
+              <span className="">Thêm Danh Mục</span>
+            </button>
+          </Link>
+        </div>
       </div>
-      <table class="table table-bordered" id="myTable">
-        <thead>
-          <th class="text-center" style={{ width: 20 }}>
-            #
-          </th>
-          <th>Tên danh mục</th>
-          <th>Slug</th>
-          <th>Ngày tạo</th>
-          <th>Chức năng</th>
-          <th>ID</th>
-        </thead>
-        <tbody>
-          {topic.map((item) => (
-            <tr>
-              <td class="text-center">
-                <input name="checkid" type="checkbox" />
-              </td>
-              <td>{item.name}</td>
-              <td>{item.slug}</td>
-              <td class="text-center date">{item.createdAt}</td>
-              <td className="text-center action">
-                <div class="d-grid gap-2 d-md-block">
-                  {item.status === 1 ? (
-                    <button
-                      class="btn btn-success m-1 text-center"
-                      type="button"
-                      onClick={(e) => handleStatus(e, item.id, item.status)}
-                    >
-                      <BsToggleOn className="text-white" />
-                    </button>
-                  ) : (
-                    <button
-                      class="btn btn-danger m-1 text-center"
-                      type="button"
-                      onClick={(e) => handleStatus(e, item.id, item.status)}
-                    >
-                      <BsToggleOff className="text-white" />
-                    </button>
-                  )}
-                  <Link to={"./edit-topic/" + item.id}>
-                    <button class="btn btn-warning m-1 text-center" type="button">
-                      <AiFillEdit className="text-white" />
-                    </button>
-                  </Link>
-                  <button
-                    onClick={(e) => handleDelete(item.id)}
-                    class="btn btn-danger m-1 text-center"
-                    type="button"
-                  >
-                    <FaTrashAlt className="text-white" />
-                  </button>
-                </div>
-              </td>
-              <td class="text-center">
-                {item.id}--{item.parentId}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Input.Search
+        style={{ paddingLeft: "20%", paddingRight: "20%", marginBottom: 10 }}
+        onSearch={(value) => {
+          setSearch(value);
+        }}
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
+        placehoder="Search here..."
+      />
+      <Table columns={columns} dataSource={topic}></Table>
+      <Modal show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thông báo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn xóa phần tử này!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => handleDeleteClose(true)}>
+            Đồng ý
+          </Button>
+          <Button variant="danger" onClick={() => handleDeleteClose(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -12,9 +12,10 @@ import { FcPlus } from "react-icons/fc";
 import "./postAD.scss";
 import { useSelector } from "react-redux";
 import { TiArrowBackOutline } from "react-icons/ti";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddPost = () => {
+  const navigate = useNavigate();
   //Rexdux
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   const slugname = require("slug");
@@ -25,6 +26,7 @@ const AddPost = () => {
   const [title, setTitle] = useState("");
   const [topId, setTopId] = useState("");
   const [detail, setDetail] = useState("");
+  const [type, setType] = useState("post");
   const [createdBy, setCreateBy] = useState(userRD?.user.id);
   const [status, setStatus] = useState("0");
   const [imagesPreview, setImagesPreview] = useState([]);
@@ -77,6 +79,7 @@ const AddPost = () => {
       slug: slugname(title),
       detail: quillRef.current.firstChild.innerHTML,
       topId,
+      type,
       image: imagesPreview,
       createdBy,
       status,
@@ -87,6 +90,7 @@ const AddPost = () => {
         .create(post)
         .then((reponse) => {
           console.log("Ok", reponse.data);
+          navigate("/dashboard/post", { replace: true });
         })
         .catch((error) => {
           console.log("Create Post Error", error);
@@ -185,7 +189,22 @@ const AddPost = () => {
                   ))}
                 </select>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
+                <label for="" className="form-label fw-bolder fs-5">
+                  Vị trí
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="status"
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  {/* <option selected>Status</option> */}
+                  <option value="post">Bài viết</option>
+                  <option value="page">Chính sách</option>
+                </select>
+              </div>
+              <div className="col-md-3">
                 <label for="" className="form-label fw-bolder fs-5">
                   Trạng thái
                 </label>

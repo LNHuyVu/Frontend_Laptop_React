@@ -1,20 +1,33 @@
 import httpClient from "../http-common";
-const getAll = (id) => {
-  return httpClient.get(`/get-all-category?id=${id}`);
+const getAll = (id, Token) => {
+  return httpClient.get(`/get-all-category?id=${id}`, {
+    headers: { token: `Bearer ${Token.accessToken}` },
+  });
 };
-const create = (data) => {
-  return httpClient.post("/create-new-category", data);
+const getAllCus = (id) => {
+  return httpClient.get(`/customer/get-all-category?id=${id}`);
 };
-const update = (data) => {
+const getIdCat = (slug) => {
+  return httpClient.get(`/customer/get-id-category?slug=${slug}`);
+};
+const create = (data, Token) => {
+  return httpClient.post("/create-new-category", data, {
+    headers: { token: `Bearer ${Token.accessToken}` },
+  });
+};
+const update = (data, Token) => {
   //   console.log('update', data)
-  return httpClient.put("/edit-category", data);
+  return httpClient.put("/edit-category", data, {
+    headers: { token: `Bearer ${Token.accessToken}` },
+  });
 };
-const remove = (userId) => {
+const remove = (userId, Token) => {
   //   console.log("data", userId);
   return httpClient.delete("/delete-category", {
+    headers: { token: `Bearer ${Token.accessToken}` },
     data: {
       id: userId,
     },
   });
 };
-export default { create, getAll, update, remove };
+export default { create, getAll, update, remove, getIdCat, getAllCus};

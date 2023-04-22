@@ -2,6 +2,9 @@ import httpClient from "../http-common";
 const getAll = (id) => {
   return httpClient.get(`/get-all-post?id=${id}`);
 };
+const getTopId = (id) => {
+  return httpClient.get(`/customer/get-all-post?topId=${id}`);
+};
 const create = (data) => {
   return httpClient.post("/create-new-post", data);
 };
@@ -17,4 +20,4 @@ const remove = (Id) => {
     },
   });
 };
-export default { create, getAll, update, remove };
+export default { create, getAll, update, remove, getTopId };

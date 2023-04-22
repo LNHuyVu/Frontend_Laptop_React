@@ -28,6 +28,7 @@ import EditPost from "../../views/admin/post/EditPost";
 import ListSlider from "../../views/admin/slider/ListSlider";
 import AddSlider from "../../views/admin/slider/AddSlider";
 import EditSlider from "../../views/admin/slider/EditSlider";
+import ListContact from "../../views/admin/contact/ListContact";
 
 const AdminRoute = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -59,6 +60,7 @@ const AdminRoute = () => {
             <Routes>
               <Route path="/" element={<AdminHome />} />
               <Route path="/category" element={<ListCategory />} />
+              <Route path="/contact" element={<ListContact />} />
               <Route path="/category/add-category" element={<AddCategory />} />
               <Route
                 path="/category/edit-category/:id"

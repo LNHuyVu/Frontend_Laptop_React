@@ -9,7 +9,7 @@ import {
   logoutSuccess,
   logoutFailed,
   logoutStart,
-} from "./authSlice";
+} from "./slice/authSlice";
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {

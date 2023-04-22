@@ -27,6 +27,7 @@ const EditPost = () => {
   const [slug, setSlug] = useState("");
   const [topId, setTopId] = useState("");
   const [detail, setDetail] = useState("");
+  const [type, setType] = useState("");
   const [status, setStatus] = useState("0");
   const [imagesPreview, setImagesPreview] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,7 @@ const EditPost = () => {
         console.log("Post ID:", response.data);
         setTitle(response.data.post.title);
         setSlug(response.data.post.slug);
+        setType(response.data.post.type);
         setImagesPreview(response.data.post.image);
         quillRef.current.firstChild.innerHTML = response.data.post.detail;
         setTopId(response.data.post.topId);
@@ -190,7 +192,30 @@ const EditPost = () => {
                   )}
                 </select>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
+                <label for="" className="form-label fw-bolder fs-5">
+                  Vị trí
+                </label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="status"
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  {type == "post" ? (
+                    <>
+                      <option value="post">Bài viết</option>
+                      <option value="page">Chính sách</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="page">Chính sách</option>
+                      <option value="post">Bài viết</option>
+                    </>
+                  )}
+                </select>
+              </div>
+              <div className="col-md-3">
                 <label for="" className="form-label fw-bolder fs-5">
                   Trạng thái
                 </label>

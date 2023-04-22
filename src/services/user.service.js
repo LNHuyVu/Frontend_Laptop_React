@@ -4,12 +4,15 @@ const getAll = (id, Token) => {
     headers: { token: `Bearer ${Token.accessToken}` },
   });
 };
-const create = (data) => {
-  return httpClient.post("/create-new-user", data);
+const create = (data, Token) => {
+  return httpClient.post("/create-new-user", data, {
+    headers: { token: `Bearer ${Token.accessToken}` },
+  });
 };
-const update = (data) => {
-  //   console.log('update', data)
-  return httpClient.put("/edit-user", data);
+const update = (data, Token) => {
+  return httpClient.put("/edit-user", data, {
+    headers: { token: `Bearer ${Token.accessToken}` },
+  });
 };
 const remove = (userId, Token) => {
   //   console.log("data", userId);

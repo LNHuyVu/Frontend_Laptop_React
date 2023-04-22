@@ -11,7 +11,17 @@ import productImgService from "../../../services/productImg.service";
 import productValueService from "../../../services/productValue.service";
 import productStoreService from "../../../services/productStore.service";
 import productOptionService from "../../../services/productOption.service";
+import { NumericFormat } from "react-number-format";
+import { useSelector } from "react-redux";
+//
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
+
 const EditProduct = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+
+  const { quill, quillRef } = useQuill();
+
   const [key, setKey] = useState("home");
   const navigate = useNavigate();
   const slugname = require("slug");
@@ -56,9 +66,6 @@ const EditProduct = () => {
   //Load parentid
   useEffect(() => {
     init();
-    // if (type == "LT") {
-    //   initOption();
-    // }
   }, []);
   const init = () => {
     //GET ID
@@ -71,7 +78,8 @@ const EditProduct = () => {
         setNameProduct(response.data.product.nameProduct);
         setCatId(response.data.product.catId);
         setType(response.data.product.type);
-        setDetail(response.data.product.detail);
+        quillRef.current.firstChild.innerHTML = response.data.product.detail;
+        // setDetail(response.data.product.detail);
         setStatus(response.data.product.status);
         setSlugProduct(response.data.product.slugProduct);
         setPrice(response.data.product.price);
@@ -107,7 +115,7 @@ const EditProduct = () => {
     //
     // //GET OPTION
     categoryService
-      .getAll("ALL")
+      .getAll("ALL", userRD)
       .then((response) => {
         // console.log("Get Data OK", response.data.category);
         setCategory(response.data.category);
@@ -122,36 +130,18 @@ const EditProduct = () => {
         setProductValue(response.data.productvalue);
       })
       .catch((error) => {
-        console.log("Ngu", error);
+        console.log(error);
       });
   };
-  // const initOption = () => {
-  //   //GET ID
-  //   console.log(id);
-  //   productService
-  //     .getAll(id)
-  //     .then((response) => {
-  //       //Start Option
-  //       setOptionId(response.data.product.option.id);
-  //       setDemand(response.data.product.option.demandName.id);
-  //       setCpu(response.data.product.option.cpuName.id);
-  //       setCard(response.data.product.option.cardName.id);
-  //       setSystem(response.data.product.option.systemName.id);
-  //       setHdrive(response.data.product.option.hdriveName.id);
-  //       setRam(response.data.product.option.ramName.id);
-  //       setCpuGen(response.data.product.option.cpuGenName.id);
-  //       setScreen(response.data.product.option.screenName.id);
-  //       // End Option
-  //     })
-  //     .catch((error) => {
-  //       console.log("Get Data Failed ID", error);
-  //     });
-  // };
-
   const CheckValidateLT = () => {
+    let contentLT = quillRef.current.firstChild.innerHTML;
+    if (contentLT == "<p><br></p>") {
+      contentLT = "";
+    }
     setLink(imagesPreview);
     let isValue = true;
     const check = {
+      "Mô tả": contentLT,
       "Nhu cầu": demand,
       "Trạng thái": status,
       CPU: cpu,
@@ -161,7 +151,6 @@ const EditProduct = () => {
       "Card đồ họa": card,
       "Hệ điều hành": system,
       "Tên sản phẩm": nameProduct,
-      slugProduct,
       Giá: price,
       "Danh mục": catId,
       "Hình ảnh": imagesPreview,
@@ -182,9 +171,15 @@ const EditProduct = () => {
   };
   //CheckValidatePK
   const CheckValidatePK = () => {
+    let contentPK = quillRef.current.firstChild.innerHTML;
+    if (contentPK == "<p><br></p>") {
+      contentPK = "";
+    }
+
     setLink(imagesPreview);
     let isValue = true;
     const check = {
+      "Mô tả": contentPK,
       "Trạng thái": status,
       "Tên sản phẩm": nameProduct,
       slugProduct,
@@ -206,16 +201,15 @@ const EditProduct = () => {
     return isValue;
   };
   //Handle Submit
-  const handleUpdate = (e) => {
+  const handleUpdate = async(e) => {
     // e.preventDefault();
-
     //Product
     const product = {
       nameProduct,
       slugProduct,
       catId,
-      price,
-      detail,
+      price: parseInt(String(price).replace(/,/g, "")),
+      detail: quillRef.current.firstChild.innerHTML,
       type,
       proId,
       createdBy: "VIP",
@@ -245,16 +239,17 @@ const EditProduct = () => {
     console.log("Option: ", product_option);
     const product_store = {
       id: storeId,
-      importPrices,
+      importPrices: parseInt(String(importPrices).replace(/,/g, "")),
       number,
     };
     console.log("Store: ", product_store);
     if (type == "LT") {
       if (CheckValidateLT()) {
+        // console.log(type);
         console.log("product", product);
         console.log("option", product_option);
         console.log("img", product_img);
-        productService
+        await productService
           .update(product)
           .then((response) => {
             console.log("data product successfully", response.data);
@@ -266,7 +261,7 @@ const EditProduct = () => {
               .catch((error) => {
                 console.log("Songthing img went wrong", error);
               });
-            productStoreService
+              productStoreService
               .update(product_store)
               .then((response) => {
                 console.log("data store successfully", response.data);
@@ -274,16 +269,16 @@ const EditProduct = () => {
               .catch((error) => {
                 console.log("Songthing store went wrong", error);
               });
-            productOptionService
+              productOptionService
               .update(product_option)
               .then((response) => {
                 console.log("data option successfully", response.data);
+                navigate("/dashboard/product", { replace: true });
+                init();
               })
               .catch((error) => {
                 console.log("Songthing went wrong", error);
               });
-            navigate("/dashboard/product", { replace: true });
-            init();
           })
           .catch((error) => {
             console.log("Songthing product went wrong", error);
@@ -465,12 +460,9 @@ const EditProduct = () => {
               <label for="exampleInputEmail1" className="form-label">
                 Mô tả chi tiết
               </label>
-              <textarea
-                value={detail}
-                onChange={(e) => setDetail(e.target.value)}
-                id="detail"
-                name="detail"
-              ></textarea>
+              <div style={{ width: "100%", height: 350, background: "#fff" }}>
+                <div ref={quillRef} />
+              </div>
             </div>
           </div>
         </Tab>
@@ -758,27 +750,30 @@ const EditProduct = () => {
               <label for="exampleInputEmail1" className="form-label">
                 Giá nhập
               </label>
-              <input
-                type="text"
+              <NumericFormat
                 className="form-control"
-                name="name"
+                thousandSeparator={true}
                 value={importPrices}
                 onChange={(e) => setImportPrices(e.target.value)}
               />
+              <span>
+                <i>
+                  <b>Lưu ý:</b> Sử dụng đơn vị tiền tệ <b>VND</b>(Việt Nam Đồng)
+                </i>
+              </span>
             </div>
             <div className="col-md-6">
               <label for="exampleInputEmail1" className="form-label">
                 Giá bán
               </label>
-              <input
-                type="text"
+              <NumericFormat
                 className="form-control"
-                name="name"
+                thousandSeparator={true}
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6 mt-2">
               <label for="exampleInputEmail1" className="form-label">
                 Số lượng
               </label>

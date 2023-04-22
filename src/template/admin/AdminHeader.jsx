@@ -160,12 +160,14 @@ const AdminHeader = () => {
               <span>Profile</span>
             </a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link collapsed" href="pages-contact.html">
-              <i className="bi bi-envelope"></i>
-              <span>Liên hệ</span>
-            </a>
-          </li>
+          <Link to="./contact">
+            <li className="nav-item">
+              <a className="nav-link collapsed" href="pages-contact.html">
+                <i className="bi bi-envelope"></i>
+                <span>Liên hệ</span>
+              </a>
+            </li>
+          </Link>
 
           <li className="nav-item">
             <a className="nav-link collapsed" href="pages-register.html">

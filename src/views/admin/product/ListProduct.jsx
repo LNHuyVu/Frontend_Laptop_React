@@ -12,28 +12,29 @@ import productStoreService from "../../../services/productStore.service";
 import productValueService from "../../../services/productValue.service";
 import { Link } from "react-router-dom";
 import { Input, Table } from "antd";
+import { FcPlus } from "react-icons/fc";
+import { useSelector } from "react-redux";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 const ListProduct = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+
   const [search, setSearch] = useState("");
 
   const [key, setKey] = useState("home");
   const [product, setProduct] = useState([]);
-  const [productValue, setProductValue] = useState([]);
+
+  const [deleteId, setDeleteId] = useState("");
+  const [deleteProId, setDeleteProId] = useState("");
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     init();
-    initValue();
   }, []);
-  const initValue = () => {
-    productValueService
-      .getAll("ALL")
-      .then((response) => {
-        setProductValue(response.data.productvalue);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  // console.log("Value", productValue);
+
   const init = () => {
     productService
       .getAll("ALL")
@@ -46,7 +47,6 @@ const ListProduct = () => {
       });
   };
 
-  // console.log("product", product);
   //handle status
   const handleStatus = (e, id, status) => {
     e.preventDefault();
@@ -104,16 +104,48 @@ const ListProduct = () => {
         console.log("Delete Not OK", error);
       });
   };
-  const handleDeleteProductValue = (id) => {
-    productValueService
-      .remove(id)
-      .then((reponse) => {
-        // console.log("Delete OK", reponse.data);
-        init();
-      })
-      .catch((error) => {
-        console.log("Delete Not OK", error);
-      });
+  //
+  const handleDeleteClose = (value) => {
+    handleClose();
+    if (value == true) {
+      productService
+        .remove(deleteId)
+        .then((reponse) => {
+          init();
+        })
+        .catch((error) => {
+          console.log("Delete Not OK", error);
+        });
+      productOptionService
+        .remove(deleteProId)
+        .then((reponse) => {
+          init();
+        })
+        .catch((error) => {
+          console.log("Delete Not OK", error);
+        });
+      productImgService
+        .remove(deleteProId)
+        .then((reponse) => {
+          init();
+        })
+        .catch((error) => {});
+      productStoreService
+        .remove(deleteProId)
+        .then((reponse) => {
+          init();
+        })
+        .catch((error) => {
+          console.log("Delete Not OK", error);
+        });
+      setDeleteId("");
+      setDeleteProId("");
+    }
+  };
+  const handleDeleteOpen = (id, proId) => {
+    handleShow();
+    setDeleteId(id);
+    setDeleteProId(proId);
   };
   //Table colums
   const columns = [
@@ -130,10 +162,6 @@ const ListProduct = () => {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-    },
-    {
-      title: "Slug",
-      dataIndex: "slugProduct",
     },
     {
       title: "Ngày tạo",
@@ -183,7 +211,7 @@ const ListProduct = () => {
           </button>
         </Link>
         <button
-          onClick={(e) => handleDelete(element.id)}
+          onClick={(e) => handleDeleteOpen(element.id, element.proId)}
           class="btn btn-danger m-1 text-center"
           type="button"
         >
@@ -195,10 +223,19 @@ const ListProduct = () => {
   return (
     <>
       <div className="card-body">
-        <div className="add-item text-end m-1">
-          <Link to="./add-product">
-            <button className="btn btn-info">Thêm Sản Phẩm </button>
-          </Link>
+        <div className="text-center d-flex justify-content-between align-items-center mb-3">
+          <div></div>
+          <div>
+            <h2>Danh Mục Sản Phẩm</h2>
+          </div>
+          <div>
+            <Link to="./add-product">
+              <button className="btn border border-3 border-success d-flex ">
+                <FcPlus className="fs-4" />
+                <span className="">Thêm mới</span>
+              </button>
+            </Link>
+          </div>
         </div>
         <Tabs
           id="controlled-tab-example"
@@ -226,43 +263,21 @@ const ListProduct = () => {
           <Tab eventKey="profile" title="Sản phẩm khuyến mãi">
             Khuyến mãi
           </Tab>
-          <Tab eventKey="contact" title="Cấu hình">
-            <table class="table table-bordered" id="myTable">
-              <thead>
-                <th class="text-center" style={{ width: 20 }}>
-                  #
-                </th>
-                <th>Tên</th>
-                <th>Chức năng</th>
-                <th>ID</th>
-              </thead>
-              <tbody>
-                {productValue.map((item) => (
-                  <tr>
-                    <td class="text-center">
-                      <input name="checkid" type="checkbox" />
-                    </td>
-                    <td>{item.nameValue}</td>
-                    <td className="text-center action">
-                      <div class="d-grid gap-2 d-md-block">
-                        <button
-                          onClick={(e) => handleDeleteProductValue(item.id)}
-                          class="btn btn-danger m-1 text-center"
-                          type="button"
-                        >
-                          <FaTrashAlt className="text-white" />
-                        </button>
-                      </div>
-                    </td>
-                    <td class="text-center">
-                      {item.id}--{item.parentIdValue}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Tab>
         </Tabs>
+        <Modal show={show} onHide={handleClose} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Thông báo</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Bạn có chắc chắn xóa phần tử này!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="success" onClick={() => handleDeleteClose(true)}>
+              Đồng ý
+            </Button>
+            <Button variant="danger" onClick={() => handleDeleteClose(false)}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );

@@ -2,11 +2,16 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import productValueService from "../../../services/productValue.service";
+import { useSelector } from "react-redux";
 const EditProductValue = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+
   const params = useParams();
   let id = params.id;
+  const slugname = require("slug");
   const navigate = useNavigate();
   const [nameValue, setNameValue] = useState("");
+  const [slug, setSlug] = useState("");
   const [parentIdValue, setParentIdValue] = useState("0");
   const [statusValue, setStatusValue] = useState("0");
   const [productValue, setProductValue] = useState([]);
@@ -16,9 +21,10 @@ const EditProductValue = () => {
   }, []);
   const init = () => {
     productValueService
-      .getAll(id)
+      .getAll(id, userRD)
       .then((response) => {
         setNameValue(response.data.productvalue.nameValue);
+        setSlug(response.data.productvalue.slug);
         setParentIdValue(response.data.productvalue.parentIdValue);
         setStatusValue(response.data.productvalue.statusValue);
       })
@@ -28,7 +34,7 @@ const EditProductValue = () => {
   };
   const initParentId = () => {
     productValueService
-      .getAll("ALL")
+      .getAll("ALL", userRD)
       .then((response) => {
         setProductValue(response.data.productvalue);
       })
@@ -36,21 +42,22 @@ const EditProductValue = () => {
         console.log(error);
       });
   };
-  console.log(nameValue, parentIdValue, statusValue);
-  console.log(productValue);
+  // console.log(nameValue, parentIdValue, statusValue);
+  // console.log(productValue);
   const handleUpdate = (e) => {
     e.preventDefault();
-    console.log(parentIdValue);
+    // console.log(parentIdValue);
     // if (parentIdValue == "") setParentIdValue(0);
     const data_update = {
       id,
       nameValue,
+      slug: slugname(nameValue),
       parentIdValue,
       statusValue,
     };
-    console.log(data_update);
+    // console.log(data_update);
     productValueService
-      .update(data_update)
+      .update(data_update, userRD)
       .then((response) => {
         console.log(response.data);
         console.log("Success OK");

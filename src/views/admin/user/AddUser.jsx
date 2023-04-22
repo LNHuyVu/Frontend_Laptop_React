@@ -8,8 +8,10 @@ import "./listuser.scss";
 import { FcPlus } from "react-icons/fc";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 const AddUser = () => {
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+  // console.log(userRD.user.id);
   const [imagesPreview, setImagesPreview] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,13 +66,13 @@ const AddUser = () => {
       address,
       phone,
       roles,
-      createdBy: "VIP",
+      createdBy: String(userRD?.user.id),
       status,
     };
     console.log("User new", user_create);
     if (CheckValidate()) {
       userService
-        .create(user_create)
+        .create(user_create, userRD)
         .then((response) => {
           console.log("Created User Successflly!", response.data);
           navigate("/dashboard/user", { replace: true });
@@ -90,7 +92,6 @@ const AddUser = () => {
     const check = {
       "Tên người dùng": name,
       "Tài khoản email": email,
-      "Hình ảnh": imagesPreview,
       "Mật khẩu": password,
       "Địa chỉ": address,
       "Số điện thoại": phone,

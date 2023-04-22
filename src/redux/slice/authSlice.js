@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { removeToCart } from "./cartSlice";
+import { useDispatch } from "react-redux";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
