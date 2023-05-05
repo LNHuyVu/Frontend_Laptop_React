@@ -11,15 +11,17 @@ const create = (data) => {
   });
 };
 const update = (data) => {
-  //   console.log('update', data)
   return httpClient.put("/edit-productstore", data);
 };
+//Handle number
+const updateQuantity = (data) => {
+  return httpClient.put("/quantity-productstore", data);
+};
 const remove = (userId) => {
-  //   console.log("data", userId);
   return httpClient.delete("/delete-productstore", {
     data: {
       id: userId,
     },
   });
 };
-export default { create, getAll, update, remove };
+export default { create, getAll, update, updateQuantity, remove };

@@ -2,6 +2,9 @@ import httpClient from "../http-common";
 const getAll = (id) => {
   return httpClient.get(`/get-all-orderdetail?id=${id}`);
 };
+const getProductHot = (id) => {
+  return httpClient.get(`/get-all-producthot?id=${id}`);
+};
 const create = (data) => {
   return httpClient.post("/create-new-orderdetail", data);
 };
@@ -17,4 +20,4 @@ const remove = (orderId) => {
     },
   });
 };
-export default { create, getAll, update, remove };
+export default { create, getAll, getProductHot,update, remove };

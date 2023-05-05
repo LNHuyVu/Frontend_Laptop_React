@@ -12,6 +12,7 @@ import Button from "react-bootstrap/Button";
 import { TbConfetti } from "react-icons/tb";
 import { FcApproval } from "react-icons/fc";
 import emailService from "../../../services/email.service";
+import productStoreService from "../../../services/productStore.service";
 const Order = () => {
   const d = new Date();
   let code = d.getTime();
@@ -77,6 +78,7 @@ const Order = () => {
         .create(order)
         .then((reponse) => {
           for (const item of cartRD) {
+            //ADD CART DETAIL
             const cart = {
               productId: item.id,
               orderId: reponse.data.order.id,
@@ -86,16 +88,25 @@ const Order = () => {
             };
             orderDetailService
               .create(cart)
-              .then((reponse) => {
-              })
+              .then((reponse) => {})
+              .catch((error) => {
+                console.log(error);
+              });
+            //HANDLE NUMBER IN STORE
+            const numberStore = {
+              id: item.proId,
+              number: item.quantity,
+            };
+            productStoreService
+              .updateQuantity(numberStore)
+              .then((reponse) => {})
               .catch((error) => {
                 console.log(error);
               });
           }
           emailService
             .sendEmail({ order: order, cart: cartRD, total: totalPrice })
-            .then((reponse) => {
-            })
+            .then((reponse) => {})
             .catch((error) => {
               console.log(error);
             });
@@ -246,60 +257,7 @@ const Order = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      {/* <div>
-        <h5>
-          <b>Mã đơn hàng: 123</b>
-        </h5>
-        <h5>
-          <b>Xin chào: 123</b>
-        </h5>
-        <br />
-        <div>
-          <span>
-            Chúng tôi vui mừng thông báo cho bạn biết rằng chúng tôi đã nhận
-            được đơn đặt hàng của bạn.
-          </span>
-          <br />
-          <br />
-          <span>
-            <span>
-              <b>Danh sách sản phẩm</b>
-            </span>
-            <br />
-            <table>
-              <tr>
-                <th>Tên sản phẩm</th>
-                <th>Số lượng</th>
-                <th>Giá</th>
-                <th>Thành tiền</th>
-              </tr>
-              <tr>
-                {data.cart.map((item)=>{
-                   <td>{item.name}</td>
-                   <td>{item.quantity}</td>
-                   <td>{item.price}</td>
-                   <td>{parseInt(item.quantity*item.price)}</td>
-                })}
-              </tr>
-            </table>
-          </span>
-          <br />
-          <span>
-            Sau khi gói hàng của bạn được vận chuyển, chúng tôi sẽ gửi cho bạn
-            một email có số theo dõi để bạn có thể xem chuyển động của gói hàng
-            của mình.
-          </span>
-          <br />
-          <br />
-          <span>
-            Nếu bạn có bất kỳ câu hỏi nào, hãy liên hệ với chúng tôi tại đây
-            hoặc gọi cho chúng tôi theo số [0339 142 XXX]!
-          </span>
-          <br />
-          <br />
-          <span>Chúng tôi ở đây để hỗ trợ bạn!</span>
-        </div>
-      </div> */}
+      
     </div>
   );
 };

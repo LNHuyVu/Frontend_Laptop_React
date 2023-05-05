@@ -12,7 +12,6 @@ const Featuredcategory = (product) => {
       .getAllCus("ALL")
       .then((reponse) => {
         setCategory(reponse.data.category);
-        console.log("Category", reponse.data);
       })
       .catch((error) => {
         console.log(error);

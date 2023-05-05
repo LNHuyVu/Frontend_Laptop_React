@@ -2,12 +2,19 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./productsale.scss";
+import "./producthot.scss";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
-const ProductSale = (product) => {
-  let numeral = require("numeral");
+const ProducHot = (product) => {
+  const numeral=require('numeral')
+  let settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+  };
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -28,30 +35,26 @@ const ProductSale = (product) => {
     },
   };
   return (
-    <div className="productsale p-2 mt-4 mb-1">
-      <h3>Khuyến mãi</h3>
+    <div className="producthot p-2 mt-2">
+      <h3>Bán chạy</h3>
       <Carousel responsive={responsive}>
-        {product.product
-          .filter((item) => {
-            return item.sale != null && item.sale?.status == 1;
-          })
-          .map((item) => {
-            return (
-              <div className="card mx-2">
-                <Link to={`/product/productdetail/${item?.slugProduct}`}>
+        {product?.product.map((item) => {
+          return (
+            <div key={item.productId} className="card mx-2">
+                <Link to={`/product/productdetail/${item?.product.slugProduct}`}>
                   <div className="p-2 box-zoom-out">
                     <img
-                      src={item?.imgData.link[0]}
+                      src={item?.product.imgData?.link[0]}
                       className="card-img-top"
                       alt="..."
                     />
-                    {item?.sale == null || item?.sale.status == 0 ? (
+                    {item?.product.sale == null || item?.product.sale.status == 0 ? (
                       <></>
                     ) : (
                       <>
                         <span className="sale px-2">
                           Giảm giá:{" "}
-                          {numeral(item?.sale.valueSale).format("0,0")}đ
+                          {numeral(item?.product.sale.valueSale).format("0,0")}đ
                         </span>
                       </>
                     )}
@@ -60,12 +63,12 @@ const ProductSale = (product) => {
 
                 <div className="card-body">
                   <h5 className="card-title" style={{ fontSize: "100%" }}>
-                    <Link to={`/product/productdetail/${item?.slugProduct}`}>
+                    <Link to={`/product/productdetail/${item?.product.slugProduct}`}>
                       <span
                         className="card-text-home"
                         style={{ color: "#000" }}
                       >
-                        {item?.nameProduct}
+                        {item?.product.nameProduct}
                       </span>
                     </Link>
                     <div className="mt-1 container overflow-hidden">
@@ -79,8 +82,8 @@ const ProductSale = (product) => {
                               fontSize: "80%",
                             }}
                           >
-                            {item?.option?.ramName ? "Ram" : ""}
-                            {item?.option?.ramName.nameValue}
+                            {item?.product.option?.ramName ? "Ram" : ""}
+                            {item?.product.option?.ramName.nameValue}
                           </div>
                         </div>
                         <div class="col">
@@ -92,7 +95,7 @@ const ProductSale = (product) => {
                               fontSize: "80%",
                             }}
                           >
-                            {item?.option?.hdriveName.nameValue}
+                            {item?.product.option?.hdriveName.nameValue}
                           </div>
                         </div>
                       </div>
@@ -100,7 +103,7 @@ const ProductSale = (product) => {
                   </h5>
                   <div className="card-text">
                     <div className="d-flex justify-content-lg-between">
-                      {item?.sale == null || item?.sale.status == 0 ? (
+                      {item?.product.sale == null || item?.product.sale.status == 0 ? (
                         <>
                           <span
                             className="px-2"
@@ -111,7 +114,7 @@ const ProductSale = (product) => {
                               borderRadius: 10,
                             }}
                           >
-                            {numeral(item?.price).format("0,0")}
+                            {numeral(item?.product.price).format("0,0")}
                             <u>đ</u>
                           </span>
                         </>
@@ -127,7 +130,7 @@ const ProductSale = (product) => {
                             }}
                           >
                             {numeral(
-                              parseInt(item?.price) - item?.sale?.valueSale
+                              parseInt(item?.product.price) - item?.product.sale?.valueSale
                             ).format("0,0")}
                             <u>đ</u>
                           </span>
@@ -136,36 +139,37 @@ const ProductSale = (product) => {
                               "text-decoration-line": "line-through",
                             }}
                           >
-                            {numeral(item?.price).format("0,0")}
+                            {numeral(item?.product.price).format("0,0")}
                             <u>đ</u>
                           </span>
                         </>
                       )}
                     </div>
-                    {item?.option?.ramName ? (
+                    {item?.product.option?.ramName ? (
                       <>
-                        {item?.option?.screenName ? "Màng hình: " : ""}
-                        {item?.option?.screenName.nameValue}
+                        {item?.product.option?.screenName ? "Màng hình: " : ""}
+                        {item?.product.option?.screenName.nameValue}
                         <br />
-                        {item?.option?.cpuName ? "CPU: " : ""}
-                        {item?.option?.cpuName.nameValue}
-                        {item?.option?.cpuName ? "," : ""}
-                        {item?.option?.cpuGenName.nameValue}
+                        {item?.product.option?.cpuName ? "CPU: " : ""}
+                        {item?.product.option?.cpuName.nameValue}
+                        {item?.product.option?.cpuName ? "," : ""}
+                        {item?.product.option?.cpuGenName.nameValue}
                         <br />
                         <span className="card-text text-graphics-card">
-                          {item?.option?.cardName ? "Card:" : ""}
+                          {item?.product.option?.cardName ? "Card:" : ""}
 
-                          {item?.option?.cardName.nameValue}
+                          {item?.product.option?.cardName.nameValue}
                         </span>
                       </>
                     ) : (
-                      <></>
+                      <>
+                      </>
                     )}
                   </div>
                 </div>
               </div>
-            );
-          })}
+          );
+        })}
       </Carousel>
       {/* <div className="seemore">
         <button>Xem tất cả sản phẩm</button>
@@ -174,4 +178,4 @@ const ProductSale = (product) => {
   );
 };
 
-export default ProductSale;
+export default ProducHot;

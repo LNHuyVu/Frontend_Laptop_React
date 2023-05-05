@@ -8,7 +8,20 @@ import { Carousel } from "react-responsive-carousel";
 import "react-quill/dist/quill.snow.css";
 import { Link } from "react-router-dom";
 import productValueService from "../../../services/productValue.service";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../../redux/slice/cartSlice";
+import Comment from "../facebook/Comment";
+import Like from "../facebook/Like";
+import Share from "../facebook/Share";
+import { TiShoppingCart } from "react-icons/ti";
+
 const ProductDetail = () => {
+  //
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
+
+  const dispatch = useDispatch();
+
+  //
   const param = useParams();
   let slug = param.slug;
   var numeral = require("numeral");
@@ -55,8 +68,17 @@ const ProductDetail = () => {
         console.log(error);
       });
   };
-  console.log("Similar", productSimilar);
-
+  //Add Cart
+  const handleAddCart = (id, title, image, price, proId, number) => {
+    if (!userRD) {
+      alert("vui lòng đăng nhập");
+    } else {
+      let userid = userRD.user.id;
+      dispatch(addToCart({ id, title, image, price, proId, userid, number }));
+      alert("hi");
+    }
+  };
+  //Plugin FACEBOOK
   return (
     <>
       <div className="row p-5 product-detail">
@@ -84,22 +106,70 @@ const ProductDetail = () => {
           <span className="fw-bold">
             Bộ sản phẩm gồm: Sách hướng dẫn, Thùng máy, Cáp ( Type C )
           </span>
-        </div>
-        <div className="col-md-6 product-data">
-          <h3 className="text-center">
-            Giá: {numeral(product.price).format("0,0")}đ
-          </h3>
-          <div className="text-center div-price">Mua online giảm giá sốc</div>
-          <div className="text-center div-price">
-            Chỉ còn: {numeral(product.price - 500000).format("0,0")}đ
+          {/* Plugin FACEBOOK */}
+          <div>
+            <Share link={product.slugProduct} />
+            <Comment link={product.slugProduct} />
           </div>
+        </div>
+        {/*  */}
+        <div className="col-md-6 product-data">
+          <div className="text-center">
+            <Like />
+            {product.sale == null ? (
+              <h3>Giá: {numeral(product.price).format("0,0")}đ</h3>
+            ) : (
+              <div className="">
+                <h3>
+                  Giá:{" "}
+                  {numeral(
+                    parseInt(product.price - product.sale.valueSale)
+                  ).format("0,0")}
+                  đ
+                </h3>
+                <h5>
+                  <del>{numeral(product.price).format("0,0")}đ</del>
+                </h5>
+              </div>
+            )}
+          </div>
+          <div className="text-center div-price">Mua online giảm giá sốc</div>
+          {product.sale == null ? (
+            <></>
+          ) : (
+            <>
+              <div className="text-center div-price">
+                Chỉ còn:{" "}
+                {numeral(
+                  parseInt(product.price - product.sale.valueSale)
+                ).format("0,0")}
+                đ
+              </div>
+            </>
+          )}
+
           <span>
             Giá khuyến mãi dự kiến áp dụng đến 23:00 15/6, không áp dụng trả góp
             lãi suất đặt biệt(0%, 0.5%, 1%,)
           </span>
-          <div className="buy-now">
+          <button
+            onClick={() =>
+              handleAddCart(
+                product.id,
+                product.nameProduct,
+                product?.imgData.link[0],
+                product?.sale == null
+                  ? product.price
+                  : parseInt(product.price - product.sale.valueSale),
+                product.proId,
+
+                product.store.number
+              )
+            }
+            className="buy-now w-100"
+          >
             <h3>Mua ngay</h3>
-          </div>
+          </button>
           <div className="product-info">
             <h4>Thông tin chi tiết</h4>
             <table class="table">
@@ -172,6 +242,7 @@ const ProductDetail = () => {
           {product.type == "LT" ? (
             <>
               <div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
+                {/* Get Product "LT" => Demand */}
                 {productSimilar
                   .filter((item) => {
                     return item?.product?.id !== product?.id;
@@ -180,22 +251,47 @@ const ProductDetail = () => {
                     return (
                       <div className="col">
                         <div className="card">
-                          <img
-                            src={item?.product?.imgData?.link[0]}
-                            className="card-img-top"
-                            alt="..."
-                          />
+                          <Link
+                            to={`/product/productdetail/${item.product?.slugProduct}`}
+                          >
+                            <div className="p-2 box-zoom-out">
+                              <img
+                                src={item.product?.imgData.link[0]}
+                                className="card-img-top"
+                                alt="..."
+                              />
+                              {item.product?.sale == null ? (
+                                <></>
+                              ) : (
+                                <>
+                                  <span className="sale px-2">
+                                    Giảm giá:{" "}
+                                    {numeral(
+                                      item.product?.sale.valueSale
+                                    ).format("0,0")}
+                                    đ
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </Link>
+
                           <div className="card-body">
                             <h5
                               className="card-title"
                               style={{ fontSize: "100%" }}
                             >
-                              <span
-                                className="card-text-home"
-                                style={{ color: "#000" }}
+                              <Link
+                                to={`/product/productdetail/${item.product?.slugProduct}`}
                               >
-                                {item?.product?.nameProduct}
-                              </span>
+                                <span
+                                  className="card-text-home"
+                                  style={{ color: "#000" }}
+                                >
+                                  {item.product?.nameProduct}
+                                </span>
+                              </Link>
+
                               <div className="mt-1 container overflow-hidden">
                                 <div className="row gx-2">
                                   <div className="col">
@@ -207,10 +303,8 @@ const ProductDetail = () => {
                                         fontSize: "80%",
                                       }}
                                     >
-                                      {item?.product?.option?.ramName
-                                        ? "Ram"
-                                        : ""}
-                                      {item?.product?.option?.ramName.nameValue}
+                                      Ram{" "}
+                                      {item.product?.option.ramName.nameValue}
                                     </div>
                                   </div>
                                   <div class="col">
@@ -223,7 +317,7 @@ const ProductDetail = () => {
                                       }}
                                     >
                                       {
-                                        item?.product?.option?.hdriveName
+                                        item.product?.option.hdriveName
                                           .nameValue
                                       }
                                     </div>
@@ -231,38 +325,90 @@ const ProductDetail = () => {
                                 </div>
                               </div>
                             </h5>
-                            <p className="card-text">
-                              <b>
-                                <span>Giá: </span>
-                                {numeral(item?.product?.price).format("0,0")}
-                                <span>
-                                  {" "}
-                                  <u>đ</u>
-                                </span>
-                              </b>
+                            <div className="card-text">
+                              <div className="d-flex justify-content-lg-between">
+                                {item?.product?.sale == null ? (
+                                  <>
+                                    <span
+                                      className="px-2"
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "blue",
+                                        background: "#9370D8",
+                                        borderRadius: 10,
+                                      }}
+                                    >
+                                      {numeral(item?.product?.price).format(
+                                        "0,0"
+                                      )}
+                                      <u>đ</u>
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span
+                                      className="px-2"
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "blue",
+                                        background: "#9370D8",
+                                        borderRadius: 10,
+                                      }}
+                                    >
+                                      {numeral(
+                                        parseInt(item?.product.price) -
+                                          item?.product?.sale?.valueSale
+                                      ).format("0,0")}
+                                      <u>đ</u>
+                                    </span>
+                                    <span
+                                      style={{
+                                        "text-decoration-line": "line-through",
+                                      }}
+                                    >
+                                      {numeral(item?.product.price).format(
+                                        "0,0"
+                                      )}
+                                      <u>đ</u>
+                                    </span>
+                                  </>
+                                )}
+                              </div>
                               <br />
-                              {item?.product?.option?.screenName
-                                ? "Màng hình: "
-                                : ""}
-                              {item?.product?.option?.screenName.nameValue}
+                              <span>Màng hình: </span>
+                              {item.product?.option.screenName.nameValue}
                               <br />
-                              {item?.product?.option?.cpuName ? "CPU: " : ""}
-                              {item?.product?.option?.cpuName.nameValue},
-                              {item?.product?.option?.cpuGenName.nameValue}
+                              <span>CPU: </span>
+                              {item.product?.option.cpuName.nameValue},
+                              {item.product?.option.cpuGenName.nameValue}
                               <br />
-                              <span className="card-text-home">
-                                {item?.product?.option?.cardName ? "Card:" : ""}
-
-                                {item?.product?.option?.cardName.nameValue}
+                              <span className="">
+                                Card: {item.product?.option.cardName.nameValue}
                               </span>
-                            </p>
-                            <Link
-                              to={`/product/productdetail/${item?.product?.slugProduct}`}
+                            </div>
+
+                            <button
+                              className="btn btn-success w-100"
+                              onClick={() =>
+                                handleAddCart(
+                                  item.product.id,
+                                  item.product.nameProduct,
+                                  item.product.imgData?.link[0],
+                                  item.product.sale == null
+                                    ? item.product.price
+                                    : parseInt(
+                                        item.product.price -
+                                          item.product.sale.valueSale
+                                      ),
+                                  item.product.proId,
+
+                                  item.product.store.number
+                                )
+                              }
                             >
-                              <button className="btn btn-primary">
-                                Go somewhere
-                              </button>
-                            </Link>
+                              <TiShoppingCart size={30} />
+                              MUA NGAY
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -271,105 +417,175 @@ const ProductDetail = () => {
               </div>
             </>
           ) : (
-            <><div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
-            {productSimilar
-              .filter((item) => {
-                return item?.id !== product.id;
-              })
-              .map((item) => {
-                return (
-                  <div className="col">
-                    <div className="card">
-                      <img
-                        src={item?.imgData?.link[0]}
-                        className="card-img-top"
-                        alt="..."
-                      />
-                      <div className="card-body">
-                        <h5
-                          className="card-title"
-                          style={{ fontSize: "100%" }}
-                        >
-                          <span
-                            className="card-text-home"
-                            style={{ color: "#000" }}
+            <>
+              <div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
+                {/* Get Product "PK" => Category */}
+                {productSimilar
+                  .filter((item) => {
+                    return item?.id !== product.id;
+                  })
+                  .map((item) => {
+                    return (
+                      <div className="col">
+                        <div className="card">
+                          <Link
+                            to={`/product/productdetail/${item?.slugProduct}`}
                           >
-                            {item?.nameProduct}
-                          </span>
-                          <div className="mt-1 container overflow-hidden">
-                            <div className="row gx-2">
-                              <div className="col">
-                                <div
-                                  className="border bg-light text-center"
-                                  style={{
-                                    borderRadius: 5,
-                                    background: "#fff",
-                                    fontSize: "80%",
-                                  }}
-                                >
-                                  {item?.option?.ramName
-                                    ? "Ram"
-                                    : ""}
-                                  {item?.option?.ramName.nameValue}
-                                </div>
-                              </div>
-                              <div class="col">
-                                <div
-                                  class="border bg-light text-center"
-                                  style={{
-                                    borderRadius: 5,
-                                    background: "#fff",
-                                    fontSize: "80%",
-                                  }}
-                                >
-                                  {
-                                    item?.option?.hdriveName
-                                      .nameValue
-                                  }
-                                </div>
-                              </div>
+                            <div className="p-2 box-zoom-out">
+                              <img
+                                src={item?.imgData.link[0]}
+                                className="card-img-top"
+                                alt="..."
+                              />
+                              {item?.sale == null || item?.sale.status == 0 ? (
+                                <></>
+                              ) : (
+                                <>
+                                  <span className="sale px-2">
+                                    Giảm giá:{" "}
+                                    {numeral(item?.sale.valueSale).format(
+                                      "0,0"
+                                    )}
+                                    đ
+                                  </span>
+                                </>
+                              )}
                             </div>
-                          </div>
-                        </h5>
-                        <p className="card-text">
-                          <b>
-                            <span>Giá: </span>
-                            {numeral(item?.price).format("0,0")}
-                            <span>
-                              {" "}
-                              <u>đ</u>
-                            </span>
-                          </b>
-                          <br />
-                          {item?.option?.screenName
-                            ? "Màng hình: "
-                            : ""}
-                          {item?.option?.screenName.nameValue}
-                          <br />
-                          {item?.option?.cpuName ? "CPU: " : ""}
-                          {item?.option?.cpuName.nameValue}
-                          {item?.option?.cpuName ? "," : ""}
-                          {item?.option?.cpuGenName.nameValue}
-                          <br />
-                          <span className="card-text-home">
-                            {item?.option?.cardName ? "Card:" : ""}
+                          </Link>
 
-                            {item?.option?.cardName.nameValue}
-                          </span>
-                        </p>
-                        <Link
-                          to={`/product/productdetail/${item?.slugProduct}`}
-                        >
-                          <button className="btn btn-primary">
-                            Go somewhere
-                          </button>
-                        </Link>
+                          <div className="card-body">
+                            <h5
+                              className="card-title"
+                              style={{ fontSize: "100%" }}
+                            >
+                              <Link
+                                to={`/product/productdetail/${item?.slugProduct}`}
+                              >
+                                <span
+                                  className="card-text-home"
+                                  style={{ color: "#000" }}
+                                >
+                                  {item?.nameProduct}
+                                </span>
+                              </Link>
+                              <div className="mt-1 container overflow-hidden">
+                                <div className="row gx-2">
+                                  <div className="col">
+                                    <div
+                                      className="border bg-light text-center"
+                                      style={{
+                                        borderRadius: 5,
+                                        background: "#fff",
+                                        fontSize: "80%",
+                                      }}
+                                    >
+                                      {item?.option?.ramName ? "Ram" : ""}
+                                      {item?.option?.ramName.nameValue}
+                                    </div>
+                                  </div>
+                                  <div class="col">
+                                    <div
+                                      class="border bg-light text-center"
+                                      style={{
+                                        borderRadius: 5,
+                                        background: "#fff",
+                                        fontSize: "80%",
+                                      }}
+                                    >
+                                      {item?.option?.hdriveName.nameValue}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </h5>
+                            <div className="card-text">
+                              <div className="d-flex justify-content-lg-between">
+                                {item?.sale == null ||
+                                item?.sale.status == 0 ? (
+                                  <>
+                                    <span
+                                      className="px-2"
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "blue",
+                                        background: "#9370D8",
+                                        borderRadius: 10,
+                                      }}
+                                    >
+                                      {numeral(item?.price).format("0,0")}
+                                      <u>đ</u>
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span
+                                      className="px-2"
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "blue",
+                                        background: "#9370D8",
+                                        borderRadius: 10,
+                                      }}
+                                    >
+                                      {numeral(
+                                        parseInt(item?.price) -
+                                          item?.sale?.valueSale
+                                      ).format("0,0")}
+                                      <u>đ</u>
+                                    </span>
+                                    <span
+                                      style={{
+                                        "text-decoration-line": "line-through",
+                                      }}
+                                    >
+                                      {numeral(item?.price).format("0,0")}
+                                      <u>đ</u>
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                              <br />
+                              {item?.option?.screenName ? "Màng hình: " : ""}
+                              {item?.option?.screenName.nameValue}
+                              <br />
+                              {item?.option?.cpuName ? "CPU: " : ""}
+                              {item?.option?.cpuName.nameValue}
+                              {item?.option?.cpuName ? "," : ""}
+                              {item?.option?.cpuGenName.nameValue}
+                              <br />
+                              <span className="card-text">
+                                {item?.option?.cardName ? "Card:" : ""}
+
+                                {item?.option?.cardName.nameValue}
+                              </span>
+                            </div>
+                            <button
+                              className="btn btn-success w-100"
+                              onClick={() =>
+                                handleAddCart(
+                                  item.id,
+                                  item.nameProduct,
+                                  item?.imgData.link[0],
+                                  item?.sale == null
+                                    ? item.price
+                                    : parseInt(
+                                        item.price - item.sale.valueSale
+                                      ),
+                                  item.proId,
+                                  item.store.number
+                                )
+                              }
+                            >
+                              <TiShoppingCart size={30} />
+                              MUA NGAY
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
-          </div></>
+                    );
+                  })}
+              </div>
+            </>
           )}
         </div>
       </div>

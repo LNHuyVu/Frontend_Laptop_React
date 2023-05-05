@@ -2,16 +2,16 @@ import httpClient from "../http-common";
 const getAll = (id) => {
   return httpClient.get(`/get-all-contact?id=${id}`);
 };
-const create = (data, Token) => {
+const create = (data) => {
   return httpClient.post("/create-new-contact", data);
 };
-const update = (data, Token) => {
+const update = (data) => {
   return httpClient.put("/edit-contact", data);
 };
-const remove = (userId, Token) => {
+const remove = (contactId) => {
   return httpClient.delete("/delete-contact", {
     data: {
-      id: userId,
+      id: contactId,
     },
   });
 };

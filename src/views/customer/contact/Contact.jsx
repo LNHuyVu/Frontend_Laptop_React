@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./contact.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import contactService from "../../../services/contact.service";
 import { useSelector } from "react-redux";
 const Contact = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ const Contact = () => {
     contactService
       .create(contact)
       .then((reponse) => {
+        navigate("./");
       })
       .catch((error) => {
         console.log(error);

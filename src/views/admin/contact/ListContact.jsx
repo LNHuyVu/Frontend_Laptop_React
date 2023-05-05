@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsToggleOff, BsToggleOn } from "react-icons/bs";
+import { MdEmail, MdMarkEmailRead } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import "./listcontact.scss";
@@ -31,7 +31,7 @@ const ListContact = () => {
       .getAll("ALL")
       .then((response) => {
         setContact(response.data.contact);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log("Get Data Failed");
@@ -107,25 +107,26 @@ const ListContact = () => {
           <button
             class="btn btn-success m-1 text-center"
             type="button"
-            onClick={(e) => handleStatus(e, element.id, element.status)}
+            // onClick={(e) => handleStatus(e, element.id, element.status)}
           >
-            <BsToggleOn className="text-white" />
+            <MdMarkEmailRead className="text-white" />
           </button>
         ) : (
           <button
             class="btn btn-danger m-1 text-center"
             type="button"
-            onClick={(e) => handleStatus(e, element.id, element.status)}
+            // onClick={(e) => handleStatus(e, element.id, element.status)}
           >
-            <BsToggleOff className="text-white" />Chưa trả lời
+            <MdEmail className="text-white" />
           </button>
         )}
-        <Link to={"./edit-contact/" + element.id}>
-          <button class="btn btn-warning m-1 text-center" type="button">
+        <Link to={"./reply-contact/" + element.id}>
+          <button class="btn btn-info m-1 text-center" type="button">
             <AiFillEdit className="text-white" />
           </button>
         </Link>
         <button
+          hidden
           onClick={(e) => handleDeleteOpen(element.id)}
           class="btn btn-danger m-1 text-center"
           type="button"
@@ -139,18 +140,10 @@ const ListContact = () => {
     <>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
-
         <div>
-          <h2>Danh Mục Sản Phẩm</h2>
+          <h2>Liên hệ</h2>
         </div>
-        <div>
-          <Link to="./add-contact">
-            <button className="btn border border-3 border-success d-flex ">
-              <FcPlus className="fs-4" />
-              <span className="">Thêm mới</span>
-            </button>
-          </Link>
-        </div>
+        <div></div>
       </div>
       <Input.Search
         style={{ paddingLeft: "20%", paddingRight: "20%", marginBottom: 10 }}

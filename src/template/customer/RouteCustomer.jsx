@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import ProductListCus from "../../views/customer/product-cus/ProductListCus";
 import FooterCustomer from "./FooterCustomer";
 import HeaderCustomer from "./HeaderCustomer";
 import HomeCustomer from "./HomeCustomer";
@@ -25,7 +24,6 @@ const RouteCustomer = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/search/:slug" element={<Search />} />
           <Route path="/order" element={<Order />} />
-          <Route path="/product" element={<ProductListCus />} />
           {/*  */}
           <Route path="/demand/:slug" element={<ProductDemand />} />
           <Route path="/product/productdetail/:slug" element={<ProductDetail />} />

@@ -2,6 +2,7 @@ import httpClient from "../http-common";
 const getAll = (id) => {
   return httpClient.get(`/get-all-productvalue?id=${id}`);
 };
+// Get Product Demand All GroupBy (Gaming, ....)
 const getProductValueCustomer = (slug) => {
   return httpClient.get(`/customer/get-all-productvalue?slug=${slug}`);
 };
@@ -28,4 +29,11 @@ const remove = (userId, Token) => {
     },
   });
 };
-export default { create, getAll, update, remove, getProductValueCustomer, getDemand};
+export default {
+  create,
+  getAll,
+  update,
+  remove,
+  getProductValueCustomer,
+  getDemand,
+};

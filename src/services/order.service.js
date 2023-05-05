@@ -6,11 +6,9 @@ const create = (data) => {
   return httpClient.post("/create-new-order", data);
 };
 const update = (data) => {
-  //   console.log('update', data)
   return httpClient.put("/edit-order", data);
 };
 const remove = (orderId) => {
-  //   console.log("data", userId);
   return httpClient.delete("/delete-order", {
     data: {
       id: orderId,

@@ -151,7 +151,15 @@ const AdminHeader = () => {
                 </Link>
               </ul>
             </AccordionItem>
+            <AccordionItem header="Đơn hàng" className="nav-item ">
+              <ul>
+                <Link to="./order">
+                  <li className="nav-link ">Tất cả đơn hàng</li>
+                </Link>
+              </ul>
+            </AccordionItem>
           </Accordion>
+
           <li className="nav-heading">Pages</li>
 
           <li className="nav-item">

@@ -12,6 +12,7 @@ import ListCategory from "../../views/admin/category/ListCategory";
 import AddCategory from "../../views/admin/category/AddCategory";
 import EditCategory from "../../views/admin/category/EditCategory";
 import EditProduct from "../../views/admin/product/EditProduct";
+import EditProductSale from "../../views/admin/productSale/EditProductSale";
 import ListproductValue from "../../views/admin/productValue/ListproductValue";
 import AddProductValue from "../../views/admin/productValue/AddProductValue";
 import EditProductValue from "../../views/admin/productValue/EditProductValue";
@@ -29,6 +30,8 @@ import ListSlider from "../../views/admin/slider/ListSlider";
 import AddSlider from "../../views/admin/slider/AddSlider";
 import EditSlider from "../../views/admin/slider/EditSlider";
 import ListContact from "../../views/admin/contact/ListContact";
+import EditContact from "../../views/admin/contact/EditContact";
+import ListOrder from "../../views/admin/order/ListOrder";
 
 const AdminRoute = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -61,6 +64,10 @@ const AdminRoute = () => {
               <Route path="/" element={<AdminHome />} />
               <Route path="/category" element={<ListCategory />} />
               <Route path="/contact" element={<ListContact />} />
+              <Route
+                path="/contact/reply-contact/:id"
+                element={<EditContact />}
+              />
               <Route path="/category/add-category" element={<AddCategory />} />
               <Route
                 path="/category/edit-category/:id"
@@ -77,6 +84,10 @@ const AdminRoute = () => {
               <Route
                 path="/product/edit-product/:id"
                 element={<EditProduct />}
+              />
+              <Route
+                path="/product/edit-productsale/:id"
+                element={<EditProductSale />}
               />
               <Route
                 path="/product/productdetail"
@@ -107,6 +118,7 @@ const AdminRoute = () => {
               <Route path="/slider" element={<ListSlider />} />
               <Route path="/slider/add-slider" element={<AddSlider />} />
               <Route path="/slider/edit-slider/:id" element={<EditSlider />} />
+              <Route path="/order" element={<ListOrder />} />
             </Routes>
           </div>
         </section>

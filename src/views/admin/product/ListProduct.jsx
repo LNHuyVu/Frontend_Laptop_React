@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import { BsToggleOff, BsToggleOn } from "react-icons/bs";
+import { BsToggleOff, BsToggleOn, BsFillStarFill } from "react-icons/bs";
+import { GiStarFormation } from "react-icons/gi";
+import { MdOutlineMoreHoriz } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import "./listproduct.scss";
@@ -16,7 +18,8 @@ import { FcPlus } from "react-icons/fc";
 import { useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import ListProductSale from "../productSale/ListProductSale";
+import productSaleService from "../../../services/productSale.service";
 const ListProduct = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
 
@@ -46,6 +49,10 @@ const ListProduct = () => {
         console.log("Get Product Failed");
       });
   };
+  //
+  const handleClick = () => {
+    console.log("onClick được gọi");
+  };
 
   //handle status
   const handleStatus = (e, id, status) => {
@@ -66,45 +73,6 @@ const ListProduct = () => {
       });
   };
   //Handle Delete
-  const handleDelete = (id, proId) => {
-    productService
-      .remove(id)
-      .then((reponse) => {
-        console.log("Delete OK", reponse.data);
-        init();
-      })
-      .catch((error) => {
-        console.log("Delete Not OK", error);
-      });
-    productOptionService
-      .remove(proId)
-      .then((reponse) => {
-        console.log("Delete Option OK", reponse.data);
-        init();
-      })
-      .catch((error) => {
-        console.log("Delete Not OK", error);
-      });
-    productImgService
-      .remove(proId)
-      .then((reponse) => {
-        console.log("Delete IMG OK", reponse.data);
-        init();
-      })
-      .catch((error) => {
-        console.log("Delete Not OK", error);
-      });
-    productStoreService
-      .remove(proId)
-      .then((reponse) => {
-        console.log("Delete Store OK", reponse.data);
-        init();
-      })
-      .catch((error) => {
-        console.log("Delete Not OK", error);
-      });
-  };
-  //
   const handleDeleteClose = (value) => {
     handleClose();
     if (value == true) {
@@ -147,8 +115,26 @@ const ListProduct = () => {
     setDeleteId(id);
     setDeleteProId(proId);
   };
+  //ADD Product Sale
+  const handleAddSale = (e, id) => {
+    e.preventDefault();
+    const sale = {
+      saleId: id,
+      createdBy: userRD.user.id,
+      status: 0,
+    };
+    productSaleService
+      .create(sale)
+      .then((response) => {
+        console.log("Sale OK", response.data);
+        init();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   //Table colums
-  const columns = [
+  const columnsProduct = [
     {
       title: "Hình ảnh",
       dataIndex: "image",
@@ -179,12 +165,23 @@ const ListProduct = () => {
   ];
   for (const element of product) {
     element.image = (
-      <img
-        style={{ maxWidth: 80 }}
-        className=""
-        src={element.imgData.link[0]}
-        alt=""
-      />
+      <div className="d-flex">
+        {element.sale == null ? (
+          <>
+            <GiStarFormation size="30" />
+          </>
+        ) : (
+          <>
+            <GiStarFormation size="30" color="red" />
+          </>
+        )}
+        <img
+          style={{ maxWidth: 80 }}
+          className=""
+          src={element.imgData.link[0]}
+          alt=""
+        />
+      </div>
     );
     element.action = (
       <div class="d-grid gap-2 d-md-block">
@@ -217,6 +214,21 @@ const ListProduct = () => {
         >
           <FaTrashAlt className="text-white" />
         </button>
+        <div className="product-more">
+          <ul className="">
+            <li>
+              <button class="btn btn-info m-1 text-center" type="button">
+                <MdOutlineMoreHoriz className="text-white" />
+              </button>
+              <ul className="rounded-3 bg-white shadow-lg p-3 mb-5 bg-body rounded">
+                <li>Xem chi tiết</li>
+                <li onClick={(e) => handleAddSale(e, element.id)}>
+                  Tạo khuyến mãi
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }
@@ -258,10 +270,10 @@ const ListProduct = () => {
               }}
               placehoder="Search here..."
             />
-            <Table columns={columns} dataSource={product}></Table>
+            <Table columns={columnsProduct} dataSource={product}></Table>
           </Tab>
           <Tab eventKey="profile" title="Sản phẩm khuyến mãi">
-            Khuyến mãi
+            <ListProductSale click="click" />
           </Tab>
         </Tabs>
         <Modal show={show} onHide={handleClose} animation={false}>

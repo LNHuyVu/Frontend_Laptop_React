@@ -14,7 +14,7 @@ const ProductCategory = () => {
 
   const dispatch = useDispatch();
   const [product, setProduct] = useState([]);
-  var numeral = require("numeral");
+  let numeral = require("numeral");
   const param = useParams();
   let slug = param.slug;
   useEffect(() => {
@@ -39,12 +39,12 @@ const ProductCategory = () => {
         console.log(error);
       });
   };
-  const handleAddCart = (id, title, image, price) => {
+  const handleAddCart = (id, title, image, price, proId, number) => {
     if (!userRD) {
       alert("vui lòng đăng nhập");
     } else {
       let userid = userRD.user.id;
-      dispatch(addToCart({ id, title, image, price, userid }));
+      dispatch(addToCart({ id, title, image, price, proId, userid, number}));
       alert("hi");
     }
   };
@@ -161,6 +161,16 @@ const ProductCategory = () => {
                             className="card-img-top"
                             alt="..."
                           />
+                          {item?.sale == null || item?.sale.status==0 ? (
+                            <></>
+                          ) : (
+                            <>
+                              <span className="sale px-2">
+                                Giảm giá:{" "}
+                                {numeral(item?.sale.valueSale).format("0,0")}đ
+                              </span>
+                            </>
+                          )}
                         </div>
                       </Link>
 
@@ -206,15 +216,51 @@ const ProductCategory = () => {
                             </div>
                           </div>
                         </h5>
-                        <p className="card-text">
-                          <b>
-                            <span>Giá: </span>
-                            {numeral(item?.price).format("0,0")}
-                            <span>
-                              {" "}
-                              <u>đ</u>
-                            </span>
-                          </b>
+                        <div className="card-text">
+                          <div className="d-flex justify-content-lg-between">
+                            {item?.sale == null || item?.sale.status==0 ? (
+                              <>
+                                <span
+                                  className="px-2"
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "blue",
+                                    background: "#9370D8",
+                                    borderRadius: 10,
+                                  }}
+                                >
+                                  {numeral(item?.price).format("0,0")}
+                                  <u>đ</u>
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span
+                                  className="px-2"
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "blue",
+                                    background: "#9370D8",
+                                    borderRadius: 10,
+                                  }}
+                                >
+                                  {numeral(
+                                    parseInt(item?.price) -
+                                      item?.sale?.valueSale
+                                  ).format("0,0")}
+                                  <u>đ</u>
+                                </span>
+                                <span
+                                  style={{
+                                    "text-decoration-line": "line-through",
+                                  }}
+                                >
+                                  {numeral(item?.price).format("0,0")}
+                                  <u>đ</u>
+                                </span>
+                              </>
+                            )}
+                          </div>
                           <br />
                           {item?.option?.screenName ? "Màng hình: " : ""}
                           {item?.option?.screenName.nameValue}
@@ -229,7 +275,7 @@ const ProductCategory = () => {
 
                             {item?.option?.cardName.nameValue}
                           </span>
-                        </p>
+                        </div>
                         <button
                           className="btn btn-success w-100"
                           onClick={() =>
@@ -237,7 +283,11 @@ const ProductCategory = () => {
                               item.id,
                               item.nameProduct,
                               item?.imgData.link[0],
-                              item.price
+                              item?.sale == null
+                                ? item.price
+                                : parseInt(item.price - item.sale.valueSale),
+                              item.proId,
+                              item.store.number
                             )
                           }
                         >

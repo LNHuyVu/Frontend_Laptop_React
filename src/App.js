@@ -9,6 +9,7 @@ import RouteCustomer from "./template/customer/RouteCustomer";
 import Login from "./component/login/login";
 import Register from "./component/register/register";
 import ScrollToTop from "./component/scrollToTop/ScrollToTop";
+import Test from "./component/test/Test";
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<RouteCustomer />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/test" element={<Test />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard/*" element={<AdminRoute />} />
         </Routes>
