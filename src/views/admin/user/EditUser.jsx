@@ -21,11 +21,7 @@ const EditUser = () => {
     {
       value: "0",
       nameGender: "Nữ",
-    },
-    {
-      value: "2",
-      nameGender: "Khác",
-    },
+    }
   ];
   const ROLES = [
     {

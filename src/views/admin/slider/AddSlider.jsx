@@ -41,12 +41,12 @@ const AddSlider = () => {
         });
     }
   };
+  //Handle Image
   const handleFiles = async (e) => {
     setIsLoading(true);
     e.stopPropagation();
     let images = [];
     const files = e.target.files;
-    // console.log("file", files);
     const formData = new FormData();
     for (let i of files) {
       formData.append("file", i);
@@ -57,7 +57,7 @@ const AddSlider = () => {
       const reponse = await uploadfileService.apiUploadImages(formData);
       // console.log('reponse',reponse);
       if (reponse.status === 200) {
-        images = [reponse.data.secure_url];
+        images = [...images, reponse.data.secure_url];
       }
     }
     setIsLoading(false);
@@ -84,6 +84,14 @@ const AddSlider = () => {
     }
     return isValue;
   };
+  //Array Position
+  const arrPosition = [
+    { name: "Banner", positon: 1 },
+    { name: "Slider", positon: 2 },
+    { name: "Main", positon: 3 },
+    { name: "Post", positon: 4 },
+    { name: "Accessory", positon: 5 },
+  ];
   return (
     <div className="row">
       <div className="text-center d-flex justify-content-between align-items-center">
@@ -143,8 +151,9 @@ const AddSlider = () => {
           name="status"
           onChange={(e) => setPosition(e.target.value)}
         >
-          <option value="0">Slider</option>
-          <option value="1">Banner</option>
+          {arrPosition.map((item) => {
+            return <option value={item.positon}>{item.name}</option>;
+          })}
         </select>
       </div>
       <div className="col-md-6">

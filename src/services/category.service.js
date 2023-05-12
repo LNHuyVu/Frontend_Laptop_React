@@ -1,8 +1,6 @@
 import httpClient from "../http-common";
-const getAll = (id, Token) => {
-  return httpClient.get(`/get-all-category?id=${id}`, {
-    headers: { token: `Bearer ${Token.accessToken}` },
-  });
+const getAll = (id) => {
+  return httpClient.get(`/get-all-category?id=${id}`);
 };
 const getAllCus = (id) => {
   return httpClient.get(`/customer/get-all-category?id=${id}`);
@@ -30,4 +28,4 @@ const remove = (userId, Token) => {
     },
   });
 };
-export default { create, getAll, update, remove, getIdCat, getAllCus};
+export default { create, getAll, update, remove, getIdCat, getAllCus };

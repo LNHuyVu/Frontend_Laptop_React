@@ -174,11 +174,12 @@ const HeaderCustomer = () => {
               </>
             ) : (
               <>
-                <span className="w-100" style={{ display: "inline-block" }}>
-                  <FaUserAlt className="mx-1" />
-                  {userRD?.user.name}
-                </span>
-
+                <Link to="./user">
+                  <span className="w-100" style={{ display: "inline-block" }}>
+                    <FaUserAlt className="mx-1" />
+                    {userRD?.user.name}
+                  </span>
+                </Link>
                 <span onClick={handleLogout}>
                   <FaShoppingCart className="mx-1" />
                   Đăng xuất

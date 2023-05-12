@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./featuredcategory.scss";
 import categoryService from "../../../services/category.service";
 import { Link } from "react-router-dom";
-const Featuredcategory = (product) => {
+const Featuredcategory = () => {
   const [category, setCategory] = useState([]);
   useEffect(() => {
     init();

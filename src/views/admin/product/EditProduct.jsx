@@ -328,7 +328,6 @@ const EditProduct = () => {
     e.stopPropagation();
     let images = [];
     const files = e.target.files;
-    // console.log("file", files);
     const formData = new FormData();
     for (let i of files) {
       formData.append("file", i);
@@ -345,8 +344,6 @@ const EditProduct = () => {
     setIsLoading(false);
     setImagesPreview((prev) => [...prev, ...images]);
   };
-  // console.log("IMGPRE:", imagesPreview);
-  // console.log(process.env.REACT_APP_UPLOAD_ASSETS_NAME);
   const handleDeleteImagePreview = (image) => {
     setImagesPreview((prev) => prev.filter((item) => item !== image));
   };

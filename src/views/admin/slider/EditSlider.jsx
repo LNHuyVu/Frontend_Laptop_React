@@ -68,7 +68,6 @@ const EditSlider = () => {
     e.stopPropagation();
     let images = [];
     const files = e.target.files;
-    // console.log("file", files);
     const formData = new FormData();
     for (let i of files) {
       formData.append("file", i);
@@ -77,9 +76,8 @@ const EditSlider = () => {
         process.env.REACT_APP_UPLOAD_ASSETS_NAME
       );
       const reponse = await uploadfileService.apiUploadImages(formData);
-      // console.log('reponse',reponse);
       if (reponse.status === 200) {
-        images = [reponse.data.secure_url];
+        images = [...images, reponse.data.secure_url];
       }
     }
     setIsLoading(false);
@@ -106,14 +104,20 @@ const EditSlider = () => {
     }
     return isValue;
   };
-
+  const arrPosition = [
+    { name: "Banner", positon: 1 },
+    { name: "Slider", positon: 2 },
+    { name: "Main", positon: 3 },
+    { name: "Post", positon: 4 },
+    { name: "Accessory", positon: 5 },
+  ];
   return (
     <div className="row">
       <div className="text-center d-flex justify-content-between align-items-center">
         <div></div>
 
         <div>
-          <h2>Thêm Slider</h2>
+          <h2>Chỉnh sửa Slider</h2>
         </div>
         <div>
           <button
@@ -159,17 +163,19 @@ const EditSlider = () => {
           name="status"
           onChange={(e) => setPosition(e.target.value)}
         >
-          {position == "0" ? (
-            <>
-              <option value="0">Slider</option>
-              <option value="1">Banner</option>
-            </>
-          ) : (
-            <>
-              <option value="1">Banner</option>
-              <option value="0">Slider</option>
-            </>
-          )}
+          {arrPosition.map((item) => {
+            return item.positon == position ? (
+              <>
+                <option value={item.positon} selected>
+                  {item.name}
+                </option>
+              </>
+            ) : (
+              <>
+                <option value={item.positon}>{item.name}</option>
+              </>
+            );
+          })}
         </select>
       </div>
       <div className="col-md-6">
@@ -214,6 +220,7 @@ const EditSlider = () => {
             className="form-control"
             name="file"
             onChange={handleFiles}
+            multiple
           />
         </div>
         {/*  */}

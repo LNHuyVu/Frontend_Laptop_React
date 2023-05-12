@@ -98,9 +98,9 @@ const Register = () => {
     setImagesPreview(images);
   };
   return (
-    <div className="login-form-user">
+    <div className="register-form-user">
       <div className="login-form">
-        <form action="">
+        <form className="p-3">
           <div>
             <h3 className="text-center">Thêm Mới Tài Khoản</h3>
             <div className="row">
@@ -177,7 +177,7 @@ const Register = () => {
                       Mật khẩu
                     </label>
                     <input
-                      type="text"
+                      type="password"
                       className="form-control"
                       name="name"
                       value={password}

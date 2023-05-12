@@ -1,148 +1,121 @@
 // Button Scroll
-.button-scroll{
-    border:none;
-    background-color: transparent;
-    position: fixed; 
-    width: 100%;
-    left: 96%;
-    bottom: 60px;
-    height: 20px;
-    font-size: 3rem;
-    z-index: 1;
-    button{
+.homecustomer {
+    .parent-slider {
+        position: relative;
+        min-height: 80px;
+        .slider {
+            margin: auto;
+            width: 90%;
+            position: absolute;
+            top: 18%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: transparent;
+            .slider-child {
+                img {
+                    border-radius: 10px;
+                }
+            }
+            .slick-prev,
+            .slick-next {
+                top: 50%;
+                background-color: #fff;
+                opacity: 0.7;
+                border: 2px solid #d7d7d7;
+                // height: 21%;
+                // width: 4%;
+                height: 50px;
+                width: 50px;
+                border-radius: 30px;
+            }
+        }
+    }
+    .button-scroll {
         border: none;
         background-color: transparent;
-    }
-}
-.product-type{
-    // border: 3px solid rgb(3, 254, 41);
-    margin-top: 0.2%;
-    border-radius: 20px;
-    padding: 10px;
-    button{
-        cursor: pointer;
-    }
-    .box-zoom-out{
-        overflow: hidden;
-        position: relative;
-        .sale{
-            position: absolute;
-            background-color: red;
-            padding: 0 2px 0 2px;
-            border-radius: 10px;
-            bottom:0;
-            left: 0;
-            margin:0 1rem;
-            color: white;
-            font-weight: bold;
-            font-size:90%;
-            
-        }
-        img { 
-            vertical-align:middle; 
-            max-width: 100%;
-            padding:1%;
-            transition: all 1s;
-            -webkit-transform: scale(1);
-            transform: scale(1);
-        }
-
-    }
-    .card{
-        .text-graphics-card{
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .card-text-home{
-            &:hover{
-                font-weight: bold !important;
-                color: blue !important;
-                transition: 0.3s;
-            }
-            
-        }
-        &:hover{
-            img{
-                -webkit-transform: scale(1.1);
-                transform: scale(1.1);
-            }
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        }  
-    }
-}
-
-.product-today{
-    margin: auto;
-    .row{
-        margin: auto;
-    }
-}
-.card-text-home{
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-.title-demand{
-    border-bottom: 10px double rgb(0, 255, 251);
-    .link{  
-        position: relative;
-        &:before {
-            opacity: 1;
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 3px;
-            bottom: 10px;
-            margin: -5px 0;
-            background-color: rgb(19, 3, 255);
-            visibility: hidden;
-            transform: scaleX(0);
-            transition: all 0.4s ease-in-out 0s;
-        }
-        &:hover:before {
-            opacity: 1;
-            visibility: visible;
-            transform: scaleX(1);
-        }
-    }
-}
-.slider{
-    // height: 100%;
-    padding: 20px;
-
-    .slick-prev{
-        left: 4px;
-        &::before{
-            color: rgb(106, 106, 106);
-            opacity: 1 !important;
-        }
+        position: fixed;
+        width: 100%;
+        left: 96%;
+        bottom: 60px;
+        height: 20px;
+        font-size: 3rem;
         z-index: 1;
-    }
-    .slick-next{
-        right: 4px;
-        &::before{
-            color: rgb(106, 106, 106);
-            opacity: 1 !important;
+        button {
+            border: none;
+            background-color: transparent;
         }
     }
-    .slick-prev, .slick-next{
-        top: 50%;
-        background-color: #ffffff;
-        opacity: 0.5;
-        border: 2px solid #d7d7d7;
-        height: 50px;
-        width: 50px;
-        &:hover{
-            opacity: 1;
-            background-color: #ffffff;
+    .product-today {
+        margin: auto;
+        .row {
+            margin: auto;
         }
     }
-    .slider-child{
+    .card-text-home {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .title-demand {
+        border-bottom: 10px double rgb(0, 255, 251);
+        .link {
+            position: relative;
+            &:before {
+                opacity: 1;
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 3px;
+                bottom: 10px;
+                margin: -5px 0;
+                background-color: rgb(19, 3, 255);
+                visibility: hidden;
+                transform: scaleX(0);
+                transition: all 0.4s ease-in-out 0s;
+            }
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+                transform: scaleX(1);
+            }
+        }
+    }
+    .slider {
         // height: 100%;
-        padding: 0 5px;
+        padding: 20px;
+
+        .slick-prev {
+            left: 4px;
+            &::before {
+                color: rgb(106, 106, 106);
+                opacity: 1 !important;
+            }
+            z-index: 1;
+        }
+        .slick-next {
+            right: 4px;
+            &::before {
+                color: rgb(106, 106, 106);
+                opacity: 1 !important;
+            }
+        }
+        .slick-prev,
+        .slick-next {
+            top: 50%;
+            background-color: #ffffff;
+            opacity: 0.5;
+            border: 2px solid #d7d7d7;
+            height: 50px;
+            width: 50px;
+            &:hover {
+                opacity: 1;
+                background-color: #ffffff;
+            }
+        }
+        .slider-child {
+            // height: 100%;
+            padding: 0 5px;
+        }
     }
 }
-

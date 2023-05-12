@@ -10,6 +10,11 @@ import { TiShoppingCart } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../redux/slice/cartSlice";
 const ProductCategory = () => {
+  //Filter Price
+  let maxB;
+  let minA;
+  const [filter, setFilter] = useState([]);
+  //
   const userRD = useSelector((state) => state.auth.login?.currentUser);
 
   const dispatch = useDispatch();
@@ -17,6 +22,13 @@ const ProductCategory = () => {
   let numeral = require("numeral");
   const param = useParams();
   let slug = param.slug;
+  const categories = [
+    { name: "Dưới 10 triệu", a: 0, b: 10000000 },
+    { name: "Từ 10 đến 15 triệu", a: 10000000, b: 15000000 },
+    { name: "Từ 15 đến 20 triệu", a: 15000000, b: 20000000 },
+    { name: "Từ 20 đến 25 triệu", a: 20000000, b: 25000000 },
+    { name: "Trên 25 triệu", a: 25000000, b: 1000000000 },
+  ];
   useEffect(() => {
     init();
   }, [slug]);
@@ -44,113 +56,86 @@ const ProductCategory = () => {
       alert("vui lòng đăng nhập");
     } else {
       let userid = userRD.user.id;
-      dispatch(addToCart({ id, title, image, price, proId, userid, number}));
+      dispatch(addToCart({ id, title, image, price, proId, userid, number }));
       alert("hi");
     }
   };
+  //Filter Price
+  function updateFilters(checked, categoryFilter) {
+    if (checked) {
+      setFilter([categoryFilter]);
+    }
+    if (!checked) {
+      setFilter(
+        filter.filter(
+          (item) =>
+            !(item.a === categoryFilter.a && item.b === categoryFilter.b)
+        )
+      );
+    }
+  }
+  if (filter.length > 0) {
+    const max = filter.reduce((prev, current) =>
+      prev.b > current.b ? prev : current
+    );
+    maxB = max.b;
+    console.log(max.b); // 2
+    const min = Math.min(...filter.map((obj) => obj.a));
+    minA = min;
+    console.log(min); // 1
+  }
+  const filteredProducts =
+    filter.length === 0
+      ? product
+      : product.filter((p) => p.price >= minA && p.price <= maxB);
   return (
     <div className="product-category">
       <div>ProductCategory</div>
       <div className="row">
-        <div className="col-md-2 p-3">
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="flexRadioDefault"
-              id="flexRadioDefault1"
-            />
-            <label className="form-check-label" for="flexRadioDefault1">
-              Default radio
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="flexRadioDefault"
-              id="flexRadioDefault2"
-              checked
-            />
-            <label className="form-check-label" for="flexRadioDefault2">
-              Default checked radio
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-            />
-            <label className="form-check-label" for="flexCheckDefault">
-              Default checkbox
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckChecked"
-              checked
-            />
-            <label className="form-check-label" for="flexCheckChecked">
-              Checked checkbox
-            </label>
-          </div>
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckDefault"
-            />
-            <label className="form-check-label" for="flexSwitchCheckDefault">
-              Default switch checkbox input
-            </label>
-          </div>
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckChecked"
-              checked
-            />
-            <label className="form-check-label" for="flexSwitchCheckChecked">
-              Checked switch checkbox input
-            </label>
-          </div>
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckDisabled"
-              disabled
-            />
-            <label className="form-check-label" for="flexSwitchCheckDisabled">
-              Disabled switch checkbox input
-            </label>
-          </div>
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckCheckedDisabled"
-              checked
-              disabled
-            />
-            <label
-              className="form-check-label"
-              for="flexSwitchCheckCheckedDisabled"
-            >
-              Disabled checked switch checkbox input
-            </label>
+        <div className="col-md-2 px-1">
+          <div className="radio-price">
+            <h6 style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight:"bolder"}}>Lọc theo giá</h6>
+            <div className="form-radio-price">
+              <div className="w-100">
+                <label className="form-check-label label-radio-price">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="radioPrice"
+                    onChange={(e) =>
+                      updateFilters(e.target.checked, { a: 0, b: 1000000000 })
+                    }
+                  />
+                  <span>Tất cả</span>
+                </label>
+              </div>
+              {categories.map((elm, index) => {
+                return (
+                  <div className="w-100" key={index}>
+                    <label className="form-check-label">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="radioPrice"
+                        onChange={(e) =>
+                          updateFilters(e.target.checked, {
+                            a: elm.a,
+                            b: elm.b,
+                          })
+                        }
+                      />
+                      <span>{elm.name}</span>
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
         <div className="col-md-10">
           <div className="container">
             <div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
-              {product.map((item) => {
+              {filteredProducts.map((item) => {
                 return (
                   <div className="col">
                     <div className="card">
@@ -161,7 +146,7 @@ const ProductCategory = () => {
                             className="card-img-top"
                             alt="..."
                           />
-                          {item?.sale == null || item?.sale.status==0 ? (
+                          {item?.sale == null || item?.sale.status == 0 ? (
                             <></>
                           ) : (
                             <>
@@ -218,7 +203,7 @@ const ProductCategory = () => {
                         </h5>
                         <div className="card-text">
                           <div className="d-flex justify-content-lg-between">
-                            {item?.sale == null || item?.sale.status==0 ? (
+                            {item?.sale == null || item?.sale.status == 0 ? (
                               <>
                                 <span
                                   className="px-2"

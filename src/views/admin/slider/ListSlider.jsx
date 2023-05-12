@@ -70,9 +70,7 @@ const ListSlider = () => {
       dataIndex: "name",
       filteredValue: [search],
       onFilter: (value, record) => {
-        return (
-          String(record.name).toLowerCase().includes(value.toLowerCase())
-        );
+        return String(record.name).toLowerCase().includes(value.toLowerCase());
       },
     },
     {
@@ -95,7 +93,12 @@ const ListSlider = () => {
   ];
   for (const element of slider) {
     element.img = (
-      <img style={{ maxWidth: 80 }} className="" src={element.image} alt="" />
+      <img
+        style={{ maxWidth: 80 }}
+        className=""
+        src={element.image[0]}
+        alt=""
+      />
     );
     element.action = (
       <div class="d-grid gap-2 d-md-block">
@@ -116,7 +119,7 @@ const ListSlider = () => {
             <BsToggleOff className="text-white" />
           </button>
         )}
-        <Link to={"./edit-post/" + element.id}>
+        <Link to={"./edit-slider/" + element.id}>
           <button class="btn btn-warning m-1 text-center" type="button">
             <AiFillEdit className="text-white" />
           </button>
@@ -142,7 +145,7 @@ const ListSlider = () => {
           <Link to="./add-slider">
             <button className="btn border border-3 border-success d-flex ">
               <FcPlus className="fs-4" />
-              <span className="">Thêm  mới</span>
+              <span className="">Thêm mới</span>
             </button>
           </Link>
         </div>
@@ -162,71 +165,6 @@ const ListSlider = () => {
         placehoder="Search here..."
       />
       <Table columns={columns} dataSource={slider}></Table>
-      {/* <table class="table table-bordered" id="myTable">
-        <thead>
-          <th class="text-center" style={{ width: 20 }}>
-            #
-          </th>
-          <th>Hình</th>
-          <th>Tên</th>
-          <th>Ngày tạo</th>
-          <th>Chức năng</th>
-          <th>ID</th>
-        </thead>
-        <tbody>
-          {slider?.map((item) => (
-            <tr>
-              <td class="text-center">
-                <input name="checkid" type="checkbox" />
-              </td>
-              <td style={{ "max-width": 80 }}>
-                <img className="w-100 h-100" src={item.image[0]} alt="" />
-              </td>
-              <td>{item.name}</td>
-              <td class="text-center date">{item.createdAt}</td>
-              <td className="text-center action">
-                <div class="d-grid gap-2 d-md-block">
-                  {item.status === 1 ? (
-                    <button
-                      class="btn btn-success m-1 text-center"
-                      type="button"
-                      onClick={(e) => handleStatus(e, item.id, item.status)}
-                    >
-                      <BsToggleOn className="text-white" />
-                    </button>
-                  ) : (
-                    <button
-                      class="btn btn-danger m-1 text-center"
-                      type="button"
-                      onClick={(e) => handleStatus(e, item.id, item.status)}
-                    >
-                      <BsToggleOff className="text-white" />
-                    </button>
-                  )}
-                  <Link to={"./edit-slider/" + item.id}>
-                    <button
-                      class="btn btn-warning m-1 text-center"
-                      type="button"
-                    >
-                      <AiFillEdit className="text-white" />
-                    </button>
-                  </Link>
-                  <button
-                    onClick={(e) => handleDelete(item.id)}
-                    class="btn btn-danger m-1 text-center"
-                    type="button"
-                  >
-                    <FaTrashAlt className="text-white" />
-                  </button>
-                </div>
-              </td>
-              <td class="text-center">
-                {item.id}--{item.parentId}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
     </div>
   );
 };

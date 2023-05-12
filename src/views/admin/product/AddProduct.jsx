@@ -119,7 +119,6 @@ const AddProduct = () => {
     e.stopPropagation();
     let images = [];
     const files = e.target.files;
-    // console.log("file", files);
     const formData = new FormData();
     for (let i of files) {
       formData.append("file", i);

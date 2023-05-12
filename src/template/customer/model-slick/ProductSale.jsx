@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -6,8 +6,10 @@ import "./productsale.scss";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
-const ProductSale = (product) => {
+import productService from "../../../services/product.service";
+const ProductSale = () => {
   let numeral = require("numeral");
+  const [productSale, setProductSale] = useState([]);
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -27,11 +29,24 @@ const ProductSale = (product) => {
       items: 2,
     },
   };
+  useEffect(() => {
+    init();
+  }, []);
+  const init = () => {
+    productService
+      .getAll("ALL")
+      .then((reponse) => {
+        setProductSale(reponse.data.product);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="productsale p-2 mt-4 mb-1">
       <h3>Khuyến mãi</h3>
       <Carousel responsive={responsive}>
-        {product.product
+        {productSale
           .filter((item) => {
             return item.sale != null && item.sale?.status == 1;
           })
