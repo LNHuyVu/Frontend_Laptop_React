@@ -5,7 +5,10 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/slice/cartSlice";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
 import "./productsuggested.scss";
 const ProductSuggested = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -28,13 +31,36 @@ const ProductSuggested = () => {
         console.log(error);
       });
   };
+  //Toastify
+  const notifySuccess = () =>
+    toast.success("Đã thêm vào giỏ hàng!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  const notifyWarning = () =>
+    toast.warn("Vui lòng đăng nhập!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   const handleAddCart = (id, title, image, price, proId, number) => {
     if (!userRD) {
-      alert("vui lòng đăng nhập");
+      notifyWarning();
     } else {
+      notifySuccess();
       let userid = userRD.user.id;
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
-      // alert("hi");
     }
   };
   const handleShowMoreClick = () => {
@@ -216,6 +242,18 @@ const ProductSuggested = () => {
           )}
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

@@ -33,13 +33,13 @@ const ListproductValue = () => {
     productValueService
       .getAll("ALL", userRD)
       .then((response) => {
-        console.log(response.data.productvalue);
         setProductValue(response.data.productvalue);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  //Handle Status
   const handleStatus = (e, id, statusValue) => {
     e.preventDefault();
     const product_update = {

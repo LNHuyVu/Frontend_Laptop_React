@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaShoppingCart, FaUserAlt } from "react-icons/fa";
+import { HiOutlineMail } from "react-icons/hi";
+import { TbLogout } from "react-icons/tb";
+import { FiUserPlus } from "react-icons/fi";
+
+import menuService from "../../services/menu.service";
+
 import "./headercustomer.scss";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -26,7 +33,22 @@ const HeaderCustomer = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   // console.log(userRD);
   const [user, setUser] = useState("");
-  const menu = [
+  const [menu, setMenu] = useState([]);
+  useEffect(() => {
+    init();
+  }, []);
+  const init = () => {
+    menuService
+      .getAll("ALL")
+      .then((res) => {
+        setMenu(res.data.menu);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const menu1 = [
     {
       id: 1,
       name: "Nhu cầu",
@@ -56,6 +78,18 @@ const HeaderCustomer = () => {
       parentid: 1,
     },
     {
+      id: 21,
+      name: "Cao cấp sang trọng",
+      link: "demand/cao-cap-sang-trong",
+      parentid: 1,
+    },
+    {
+      id: 22,
+      name: "Đồ họa - Kỹ thuật",
+      link: "demand/do-hoa-ky-thuat",
+      parentid: 1,
+    },
+    {
       id: 5,
       name: "Gaming",
       link: "demand/gaming",
@@ -63,6 +97,12 @@ const HeaderCustomer = () => {
     },
     {
       id: 6,
+      name: "Tất cả Laptop",
+      link: "category/laptop",
+      parentid: 2,
+    },
+    {
+      id: 23,
       name: "Laptop DELL",
       link: "category/laptop-dell",
       parentid: 2,
@@ -75,6 +115,12 @@ const HeaderCustomer = () => {
     },
     {
       id: 8,
+      name: "Tất cả phụ kiện",
+      link: "category/phu-kien",
+      parentid: 3,
+    },
+    {
+      id: 24,
       name: "Bàn phím",
       link: "category/ban-phim",
       parentid: 3,
@@ -83,6 +129,24 @@ const HeaderCustomer = () => {
       id: 9,
       name: "Chuột",
       link: "category/chuot",
+      parentid: 3,
+    },
+    {
+      id: 18,
+      name: "Thiết bị mạng",
+      link: "category/thiet-bi-mang",
+      parentid: 3,
+    },
+    {
+      id: 19,
+      name: "Túi chống sốc",
+      link: "category/tui-chong-soc",
+      parentid: 3,
+    },
+    {
+      id: 20,
+      name: "Miếng lót chuột",
+      link: "category/mieng-lot-chuot",
       parentid: 3,
     },
     {
@@ -98,12 +162,49 @@ const HeaderCustomer = () => {
       parentid: 10,
     },
     {
+      id: 21,
+      name: "Tư vấn",
+      link: "post/tu-van",
+      parentid: 10,
+    },
+    {
+      id: 22,
+      name: "Laptop",
+      link: "post/laptop",
+      parentid: 10,
+    },
+    {
       id: 13,
       name: "Latop MSI",
       link: "category/laptop-msi",
       parentid: 2,
     },
+    {
+      id: 14,
+      name: "Latop Acer",
+      link: "category/laptop-acer",
+      parentid: 2,
+    },
+    {
+      id: 15,
+      name: "Latop Asus",
+      link: "category/laptop-asus",
+      parentid: 2,
+    },
+    {
+      id: 16,
+      name: "Latop Lenovo",
+      link: "category/laptop-lenovo",
+      parentid: 2,
+    },
+    {
+      id: 17,
+      name: "Latop Macbook",
+      link: "category/laptop-macbook",
+      parentid: 2,
+    },
   ];
+  //Search
   const handleSubmit = (event) => {
     event.preventDefault();
     if (searchTerm != "") {
@@ -129,7 +230,9 @@ const HeaderCustomer = () => {
       <div className="container-xxl">
         <div className="row py-1">
           <div className="col-md-2 text-center">
-            <img className="w-50" src="image/logo/LOGOLTW.png" alt="" />
+            <Link to="/">
+              <img className="w-50" src="image/logo/LOGOLTW.png" alt="" />
+            </Link>
           </div>
           <div className="col-md-4">
             <form onSubmit={handleSubmit} class="d-flex">
@@ -151,7 +254,7 @@ const HeaderCustomer = () => {
           <div className="col-md-2 ">
             <Link to="/contact" className="link text-white">
               <span>
-                <FaUserAlt className="mx-1" />
+                <HiOutlineMail className="mx-1" />
                 Hoi Dap
               </span>
             </Link>
@@ -167,7 +270,7 @@ const HeaderCustomer = () => {
                 </Link>
                 <Link to="./register" className="link text-white">
                   <span>
-                    <FaShoppingCart className="mx-1" />
+                    <FiUserPlus className="mx-1" />
                     Đăng ký
                   </span>
                 </Link>
@@ -181,7 +284,7 @@ const HeaderCustomer = () => {
                   </span>
                 </Link>
                 <span onClick={handleLogout}>
-                  <FaShoppingCart className="mx-1" />
+                  <TbLogout className="mx-1" />
                   Đăng xuất
                 </span>
               </>
@@ -191,7 +294,7 @@ const HeaderCustomer = () => {
             <Link to="/cart" className="link text-white">
               <span>
                 <FaShoppingCart className="mx-1" />
-                Gio hang
+                Giỏ hàng
               </span>
             </Link>
           </div>
@@ -210,7 +313,7 @@ const HeaderCustomer = () => {
             </Nav.Link>
             {menu
               .filter((item) => {
-                return item.parentid === 0;
+                return item.parentId === 0;
               })
               .map((item, index) => {
                 return (
@@ -222,7 +325,9 @@ const HeaderCustomer = () => {
                     >
                       {menu
                         .filter((child) => {
-                          return child.parentid === item.id;
+                          return (
+                            child.parentId === item.id && child.status === 1
+                          );
                         })
                         .map((child, index) => {
                           return (
@@ -235,9 +340,9 @@ const HeaderCustomer = () => {
                   </Nav>
                 );
               })}
-            <Nav.Link as={Link} to="/">
+            {/* <Nav.Link as={Link} to="/post/gioi-thieu/gioi-thieu">
               Giới thiệu
-            </Nav.Link>
+            </Nav.Link> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>

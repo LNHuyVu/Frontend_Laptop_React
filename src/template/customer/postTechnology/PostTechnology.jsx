@@ -5,7 +5,6 @@ import "react-multi-carousel/lib/styles.css";
 import postService from "../../../services/post.service";
 import { Link } from "react-router-dom";
 const PostTechnology = (imagePost) => {
-  console.log("IMGPOST", imagePost);
   const [posts, setPosts] = useState([]);
   const responsive = {
     superLargeDesktop: {
@@ -33,7 +32,6 @@ const PostTechnology = (imagePost) => {
     postService
       .getTopId(3)
       .then((reponse) => {
-        console.log("POST", reponse.data);
         setPosts(reponse.data.post);
       })
       .catch((error) => {

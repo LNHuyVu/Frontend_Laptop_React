@@ -3,18 +3,32 @@ import { useDispatch } from "react-redux";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/apiRequest";
+import { Link } from "react-router-dom";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const handleLogin = (e) => {
     e.preventDefault();
-    const user={
-        email,
-        password
-    }
-    loginUser(user, dispatch, navigate);
+    const user = {
+      email,
+      password,
+    };
+    let valueLogin;
+    let myPromise = new Promise((resolve, reject) => {
+      valueLogin = loginUser(user, dispatch, navigate);
+      resolve(valueLogin);
+    });
+    myPromise
+      .then((result) => {
+        console.log(result);
+        setMessage(result.value);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <div className="login-form-user">
@@ -53,12 +67,17 @@ const Login = () => {
             LOGIN
           </button>
         </form>
-        <div className="col-12" style={{ backgroundColor: "red" }}>
-          {/* {this.state.errMessage} */}
+        <div className="col-12 rounded-pill my-1 text-center" style={{ backgroundColor: "red" }}>
+          {message}
         </div>
-        <a className="lf--forgot" href="#">
-          Forgot password?
-        </a>
+        <div className="d-flex justify-content-around">
+          <Link className="lf--forgot" to="../">
+            Quay lại
+          </Link>
+          <Link className="lf--forgot" to="#">
+            Quên mật khẩu?
+          </Link>
+        </div>
       </div>
     </div>
   );

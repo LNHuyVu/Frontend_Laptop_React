@@ -6,6 +6,10 @@ import "./productdemand.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { TiShoppingCart } from "react-icons/ti";
 import { addToCart } from "../../../redux/slice/cartSlice";
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
 const ProductDemand = () => {
   var numeral = require("numeral");
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -24,7 +28,6 @@ const ProductDemand = () => {
       .getProductValueCustomer(slug)
       .then((reponse) => {
         setProductValue(reponse.data.productvalue);
-        console.log(reponse.data);
       })
       .catch((error) => {
         console.log(error);
@@ -38,13 +41,36 @@ const ProductDemand = () => {
         console.log(error);
       });
   };
+  //Toastify
+  const notifySuccess = () =>
+    toast.success("Đã thêm vào giỏ hàng!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  const notifyWarning = () =>
+    toast.warn("Vui lòng đăng nhập!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   const handleAddCart = (id, title, image, price, proId, number) => {
     if (!userRD) {
-      alert("vui lòng đăng nhập");
+      notifyWarning();
     } else {
+      notifySuccess();
       let userid = userRD.user.id;
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
-      alert("hi");
     }
   };
 
@@ -60,7 +86,6 @@ const ProductDemand = () => {
       });
     }
   }
-  console.log(categoryFilters);
 
   const filteredProducts =
     categoryFilters.size === 0
@@ -68,11 +93,18 @@ const ProductDemand = () => {
       : productValue.filter((p) => categoryFilters.has(p.product?.catId));
   return (
     <div className="productdemand">
-      <h3 className="text-center">{productValue[0]?.product?.option?.demandName?.nameValue}</h3>
+      <h3 className="text-center">
+        {productValue[0]?.product?.option?.demandName?.nameValue}
+      </h3>
       <div className="row">
         <div className="col-md-2 px-1">
           <div className="checkBox-brand">
-            <h6 style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight:"bolder"}}>
+            <h6
+              style={{
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontWeight: "bolder",
+              }}
+            >
               Hãng sản xuất
             </h6>
             {categories
@@ -117,7 +149,8 @@ const ProductDemand = () => {
                               className="card-img-top"
                               alt="..."
                             />
-                            {child.product?.sale == null  || child.product?.sale.status==0?(
+                            {child.product?.sale == null ||
+                            child.product?.sale.status == 0 ? (
                               <></>
                             ) : (
                               <>
@@ -229,7 +262,7 @@ const ProductDemand = () => {
                               )}
                             </div>
                             <br />
-                            <span>Màng hình: </span>
+                            <span>Màn hình: </span>
                             {child.product?.option.screenName.nameValue}
                             <br />
                             <span>CPU: </span>
@@ -240,29 +273,34 @@ const ProductDemand = () => {
                               Card: {child.product?.option.cardName.nameValue}
                             </span>
                           </div>
+                          {child.product?.store.number == 0 ? (
+                            <><h4 className="text-center btn-light">Đã hết</h4></>
+                          ) : (
+                            <>
+                              <button
+                                className="btn btn-success w-100"
+                                onClick={() =>
+                                  handleAddCart(
+                                    child.product.id,
+                                    child.product.nameProduct,
+                                    child.product.imgData?.link[0],
+                                    child.product.sale == null
+                                      ? child.product.price
+                                      : parseInt(
+                                          child.product.price -
+                                            child.product.sale.valueSale
+                                        ),
+                                    child.product.proId,
 
-                          <button
-                            className="btn btn-success w-100"
-                            onClick={() =>
-                              handleAddCart(
-                                child.product.id,
-                                child.product.nameProduct,
-                                child.product.imgData?.link[0],
-                                child.product.sale == null
-                                  ? child.product.price
-                                  : parseInt(
-                                      child.product.price -
-                                        child.product.sale.valueSale
-                                    ),
-                                child.product.proId,
-
-                                child.product.store.number
-                              )
-                            }
-                          >
-                            <TiShoppingCart size={30} />
-                            MUA NGAY
-                          </button>
+                                    child.product.store.number
+                                  )
+                                }
+                              >
+                                <TiShoppingCart size={30} />
+                                MUA NGAY
+                              </button>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -272,6 +310,18 @@ const ProductDemand = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

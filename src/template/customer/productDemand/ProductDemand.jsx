@@ -5,7 +5,9 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/slice/cartSlice";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const ProductDemand = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   var numeral = require("numeral");
@@ -24,13 +26,37 @@ const ProductDemand = () => {
         console.log(error);
       });
   };
+  //Toastify
+  const notifySuccess = () =>
+    toast.success("Đã thêm vào giỏ hàng!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  const notifyWarning = () =>
+    toast.warn("Vui lòng đăng nhập!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  //Handle Add Cart
   const handleAddCart = (id, title, image, price, proId, number) => {
     if (!userRD) {
-      alert("vui lòng đăng nhập");
+      notifyWarning();
     } else {
+      notifySuccess();
       let userid = userRD.user.id;
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
-      // alert("hi");
     }
   };
   return (
@@ -200,29 +226,37 @@ const ProductDemand = () => {
                                     {child.product.option.cardName?.nameValue}
                                   </span>
                                 </p>
-                                <button
-                                  className="btn btn-success w-100"
-                                  onClick={() =>
-                                    handleAddCart(
-                                      child.product.id,
-                                      child.product.nameProduct,
-                                      child.product.imgData?.link[0],
-                                      // child.product.price,
-                                      child.product.sale == null ||
-                                        child.product.sale.status == 0
-                                        ? child.product.price
-                                        : parseInt(
-                                            child.product.price -
-                                              child.product.sale.valueSale
-                                          ),
-                                      child.product.proId,
-                                      child.product.store.number
-                                    )
-                                  }
-                                >
-                                  <TiShoppingCart size={30} />
-                                  MUA NGAY
-                                </button>
+                                {child.product.store.number == 0 ? (
+                                  <>
+                                    <h4 className="text-center btn-light">Đã hết</h4>
+                                  </>
+                                ) : (
+                                  <>
+                                    <button
+                                      className="btn btn-success w-100"
+                                      onClick={() =>
+                                        handleAddCart(
+                                          child.product.id,
+                                          child.product.nameProduct,
+                                          child.product.imgData?.link[0],
+                                          // child.product.price,
+                                          child.product.sale == null ||
+                                            child.product.sale.status == 0
+                                            ? child.product.price
+                                            : parseInt(
+                                                child.product.price -
+                                                  child.product.sale.valueSale
+                                              ),
+                                          child.product.proId,
+                                          child.product.store.number
+                                        )
+                                      }
+                                    >
+                                      <TiShoppingCart size={30} />
+                                      MUA NGAY
+                                    </button>
+                                  </>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -232,6 +266,18 @@ const ProductDemand = () => {
                   })}
                 </div>
               </div>
+              <ToastContainer
+                position="top-center"
+                autoClose={500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
             </div>
           </>
         );

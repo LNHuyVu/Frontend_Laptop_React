@@ -76,8 +76,8 @@ const User = () => {
       dataIndex: "createdAt",
     },
     {
-      title: "Id",
-      dataIndex: "id",
+      title: "Trạng thái",
+      dataIndex: "status1",
     },
     {
       title: "Chức năng",
@@ -85,6 +85,37 @@ const User = () => {
     },
   ];
   for (const element of order) {
+    element.status1 = (
+      <div>
+        {element.status == 0 ? (
+          <>
+            <div
+              className="px-2 text-center"
+              style={{
+                background: "rgba(255, 255, 0, 1)",
+                boxShadow: "0px 0px 10px 5px rgba(255, 255, 0, 0.5)",
+                borderRadius: 10,
+              }}
+            >
+              Đang xử lí
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              className="px-2 text-center"
+              style={{
+                background: "rgba(0, 255, 0, 1)",
+                boxShadow: "0px 0px 10px 5px rgba(0, 255, 0, 0.5)",
+                borderRadius: 10,
+              }}
+            >
+              Đã xác nhận
+            </div>
+          </>
+        )}
+      </div>
+    );
     element.action = (
       <div class="d-grid gap-2 d-md-block">
         <button
@@ -99,7 +130,7 @@ const User = () => {
           class="btn m-1 text-center border border-primary"
           type="button"
         >
-          Show
+          Xem
           <IoIosEye size={20} color="blue" />
         </button>
       </div>
@@ -139,7 +170,7 @@ const User = () => {
                         </div>
                         <table style={{ width: "100%" }}>
                           <tr>
-                            <th>Name:</th>
+                            <th>Tên:</th>
                             <td>{user.name}</td>
                           </tr>
                           <tr>
@@ -147,15 +178,15 @@ const User = () => {
                             <td>{user.email}</td>
                           </tr>
                           <tr>
-                            <th>Telephone:</th>
+                            <th>Số điện thoại:</th>
                             <td>{user.phone}</td>
                           </tr>
                           <tr>
-                            <th>Address:</th>
+                            <th>Địa chỉ:</th>
                             <td>{user.address}</td>
                           </tr>
                           <tr>
-                            <th>Gender:</th>
+                            <th>Giới tính:</th>
                             {user.gender == 1 ? <td>Nam</td> : <td>Nữ</td>}
                           </tr>
                         </table>

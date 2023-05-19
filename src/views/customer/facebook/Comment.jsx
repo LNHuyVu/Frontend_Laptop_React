@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 export default function Comment(props) {
   let { link } = props;
-  console.log("Check link:", link, "Props: ", props);
   useEffect(() => {
     initFacebookSDK();
   }, []);

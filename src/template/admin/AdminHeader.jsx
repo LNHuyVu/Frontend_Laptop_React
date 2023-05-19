@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/apiRequest";
+
 const AdminHeader = () => {
   const user = useSelector((state) => state.auth.login?.currentUser);
   //Logout
@@ -137,8 +138,9 @@ const AdminHeader = () => {
             </AccordionItem>
             <AccordionItem header="Menu" className="nav-item ">
               <ul>
-                <li className="nav-link ">Tất cả menu</li>
-                <li className="nav-link ">Thêm bài menu</li>
+                <Link to="./menu">
+                  <li className="nav-link ">Tất cả Menu</li>
+                </Link>
               </ul>
             </AccordionItem>
             <AccordionItem header="Slider" className="nav-item ">

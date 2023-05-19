@@ -14,19 +14,28 @@ export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
     const res = await axios.post("http://localhost:8080/api/login", user);
-    dispatch(loginSuccess(res.data));
-    res.data.user.roles=="T3"?(navigate("../")):(navigate("/dashboard"))
-    
+    if (res.data.errCode == 0) {
+      dispatch(loginSuccess(res.data));
+      res.data.user.roles == "T3" ? navigate("../") : navigate("/dashboard");
+    } else {
+      dispatch(loginFailed());
+      return { value: res.data.message };
+    }
   } catch (err) {
-    dispatch(loginFailed());
+    console.log(err);
   }
 };
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
     const res = await axios.post("http://localhost:8080/api/register", user);
-    dispatch(registerSuccess(res.data));
-    navigate("/login");
+    console.log(res);
+    if (res.data.errCode == 0) {
+      dispatch(registerSuccess(res.data));
+      return { value: res.data.message, errCode: res.data.errCode };
+    } else {
+      return { value: res.data.message, errCode: res.data.errCode };
+    }
   } catch (err) {
     dispatch(registerFailed());
   }

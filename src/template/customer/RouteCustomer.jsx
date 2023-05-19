@@ -14,6 +14,7 @@ import Order from "../../views/customer/order/Order";
 import Search from "../../views/customer/search/Search";
 import Contact from "../../views/customer/contact/Contact";
 import User from "../../views/customer/user/User";
+import Page from "../../views/customer/page/Page";
 const HomeCustomer = lazy(() => import("./HomeCustomer"));
 
 const RouteCustomer = () => {
@@ -40,6 +41,8 @@ const RouteCustomer = () => {
             <Route path="/post/:slug" element={<Post />} />
             <Route path="/post/:slug/:id" element={<PostDetail />} />
             <Route path="/user" element={<User />} />
+            {/* Page */}
+            <Route path="/page/:slug" element={<Page />} />
           </Routes>
         </Suspense>
       </div>

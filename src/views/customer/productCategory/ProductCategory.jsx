@@ -9,6 +9,11 @@ import productService from "../../../services/product.service";
 import { TiShoppingCart } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../redux/slice/cartSlice";
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
+
 const ProductCategory = () => {
   //Filter Price
   let maxB;
@@ -41,7 +46,6 @@ const ProductCategory = () => {
           .getProductCat(reponse.data.id)
           .then((reponse) => {
             setProduct(reponse.data.product);
-            console.log(reponse.data.product);
           })
           .catch((error) => {
             console.log(error);
@@ -51,13 +55,36 @@ const ProductCategory = () => {
         console.log(error);
       });
   };
+  //Toastify
+  const notifySuccess = () =>
+    toast.success("Đã thêm vào giỏ hàng!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  const notifyWarning = () =>
+    toast.warn("Vui lòng đăng nhập!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   const handleAddCart = (id, title, image, price, proId, number) => {
     if (!userRD) {
-      alert("vui lòng đăng nhập");
+      notifyWarning();
     } else {
+      notifySuccess();
       let userid = userRD.user.id;
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
-      alert("hi");
     }
   };
   //Filter Price
@@ -94,7 +121,14 @@ const ProductCategory = () => {
       <div className="row">
         <div className="col-md-2 px-1">
           <div className="radio-price">
-            <h6 style={{ fontFamily: "Arial, Helvetica, sans-serif", fontWeight:"bolder"}}>Lọc theo giá</h6>
+            <h6
+              style={{
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontWeight: "bolder",
+              }}
+            >
+              Lọc theo giá
+            </h6>
             <div className="form-radio-price">
               <div className="w-100">
                 <label className="form-check-label label-radio-price">
@@ -247,7 +281,7 @@ const ProductCategory = () => {
                             )}
                           </div>
                           <br />
-                          {item?.option?.screenName ? "Màng hình: " : ""}
+                          {item?.option?.screenName ? "Màn hình: " : ""}
                           {item?.option?.screenName.nameValue}
                           <br />
                           {item?.option?.cpuName ? "CPU: " : ""}
@@ -261,24 +295,34 @@ const ProductCategory = () => {
                             {item?.option?.cardName.nameValue}
                           </span>
                         </div>
-                        <button
-                          className="btn btn-success w-100"
-                          onClick={() =>
-                            handleAddCart(
-                              item.id,
-                              item.nameProduct,
-                              item?.imgData.link[0],
-                              item?.sale == null
-                                ? item.price
-                                : parseInt(item.price - item.sale.valueSale),
-                              item.proId,
-                              item.store.number
-                            )
-                          }
-                        >
-                          <TiShoppingCart size={30} />
-                          MUA NGAY
-                        </button>
+                        {item?.store?.number == 0 ? (
+                          <>
+                            <h4 className="text-center btn-light">Đã hết</h4>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="btn btn-success w-100"
+                              onClick={() =>
+                                handleAddCart(
+                                  item.id,
+                                  item.nameProduct,
+                                  item?.imgData.link[0],
+                                  item?.sale == null
+                                    ? item.price
+                                    : parseInt(
+                                        item.price - item.sale.valueSale
+                                      ),
+                                  item.proId,
+                                  item.store.number
+                                )
+                              }
+                            >
+                              <TiShoppingCart size={30} />
+                              MUA NGAY
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -288,6 +332,18 @@ const ProductCategory = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

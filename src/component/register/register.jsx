@@ -1,17 +1,31 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import "./register.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import productImgService from "../../services/productImg.service";
 import Loading from "../loading/Loading";
-import { BsCameraFill } from "react-icons/bs";
+import { BsCameraFill, BsFillPatchCheckFill } from "react-icons/bs";
+import { TbConfetti } from "react-icons/tb";
+
+import { SlClose } from "react-icons/sl";
 import { registerUser } from "../../redux/apiRequest";
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 const Register = () => {
   const [imagesPreview, setImagesPreview] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  //
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   //
   const GENDER = [
     {
@@ -21,10 +35,6 @@ const Register = () => {
     {
       value: "0",
       nameGender: "Nữ",
-    },
-    {
-      value: "2",
-      nameGender: "Khác",
     },
   ];
   //
@@ -51,31 +61,67 @@ const Register = () => {
       createdBy: "VIP",
       status,
     };
-    console.log("User new", user_create);
-    if (CheckValidate()) {
-      registerUser(user_create, dispatch, navigate);
+    console.log(user_create);
+    let validate = CheckValidate(user_create);
+    if (validate.isValue == false) {
+      notifyError(validate.message);
+    } else {
+      let valueRegister;
+      let myPromise = new Promise((resolve, reject) => {
+        valueRegister = registerUser(user_create, dispatch, navigate);
+        resolve(valueRegister);
+      });
+      myPromise
+        .then((result) => {
+          console.log(result);
+          if (result.errCode != 0) {
+            notifyError(result.value);
+          } else {
+            handleShow();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
-  //Clear
   //Check value
-  const CheckValidate = () => {
+  const CheckValidate = (user) => {
     let isValue = true;
+    let message = "";
+    let checkUser = {};
     const check = {
-      "Tên người dùng": name,
-      "Tài khoản email": email,
-      "Mật khẩu": password,
-      "Địa chỉ": address,
-      "Số điện thoại": phone,
+      "Nhập tên người dùng": name,
+      "Nhập email": user.email,
+      "Nhập mật khẩu": user.password,
+      "Nhập địa chỉ": user.address,
+      "Nhập số điện thoại": user.phone,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
-        alert("Vui lòng chọn:" + item);
+        message = item;
         break;
       }
     }
-    return isValue;
+    if (isValue == true) {
+      if (validateEmail(user.email) != true) {
+        isValue = false;
+        message = "Email không hợp lệ";
+        return (checkUser = { isValue, message });
+      }
+      if (validatePhoneNumber(user.phone) != true) {
+        isValue = false;
+        message = "Số điện thoại không hợp lệ";
+        return (checkUser = { isValue, message });
+      }
+      if (validatePassword(user.password) != true) {
+        isValue = false;
+        message = "Mật khẩu 5 kí tự trở lên";
+        return (checkUser = { isValue, message });
+      }
+    }
+    return (checkUser = { isValue, message });
   };
   const handleFiles = async (e) => {
     setIsLoading(true);
@@ -97,12 +143,86 @@ const Register = () => {
     setIsLoading(false);
     setImagesPreview(images);
   };
+  //Validate
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
+  function validatePhoneNumber(phoneNumber) {
+    if (phoneNumber.charAt(0) != 0) return false;
+    if (isNaN(phoneNumber) || phoneNumber.length !== 10) {
+      return false;
+    }
+    return true;
+  }
+  function validatePassword(password) {
+    if (isNaN(password) || password.length < 5) {
+      return false;
+    }
+    return true;
+  }
+  //Toastify
+  const notifyError = (name) => {
+    toast.error(name, {
+      position: "top-center",
+      autoClose: 300,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
   return (
     <div className="register-form-user">
+      <Modal show={show} fullscreen="md-down" onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Thông báo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <BsFillPatchCheckFill size={100} color="green" />
+            <h4>
+              <TbConfetti size={50} color="orange" />
+              <TbConfetti size={50} color="orange" />
+              <TbConfetti size={50} color="orange" />
+            </h4>
+          </div>
+          <h4 className="text-center">Chúc mừng bạn đã đăng ký thành công</h4>
+          <div className="">
+            <Link to="/login">
+              <button
+                className="w-100 mt-2 btn border border-2 border-primary bg-light"
+                onClick={handleClose}
+              >
+                Đi đến trang đăng nhập
+              </button>
+            </Link>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Link to="../">
+            <Button variant="primary" onClick={handleClose}>
+              Quay lại
+            </Button>
+          </Link>
+        </Modal.Footer>
+      </Modal>
       <div className="login-form">
         <form className="p-3">
           <div>
-            <h3 className="text-center">Thêm Mới Tài Khoản</h3>
+            <div className="d-flex justify-content-between">
+              <div></div>
+              <div>
+                <h3 className="text-center">Thêm Mới Tài Khoản</h3>
+              </div>
+              <div className="pe-2">
+                <Link to="../">
+                  <SlClose size={30} />
+                </Link>
+              </div>
+            </div>
             <div className="row">
               <div className="col-md-3">
                 <div className="row">
@@ -245,6 +365,19 @@ const Register = () => {
           {/* {this.state.errMessage} */}
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={300}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

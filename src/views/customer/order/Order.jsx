@@ -13,6 +13,10 @@ import { TbConfetti } from "react-icons/tb";
 import { FcApproval } from "react-icons/fc";
 import emailService from "../../../services/email.service";
 import productStoreService from "../../../services/productStore.service";
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
 const Order = () => {
   const d = new Date();
   let code = d.getTime();
@@ -46,23 +50,49 @@ const Order = () => {
     totalQuantity += item.quantity;
     totalPrice += item.price * item.quantity;
   });
-  const checkOrder = (order) => {
+  const validateSubmit = (order) => {
     let isValue = true;
-    const check = {
-      "Tên người nhận": order.name,
-      "Địa chỉ": order.address,
-      "Số điện thoại": order.phone,
-      Email: order.email,
+    let message = "";
+    let check = {};
+    const value = {
+      "Nhập tên người nhận": order.name,
+      "Nhập địa chỉ": order.address,
+      "Nhập số điện thoại": order.phone,
+      "Nhập Email": order.email,
     };
-    for (const item in check) {
-      if (!check[item] || check[item] == "") {
+
+    for (const item in value) {
+      if (!value[item] || value[item] == "") {
         isValue = false;
-        alert("Vui lòng nhập:" + item);
+        message = item;
         break;
       }
     }
-    return isValue;
+    if (isValue == true) {
+      if (validateEmail(order.email) != true) {
+        isValue = false;
+        message = "Email không hợp lệ";
+        return (check = { isValue, message });
+      }
+      if (validatePhoneNumber(order.phone) != true) {
+        isValue = false;
+        message = "Số điện thoại không hợp lệ";
+        return (check = { isValue, message });
+      }
+    }
+    return (check = { isValue, message });
   };
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
+  function validatePhoneNumber(phoneNumber) {
+    if (phoneNumber.charAt(0) != 0) return false;
+    if (isNaN(phoneNumber) || phoneNumber.length !== 10) {
+      return false;
+    }
+    return true;
+  }
   const submitOrder = async () => {
     const order = {
       name,
@@ -71,9 +101,10 @@ const Order = () => {
       address,
       userId: userRD.user.id,
       codeOrder: d.getTime(),
-      status: 1,
+      status: 0,
     };
-    if (checkOrder(order)) {
+    let validate = validateSubmit(order);
+    if (validate.isValue == true) {
       await orderService
         .create(order)
         .then((reponse) => {
@@ -115,7 +146,21 @@ const Order = () => {
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      notifyError(validate.message);
     }
+  };
+  const notifyError = (name) => {
+    toast.error(name, {
+      position: "top-center",
+      autoClose: 300,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
   return (
     <div>
@@ -257,7 +302,19 @@ const Order = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+      <ToastContainer
+        position="top-center"
+        autoClose={300}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

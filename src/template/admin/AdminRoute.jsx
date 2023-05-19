@@ -32,6 +32,8 @@ import EditSlider from "../../views/admin/slider/EditSlider";
 import ListContact from "../../views/admin/contact/ListContact";
 import EditContact from "../../views/admin/contact/EditContact";
 import ListOrder from "../../views/admin/order/ListOrder";
+import ListMenu from "../../views/admin/menu/ListMenu";
+import EditMenu from "../../views/admin/menu/EditMenu";
 
 const AdminRoute = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -40,7 +42,7 @@ const AdminRoute = () => {
     if (!userRD) {
       navigate("/login");
     }
-    if (userRD.user.roles == "T3") {
+    if (userRD?.user.roles == "T3") {
       navigate("../");
     }
   }, []);
@@ -119,6 +121,10 @@ const AdminRoute = () => {
               <Route path="/slider/add-slider" element={<AddSlider />} />
               <Route path="/slider/edit-slider/:id" element={<EditSlider />} />
               <Route path="/order" element={<ListOrder />} />
+              {/* Menu */}
+              <Route path="/menu" element={<ListMenu />} />
+              <Route path="/menu/edit-menu/:id" element={<EditMenu />} />
+
             </Routes>
           </div>
         </section>

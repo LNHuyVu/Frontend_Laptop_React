@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import { lazy, Suspense } from "react";
-import { Link } from "react-router-dom";
-import BannerCustomer from "./BannerCustomer";
 import "./homecustomer.scss";
 import { useState } from "react";
 import Slider from "react-slick";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../redux/slice/cartSlice";
-import { useSelector } from "react-redux";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import sliderService from "../../services/slider.service";
+
+//
 const ProductSale = lazy(() => import("./model-slick/ProductSale"));
 const ProducHot = lazy(() => import("./model-slick/ProducHot"));
 const Featuredcategory = lazy(() => import("./model-slick/Featuredcategory"));
@@ -20,11 +17,7 @@ const ProductSuggested = lazy(() =>
 const PostTechnology = lazy(() => import("./postTechnology/PostTechnology"));
 
 const HomeCustomer = () => {
-  const userRD = useSelector((state) => state.auth.login?.currentUser);
-  var numeral = require("numeral");
-  const [demandProduct, setDemandProduct] = useState([]);
   const [slider, setSlider] = useState([]);
-  const dispatch = useDispatch();
   let imgSlider = [];
   let imgPost = [];
   useEffect(() => {
@@ -68,20 +61,12 @@ const HomeCustomer = () => {
         console.log(error);
       });
   };
-  const handleAddCart = (id, title, image, price, proId, number) => {
-    if (!userRD) {
-      alert("vui lòng đăng nhập");
-    } else {
-      let userid = userRD.user.id;
-      dispatch(addToCart({ id, title, image, price, proId, userid, number }));
-      // alert("hi");
-    }
-  };
   //Handle Img Slider(Slider, Position =2)
   for (const item of slider) {
     if (item.position == 2) imgSlider = item.image;
     if (item.position == 4) imgPost = item.image;
   }
+  
   return (
     <div className="homecustomer">
       {/* Button Scroll */}

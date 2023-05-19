@@ -14,9 +14,6 @@ import {
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,40 +34,8 @@ const Cart = () => {
     totalPrice += item.price * item.quantity;
   });
   //
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [deleteId, setDeleteId] = useState("");
-  const test = (id) => {
-    handleShow();
-    setDeleteId(id);
-  };
-  const checkDelete = (value) => {
-    handleClose();
-    if (value == true) {
-      setDeleteId("")
-    }
-  };
   return (
     <div className="container py-2">
-      <Modal show={show} onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => checkDelete(true)}>
-            Đồng ý
-          </Button>
-          <Button variant="secondary" onClick={() => checkDelete(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <button className="btn" onClick={() => test(1)}>
-        Test
-      </button>
       <div className="row">
         <div className="col-md-8 ">
           <div className="content-cart p-2 border border-2 rounded-5">
@@ -138,7 +103,7 @@ const Cart = () => {
         </div>
         <div className="col-md-4">
           <div className="p-2 border border-2 rounded-5">
-            <h3 className="text-center">Tóm tắc</h3>
+            <h3 className="text-center">Tóm tắt</h3>
             <table>
               <tr>
                 <th>Số lượng:</th>

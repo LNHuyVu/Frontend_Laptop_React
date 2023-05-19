@@ -14,7 +14,10 @@ import Comment from "../facebook/Comment";
 import Like from "../facebook/Like";
 import Share from "../facebook/Share";
 import { TiShoppingCart } from "react-icons/ti";
-
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
 const ProductDetail = () => {
   //
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -36,7 +39,6 @@ const ProductDetail = () => {
     productService
       .getProductId(slug)
       .then((reponse) => {
-        console.log(reponse.data);
         setImg(reponse.data.product.imgData.link);
         setProduct(reponse.data.product);
         setOption(reponse.data.product.option);
@@ -57,7 +59,6 @@ const ProductDetail = () => {
             .getProductCat(reponse.data.product.catId)
             .then((reponse) => {
               setProductSimilar(reponse.data.product);
-              // console.log("Cat",reponse.data);
             })
             .catch((error) => {
               console.log(error);
@@ -68,14 +69,37 @@ const ProductDetail = () => {
         console.log(error);
       });
   };
+  //Toastify
+  const notifySuccess = () =>
+    toast.success("Đã thêm vào giỏ hàng!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  const notifyWarning = () =>
+    toast.warn("Vui lòng đăng nhập!", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   //Add Cart
   const handleAddCart = (id, title, image, price, proId, number) => {
     if (!userRD) {
-      alert("vui lòng đăng nhập");
+      notifyWarning();
     } else {
       let userid = userRD.user.id;
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
-      alert("hi");
+      notifySuccess();
     }
   };
   //Plugin FACEBOOK
@@ -152,24 +176,33 @@ const ProductDetail = () => {
             Giá khuyến mãi dự kiến áp dụng đến 23:00 15/6, không áp dụng trả góp
             lãi suất đặt biệt(0%, 0.5%, 1%,)
           </span>
-          <button
-            onClick={() =>
-              handleAddCart(
-                product.id,
-                product.nameProduct,
-                product?.imgData.link[0],
-                product?.sale == null
-                  ? product.price
-                  : parseInt(product.price - product.sale.valueSale),
-                product.proId,
+          {product?.store?.number == 0 ? (
+            <>
+              <h4 className="text-center buy-now">Tạm hết hàng</h4>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() =>
+                  handleAddCart(
+                    product.id,
+                    product.nameProduct,
+                    product?.imgData.link[0],
+                    product?.sale == null
+                      ? product.price
+                      : parseInt(product.price - product.sale.valueSale),
+                    product.proId,
 
-                product.store.number
-              )
-            }
-            className="buy-now w-100"
-          >
-            <h3>Mua ngay</h3>
-          </button>
+                    product.store.number
+                  )
+                }
+                className="buy-now w-100"
+              >
+                <h3>Mua ngay</h3>
+              </button>
+            </>
+          )}
+
           <div className="product-info">
             <h4>Thông tin chi tiết</h4>
             <table class="table">
@@ -245,7 +278,7 @@ const ProductDetail = () => {
                 {/* Get Product "LT" => Demand */}
                 {productSimilar
                   .filter((item) => {
-                    return item?.product?.id !== product?.id;
+                    return item?.product?.id !== product?.id && item.product!=null;
                   })
                   .map((item) => {
                     return (
@@ -386,29 +419,38 @@ const ProductDetail = () => {
                                 Card: {item.product?.option.cardName.nameValue}
                               </span>
                             </div>
+                            {item.product?.store?.number == 0 ? (
+                              <>
+                                <h4 className="text-center btn-light">
+                                  Đã hết
+                                </h4>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className="btn btn-success w-100"
+                                  onClick={() =>
+                                    handleAddCart(
+                                      item.product.id,
+                                      item.product.nameProduct,
+                                      item.product.imgData?.link[0],
+                                      item.product.sale == null
+                                        ? item.product.price
+                                        : parseInt(
+                                            item.product.price -
+                                              item.product.sale.valueSale
+                                          ),
+                                      item.product.proId,
 
-                            <button
-                              className="btn btn-success w-100"
-                              onClick={() =>
-                                handleAddCart(
-                                  item.product.id,
-                                  item.product.nameProduct,
-                                  item.product.imgData?.link[0],
-                                  item.product.sale == null
-                                    ? item.product.price
-                                    : parseInt(
-                                        item.product.price -
-                                          item.product.sale.valueSale
-                                      ),
-                                  item.product.proId,
-
-                                  item.product.store.number
-                                )
-                              }
-                            >
-                              <TiShoppingCart size={30} />
-                              MUA NGAY
-                            </button>
+                                      item.product.store.number
+                                    )
+                                  }
+                                >
+                                  <TiShoppingCart size={30} />
+                                  MUA NGAY
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -559,26 +601,36 @@ const ProductDetail = () => {
                                 {item?.option?.cardName.nameValue}
                               </span>
                             </div>
-                            <button
-                              className="btn btn-success w-100"
-                              onClick={() =>
-                                handleAddCart(
-                                  item.id,
-                                  item.nameProduct,
-                                  item?.imgData.link[0],
-                                  item?.sale == null
-                                    ? item.price
-                                    : parseInt(
-                                        item.price - item.sale.valueSale
-                                      ),
-                                  item.proId,
-                                  item.store.number
-                                )
-                              }
-                            >
-                              <TiShoppingCart size={30} />
-                              MUA NGAY
-                            </button>
+                            {item?.store?.number == 0 ? (
+                              <>
+                                <h4 className="text-center btn-light">
+                                  Đã hết
+                                </h4>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className="btn btn-success w-100"
+                                  onClick={() =>
+                                    handleAddCart(
+                                      item.id,
+                                      item.nameProduct,
+                                      item?.imgData.link[0],
+                                      item?.sale == null
+                                        ? item.price
+                                        : parseInt(
+                                            item.price - item.sale.valueSale
+                                          ),
+                                      item.proId,
+                                      item.store.number
+                                    )
+                                  }
+                                >
+                                  <TiShoppingCart size={30} />
+                                  MUA NGAY
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -589,6 +641,18 @@ const ProductDetail = () => {
           )}
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };
