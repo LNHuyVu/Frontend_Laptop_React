@@ -63,10 +63,10 @@ const HomeCustomer = () => {
   };
   //Handle Img Slider(Slider, Position =2)
   for (const item of slider) {
-    if (item.position == 2) imgSlider = item.image;
-    if (item.position == 4) imgPost = item.image;
+    if (item.position == 2 && item.status != 0) imgSlider = item.image;
+    if (item.position == 4 && item.status != 0) imgPost = item.image;
   }
-  
+
   return (
     <div className="homecustomer">
       {/* Button Scroll */}
@@ -83,7 +83,7 @@ const HomeCustomer = () => {
         <div className="banner">
           {slider
             .filter((item) => {
-              return item.position == 1;
+              return item.position == 1 && item.status != 0;
             })
             .map((item) => {
               return (
@@ -123,7 +123,7 @@ const HomeCustomer = () => {
             <div className="text-center">
               {slider
                 .filter((item) => {
-                  return item.position == 3;
+                  return item.position == 3 && item.status != 0;
                 })
                 .map((item) => {
                   return <img className="w-100" src={item.image[0]} alt="" />;
@@ -143,7 +143,7 @@ const HomeCustomer = () => {
             <div className="text-center">
               {slider
                 .filter((item) => {
-                  return item.position == 5;
+                  return item.position == 5 && item.status != 0;
                 })
                 .map((item) => {
                   return <img className="w-100" src={item.image[0]} alt="" />;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { BsToggleOff, BsToggleOn, BsFillStarFill } from "react-icons/bs";
@@ -20,9 +20,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ListProductSale from "../productSale/ListProductSale";
 import productSaleService from "../../../services/productSale.service";
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
 const ListProduct = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
-
+  const [arrProduct, setArrProduct] = useState([]);
   const [search, setSearch] = useState("");
 
   const [key, setKey] = useState("home");
@@ -37,23 +41,45 @@ const ListProduct = () => {
   useEffect(() => {
     init();
   }, []);
-
+  //
+  function updateProductSale(checked, value) {
+    if (checked) setArrProduct([...arrProduct, value]);
+    if (!checked)
+      setArrProduct(arrProduct.filter((item) => item.id !== value.id));
+  }
+  //Add list product is saled
+  const handleAddListProductSale = (e) => {
+    e.preventDefault();
+    let ProductSale = arrProduct;
+    let Arr = ProductSale.filter((item) => item.sale == null);
+    let newArr = Arr.map(function (item) {
+      let newItem = {};
+      newItem.status = 0;
+      newItem.saleId = item.id;
+      newItem.createdBy = String(userRD?.user.id);
+      return newItem;
+    });
+    productSaleService
+      .create(newArr)
+      .then((response) => {
+        notifySuccess("Đã áp dụng khuyến mãi");
+        init();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  //
   const init = () => {
     productService
       .getAll("ALL")
       .then((response) => {
-        console.log("Get Product OK", response.data);
         setProduct(response.data.product);
       })
       .catch((error) => {
         console.log("Get Product Failed");
       });
   };
-  //
-  const handleClick = () => {
-    console.log("onClick được gọi");
-  };
-
   //handle status
   const handleStatus = (e, id, status) => {
     e.preventDefault();
@@ -115,7 +141,7 @@ const ListProduct = () => {
     setDeleteId(id);
     setDeleteProId(proId);
   };
-  //ADD Product Sale
+  //ADD 1 Product Sale
   const handleAddSale = (e, id) => {
     e.preventDefault();
     const sale = {
@@ -126,7 +152,7 @@ const ListProduct = () => {
     productSaleService
       .create(sale)
       .then((response) => {
-        console.log("Sale OK", response.data);
+        notifySuccess("Đã áp dụng khuyến mãi");
         init();
       })
       .catch((error) => {
@@ -135,6 +161,10 @@ const ListProduct = () => {
   };
   //Table colums
   const columnsProduct = [
+    {
+      title: "#",
+      dataIndex: "checkBox",
+    },
     {
       title: "Hình ảnh",
       dataIndex: "image",
@@ -164,6 +194,14 @@ const ListProduct = () => {
     },
   ];
   for (const element of product) {
+    element.checkBox = (
+      <div>
+        <input
+          type="checkBox"
+          onChange={(e) => updateProductSale(e.target.checked, element)}
+        />
+      </div>
+    );
     element.image = (
       <div className="d-flex">
         {element.sale == null ? (
@@ -222,9 +260,15 @@ const ListProduct = () => {
               </button>
               <ul className="rounded-3 bg-white shadow-lg p-3 mb-5 bg-body rounded">
                 <li>Xem chi tiết</li>
-                <li onClick={(e) => handleAddSale(e, element.id)}>
-                  Tạo khuyến mãi
-                </li>
+                {element.sale == null ? (
+                  <>
+                    <li onClick={(e) => handleAddSale(e, element.id)}>
+                      Tạo khuyến mãi
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
               </ul>
             </li>
           </ul>
@@ -232,21 +276,46 @@ const ListProduct = () => {
       </div>
     );
   }
+  const notifySuccess = (name) => {
+    toast.success(name, {
+      position: "top-center",
+      autoClose: 300,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+  //Child delete sale=>parent Render
+  const handleRenderSale = useCallback(() => {
+    init();
+  }, []);
   return (
     <>
       <div className="card-body">
-        <div className="text-center d-flex justify-content-between align-items-center mb-3">
-          <div></div>
-          <div>
-            <h2>Danh Mục Sản Phẩm</h2>
-          </div>
-          <div>
+        <div>
+          <h2 className="text-center">Danh Mục Sản Phẩm</h2>
+        </div>
+
+        <div className="text-center d-flex justify-content-start align-items-center mb-3">
+          <div className="">
             <Link to="./add-product">
               <button className="btn border border-3 border-success d-flex ">
                 <FcPlus className="fs-4" />
                 <span className="">Thêm mới</span>
               </button>
             </Link>
+          </div>
+          <div className="px-2">
+            <button
+              onClick={(e) => handleAddListProductSale(e)}
+              className="btn border border-3 border-success d-flex "
+            >
+              <FcPlus className="fs-4" />
+              <span className="">Áp dụng khuyến mãi</span>
+            </button>
           </div>
         </div>
         <Tabs
@@ -273,24 +342,37 @@ const ListProduct = () => {
             <Table columns={columnsProduct} dataSource={product}></Table>
           </Tab>
           <Tab eventKey="profile" title="Sản phẩm khuyến mãi">
-            <ListProductSale click="click" />
+            <ListProductSale onClick={handleRenderSale} />
           </Tab>
         </Tabs>
-        <Modal show={show} onHide={handleClose} animation={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>Thông báo</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Bạn có chắc chắn xóa phần tử này!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="success" onClick={() => handleDeleteClose(true)}>
-              Đồng ý
-            </Button>
-            <Button variant="danger" onClick={() => handleDeleteClose(false)}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
+      <Modal show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thông báo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn xóa phần tử này!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => handleDeleteClose(true)}>
+            Đồng ý
+          </Button>
+          <Button variant="danger" onClick={() => handleDeleteClose(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <ToastContainer
+        position="top-center"
+        autoClose={300}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };

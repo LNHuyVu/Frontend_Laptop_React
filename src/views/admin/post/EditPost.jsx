@@ -145,7 +145,7 @@ const EditPost = () => {
   };
   return (
     <div className="PostAddAD">
-      <h2 className="text-center fw-bolder">Thêm bài viết mới</h2>
+      <h2 className="text-center fw-bolder">Chỉnh sửa bài viết mới</h2>
       <Tabs
         id="controlled-tab-example"
         activeKey={key}

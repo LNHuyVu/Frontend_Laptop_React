@@ -13,17 +13,27 @@ import { addToCart } from "../../../redux/slice/cartSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import { BsFillGrid3X2GapFill, BsListUl } from "react-icons/bs";
 
 const ProductCategory = () => {
-  //Filter Price
+  //Set time
+  const date = new Date();
+  const formatDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateNow = date.toLocaleDateString("vi-VN", formatDate);
+  //
   let maxB;
   let minA;
   const [filter, setFilter] = useState([]);
   //
   const userRD = useSelector((state) => state.auth.login?.currentUser);
 
+  // Grid-List
+  const [grid, setGrid] = useState("block");
+  const [list, setList] = useState("none");
+  //
   const dispatch = useDispatch();
   const [product, setProduct] = useState([]);
+  const [category, setCategory] = useState([]);
   let numeral = require("numeral");
   const param = useParams();
   let slug = param.slug;
@@ -36,14 +46,18 @@ const ProductCategory = () => {
   ];
   useEffect(() => {
     init();
+    if (grid == "block") {
+      document.getElementById("g-view").style.color = "red";
+    }
   }, [slug]);
   const init = () => {
     categoryService
       .getIdCat(slug)
       .then((reponse) => {
-        console.log(reponse.data);
+        console.log("CB", reponse.data);
+        setCategory(reponse.data.category);
         productService
-          .getProductCat(reponse.data.id)
+          .getProductCat(reponse.data.category.id)
           .then((reponse) => {
             setProduct(reponse.data.product);
           })
@@ -106,20 +120,59 @@ const ProductCategory = () => {
       prev.b > current.b ? prev : current
     );
     maxB = max.b;
-    console.log(max.b); // 2
     const min = Math.min(...filter.map((obj) => obj.a));
     minA = min;
-    console.log(min); // 1
   }
   const filteredProducts =
     filter.length === 0
       ? product
       : product.filter((p) => p.price >= minA && p.price <= maxB);
+  const handleView = (value) => {
+    if (value == "grid") {
+      setGrid("block");
+      setList("none");
+      document.getElementById("g-view").style.color = "red";
+      document.getElementById("l-view").style.color = "black";
+    }
+    if (value == "list") {
+      setGrid("none");
+      setList("block");
+      document.getElementById("g-view").style.color = "black";
+      document.getElementById("l-view").style.color = "red";
+    }
+  };
+  const checkProductSale = (sale, status, startD, endD) => {
+    let check = true;
+    if (sale == null) {
+      return (check = false);
+    }
+    if (status == 0) {
+      return (check = false);
+    }
+    if (
+      !(
+        new Date(dateNow.split("/").reverse().join("-")) >=
+          new Date(startD.split("/").reverse().join("-")) &&
+        new Date(dateNow.split("/").reverse().join("-")) <=
+          new Date(endD.split("/").reverse().join("-"))
+      )
+    ) {
+      return (check = false);
+    }
+    return check;
+  };
   return (
     <div className="product-category">
-      <div>ProductCategory</div>
-      <div className="row">
-        <div className="col-md-2 px-1">
+      <div className="banner-category text-center">
+        <img
+          className="w-100"
+          style={{ maxHeight: 200 }}
+          src={category?.image?.[1]}
+          alt=""
+        />
+      </div>
+      <div className="row mt-2">
+        <div className="col-md-2">
           <div className="radio-price">
             <h6
               style={{
@@ -168,10 +221,231 @@ const ProductCategory = () => {
         </div>
         <div className="col-md-10">
           <div className="container">
+            <div className="d-flex justify-content-between">
+              <div>
+                <h2>{category?.name}</h2>
+              </div>
+              <div className="sort d-flex justify-content-end">
+                <div className="p-2" style={{ maxWidth: 200 }}>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    // onChange={(e) => handleSort(e.target.value)}
+                  >
+                    <option value="1" selected>
+                      Mặc định
+                    </option>
+                    <option value="2">Giá tăng dần</option>
+                    <option value="3">Giá giảm dần</option>
+                  </select>
+                </div>
+                <div className="py-2 grid-list-view">
+                  <span
+                    id="g-view"
+                    className="grid-view"
+                    onClick={() => handleView("grid")}
+                  >
+                    <BsFillGrid3X2GapFill size={40} />
+                  </span>
+                  <span
+                    id="l-view"
+                    className="list-view"
+                    onClick={() => handleView("list")}
+                  >
+                    <BsListUl size={40} />
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* List */}
+            <div>
+              {filteredProducts.map((item) => {
+                return (
+                  <div class="card mb-3" style={{ display: list }}>
+                    <div class="row g-0">
+                      <div class="col-md-4 p-1">
+                        <Link
+                          to={`/product/productdetail/${item?.slugProduct}`}
+                        >
+                          <div className="p-2 box-zoom-out">
+                            <img
+                              src={item?.imgData.link[0]}
+                              className="card-img-top"
+                              alt="..."
+                            />
+                            {checkProductSale(
+                              item?.sale,
+                              item?.sale?.status,
+                              item?.sale?.startDay,
+                              item?.sale?.endDay
+                            ) == false ? (
+                              <></>
+                            ) : (
+                              <>
+                                <span className="sale px-2">
+                                  Giảm giá:{" "}
+                                  {numeral(item?.sale.valueSale).format("0,0")}đ
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </Link>
+                        <div className="mt-1 container overflow-hidden">
+                          <div className="row gx-2">
+                            <div className="col">
+                              <div
+                                className="border bg-light text-center"
+                                style={{
+                                  borderRadius: 5,
+                                  background: "#fff",
+                                  fontSize: "80%",
+                                }}
+                              >
+                                {item?.option?.ramName ? "Ram" : ""}
+                                {item?.option?.ramName.nameValue}
+                              </div>
+                            </div>
+                            <div class="col">
+                              <div
+                                class="border bg-light text-center"
+                                style={{
+                                  borderRadius: 5,
+                                  background: "#fff",
+                                  fontSize: "80%",
+                                }}
+                              >
+                                {item?.option?.hdriveName.nameValue}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title">
+                            <Link
+                              to={`/product/productdetail/${item?.slugProduct}`}
+                            >
+                              <span
+                                className="card-text-home fs-6"
+                                style={{ color: "#000" }}
+                              >
+                                {item?.nameProduct}
+                              </span>
+                            </Link>
+                          </h5>
+                          <div className="card-text">
+                            <div className="d-flex justify-content-lg-start">
+                              {checkProductSale(
+                                item?.sale,
+                                item?.sale?.status,
+                                item?.sale?.startDay,
+                                item?.sale?.endDay
+                              ) == false ? (
+                                <>
+                                  <span
+                                    className="px-2"
+                                    style={{
+                                      fontWeight: "bold",
+                                      color: "blue",
+                                      background: "#9370D8",
+                                      borderRadius: 10,
+                                    }}
+                                  >
+                                    {numeral(item?.price).format("0,0")}
+                                    <u>đ</u>
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <span
+                                    className="px-2"
+                                    style={{
+                                      fontWeight: "bold",
+                                      color: "blue",
+                                      background: "#9370D8",
+                                      borderRadius: 10,
+                                    }}
+                                  >
+                                    {numeral(
+                                      parseInt(item?.price) -
+                                        item?.sale?.valueSale
+                                    ).format("0,0")}
+                                    <u>đ</u>
+                                  </span>
+                                  <span
+                                    className="mx-2"
+                                    style={{
+                                      "text-decoration-line": "line-through",
+                                    }}
+                                  >
+                                    {numeral(item?.price).format("0,0")}
+                                    <u>đ</u>
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                            <br />
+                            {item?.option?.screenName ? "Màn hình: " : ""}
+                            {item?.option?.screenName.nameValue}
+                            <br />
+                            {item?.option?.cpuName ? "CPU: " : ""}
+                            {item?.option?.cpuName.nameValue}
+                            {item?.option?.cpuName ? "," : ""}
+                            {item?.option?.cpuGenName.nameValue}
+                            <br />
+                            <span className="card-text">
+                              {item?.option?.cardName ? "Card:" : ""}
+
+                              {item?.option?.cardName.nameValue}
+                            </span>
+                          </div>
+                          {item?.store?.number == 0 ? (
+                            <>
+                              <h4 className="text-center btn-light">Đã hết</h4>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                className="btn btn-success w-100"
+                                onClick={() =>
+                                  handleAddCart(
+                                    item.id,
+                                    item.nameProduct,
+                                    item?.imgData.link[0],
+                                    checkProductSale(
+                                      item?.sale,
+                                      item?.sale?.status,
+                                      item?.sale?.startDay,
+                                      item?.sale?.endDay
+                                    ) == false
+                                      ? item.price
+                                      : parseInt(
+                                          item.price - item.sale.valueSale
+                                        ),
+                                    item.proId,
+                                    item.store.number
+                                  )
+                                }
+                              >
+                                <TiShoppingCart size={30} />
+                                MUA NGAY
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Grid */}
             <div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
               {filteredProducts.map((item) => {
                 return (
-                  <div className="col">
+                  <div className="col" style={{ display: grid }}>
                     <div className="card">
                       <Link to={`/product/productdetail/${item?.slugProduct}`}>
                         <div className="p-2 box-zoom-out">
@@ -180,7 +454,12 @@ const ProductCategory = () => {
                             className="card-img-top"
                             alt="..."
                           />
-                          {item?.sale == null || item?.sale.status == 0 ? (
+                          {checkProductSale(
+                            item?.sale,
+                            item?.sale?.status,
+                            item?.sale?.startDay,
+                            item?.sale?.endDay
+                          ) == false ? (
                             <></>
                           ) : (
                             <>
@@ -237,7 +516,12 @@ const ProductCategory = () => {
                         </h5>
                         <div className="card-text">
                           <div className="d-flex justify-content-lg-between">
-                            {item?.sale == null || item?.sale.status == 0 ? (
+                            {checkProductSale(
+                              item?.sale,
+                              item?.sale?.status,
+                              item?.sale?.startDay,
+                              item?.sale?.endDay
+                            ) == false ? (
                               <>
                                 <span
                                   className="px-2"
@@ -308,7 +592,12 @@ const ProductCategory = () => {
                                   item.id,
                                   item.nameProduct,
                                   item?.imgData.link[0],
-                                  item?.sale == null
+                                  checkProductSale(
+                                    item?.sale,
+                                    item?.sale?.status,
+                                    item?.sale?.startDay,
+                                    item?.sale?.endDay
+                                  ) == false
                                     ? item.price
                                     : parseInt(
                                         item.price - item.sale.valueSale

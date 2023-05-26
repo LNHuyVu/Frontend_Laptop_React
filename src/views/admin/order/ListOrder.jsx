@@ -5,9 +5,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import orderService from "../../../services/order.service";
 import { IoIosEye } from "react-icons/io";
-import { BsThreeDots } from "react-icons/bs";
-import { FaCheck } from "react-icons/fa";
-
+//
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+//
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "./listorder.scss";
@@ -17,16 +18,22 @@ const ListOrder = () => {
   const [order, setOrder] = useState([]);
   const [orderId, setOrderId] = useState([]);
   const [search, setSearch] = useState("");
-
+  const [status, setStatus] = useState("");
   const [show, setShow] = useState(false);
   const [contentModal, setContentModal] = useState([]);
   //Id and Status for Order => use Update Status
   const [id, setId] = useState("");
-  const [status, setStatus] = useState("");
   //
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  //Arr Status Order
+  const arrOrder = [
+    { key: 0, name: "Đang xử lí", bg: "transparent" },
+    { key: 1, name: "Đã xác nhận", bg: "transparent" },
+    { key: 2, name: "Đang giao hàng", bg: "transparent" },
+    { key: 3, name: "Hoàn thành", bg: "green" },
+  ];
   useEffect(() => {
     init();
   }, []);
@@ -43,34 +50,55 @@ const ListOrder = () => {
   };
   //
   const showOrderDetail = (element, content, id, status) => {
-    console.log(element);
     total_payment = 0;
-    setId(id);
-    setStatus(status);
     setContentModal(content);
     setOrderId(element);
     handleShow();
   };
   //
-  const confirm = (e, id, status) => {
-    handleStatus(e, id, status);
-    handleClose();
-  };
-  //
   const handleStatus = (e, id, status) => {
     e.preventDefault();
     const update = {
-      status: status === 0 ? 1 : 1,
+      status,
       id,
     };
-    orderService
-      .update(update)
-      .then((response) => {
-        init();
-      })
-      .catch((error) => {
-        console.log("Songthing went wrong", error);
-      });
+    if (status == "" || status == "null") {
+      notifyError("Bạn vui lòng chọn trạng thái!");
+    } else {
+      notifySuccess("Cập nhật thành công");
+      orderService
+        .update(update)
+        .then((response) => {
+          init();
+        })
+        .catch((error) => {
+          console.log("Songthing went wrong", error);
+        });
+    }
+  };
+  const notifyError = (name) => {
+    toast.error(name, {
+      position: "top-center",
+      autoClose: 300,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+  const notifySuccess = (name) => {
+    toast.success(name, {
+      position: "top-center",
+      autoClose: 300,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
   const columns = [
     {
@@ -85,12 +113,12 @@ const ListOrder = () => {
       },
     },
     {
-      title: "Email",
-      dataIndex: "email",
-    },
-    {
       title: "Mã đơn hàng",
       dataIndex: "codeOrder",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "statusOrder",
     },
     {
       title: "Ngày tạo",
@@ -107,37 +135,47 @@ const ListOrder = () => {
     },
   ];
   for (const element of order) {
+    let checkStatus = "";
+    element.statusOrder = arrOrder
+      .filter((item) => {
+        return item.key == element.status;
+      })
+      .map((item) => {
+        return (
+          <span
+            style={{ background: item.bg }}
+            className="py-1 px-3 rounded-pill shadow-sm p-3 mb-5 rounded"
+          >
+            {item.name}
+          </span>
+        );
+      });
     element.action = (
-      <div class="d-grid gap-2 d-md-block">
-        {element.status === 1 ? (
-          <button
-            style={{ background: "#00FF00" }}
-            className="btn m-1 text-center"
-            type="button"
-            // onClick={(e) => handleStatus(e, element.id, element.status)}
+      <div class="d-flex justify-content-lg-evenly">
+        <div className="d-flex justify-content-lg-end">
+          <select
+            class="form-select form-select-sm"
+            aria-label="Default select example"
+            onChange={(e) => (checkStatus = e.target.value)}
           >
-            <FaCheck />
-          </button>
-        ) : (
+            <option selected value="null">
+              Cập nhật đơn hàng
+            </option>
+            {arrOrder.map((item) => {
+              return <option value={item.key}>{item.name}</option>;
+            })}
+          </select>
+
           <button
-            style={{ background: "#FFFF00" }}
-            className="btn m-1 text-center"
-            type="button"
-            // onClick={(e) => handleStatus(e, element.id, element.status)}
+            className="btn-sm btn-success"
+            onClick={(e) => handleStatus(e, element.id, checkStatus)}
           >
-            <BsThreeDots color="black"/>
+            Apply
           </button>
-        )}
+        </div>
         <button
-          onClick={() =>
-            showOrderDetail(
-              element,
-              element.orderDetail,
-              element.id,
-              element.status
-            )
-          }
-          class="btn m-1 text-center border border-primary"
+          onClick={() => showOrderDetail(element, element.orderDetail)}
+          class="btn text-center border border-primary"
           type="button"
         >
           <IoIosEye size={20} color="blue" />
@@ -147,7 +185,7 @@ const ListOrder = () => {
   }
   return (
     <div>
-      ListOrder
+      <h3 className="text-center">Danh sách đơn hàng</h3>
       <div>
         <Input.Search
           style={{ paddingLeft: "20%", paddingRight: "20%", marginBottom: 10 }}
@@ -235,14 +273,24 @@ const ListOrder = () => {
           </table>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={(e) => confirm(e, id, status)}>
-            Xác nhận
-          </Button>
           <Button variant="danger" onClick={() => handleClose()}>
             Cancel
           </Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer
+        position="top-center"
+        autoClose={300}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

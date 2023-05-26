@@ -8,6 +8,11 @@ import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import productService from "../../../services/product.service";
 const ProductSale = () => {
+  //Set time
+  const date = new Date();
+  const formatDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateNow = date.toLocaleDateString("vi-VN", formatDate);
+  //
   let numeral = require("numeral");
   const [productSale, setProductSale] = useState([]);
   const responsive = {
@@ -42,13 +47,40 @@ const ProductSale = () => {
         console.log(error);
       });
   };
+  const checkProductSale = (sale, status, startD, endD) => {
+    let check = true;
+    if (sale == null) {
+      return (check = false);
+    }
+    if (status == 0) {
+      return (check = false);
+    }
+    if (
+      !(
+        new Date(dateNow.split("/").reverse().join("-")) >=
+          new Date(startD.split("/").reverse().join("-")) &&
+        new Date(dateNow.split("/").reverse().join("-")) <=
+          new Date(endD.split("/").reverse().join("-"))
+      )
+    ) {
+      return (check = false);
+    }
+    return check;
+  };
   return (
     <div className="productsale p-2 mt-4 mb-1">
-      <h3>Khuyến mãi</h3>
+      <h3 style={{color: "#fff"}}>Khuyến mãi</h3>
       <Carousel responsive={responsive}>
         {productSale
           .filter((item) => {
-            return item.sale != null && item.sale?.status == 1;
+            return (
+              checkProductSale(
+                item?.sale,
+                item?.sale?.status,
+                item?.sale?.startDay,
+                item?.sale?.endDay
+              ) == true
+            );
           })
           .map((item) => {
             return (
@@ -60,16 +92,12 @@ const ProductSale = () => {
                       className="card-img-top"
                       alt="..."
                     />
-                    {item?.sale == null || item?.sale.status == 0 ? (
-                      <></>
-                    ) : (
-                      <>
-                        <span className="sale px-2">
-                          Giảm giá:{" "}
-                          {numeral(item?.sale.valueSale).format("0,0")}đ
-                        </span>
-                      </>
-                    )}
+
+                    <>
+                      <span className="sale px-2">
+                        Giảm giá: {numeral(item?.sale.valueSale).format("0,0")}đ
+                      </span>
+                    </>
                   </div>
                 </Link>
 
@@ -115,47 +143,28 @@ const ProductSale = () => {
                   </h5>
                   <div className="card-text">
                     <div className="d-flex justify-content-lg-between">
-                      {item?.sale == null || item?.sale.status == 0 ? (
-                        <>
-                          <span
-                            className="px-2"
-                            style={{
-                              fontWeight: "bold",
-                              color: "blue",
-                              background: "#9370D8",
-                              borderRadius: 10,
-                            }}
-                          >
-                            {numeral(item?.price).format("0,0")}
-                            <u>đ</u>
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <span
-                            className="px-2"
-                            style={{
-                              fontWeight: "bold",
-                              color: "blue",
-                              background: "#9370D8",
-                              borderRadius: 10,
-                            }}
-                          >
-                            {numeral(
-                              parseInt(item?.price) - item?.sale?.valueSale
-                            ).format("0,0")}
-                            <u>đ</u>
-                          </span>
-                          <span
-                            style={{
-                              "text-decoration-line": "line-through",
-                            }}
-                          >
-                            {numeral(item?.price).format("0,0")}
-                            <u>đ</u>
-                          </span>
-                        </>
-                      )}
+                      <span
+                        className="px-2"
+                        style={{
+                          fontWeight: "bold",
+                          color: "blue",
+                          background: "#9370D8",
+                          borderRadius: 10,
+                        }}
+                      >
+                        {numeral(
+                          parseInt(item?.price) - item?.sale?.valueSale
+                        ).format("0,0")}
+                        <u>đ</u>
+                      </span>
+                      <span
+                        style={{
+                          "text-decoration-line": "line-through",
+                        }}
+                      >
+                        {numeral(item?.price).format("0,0")}
+                        <u>đ</u>
+                      </span>
                     </div>
                     {item?.option?.ramName ? (
                       <>

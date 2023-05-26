@@ -3,15 +3,19 @@ import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import postService from "../../../services/post.service";
+import topicService from "../../../services/topic.service";
 import { Link } from "react-router-dom";
 import { Input, Table } from "antd";
 import { FcPlus } from "react-icons/fc";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 const ListPost = () => {
+  let idTopic = "";
   const [search, setSearch] = useState("");
 
+  const [topic, setTopic] = useState([]);
   const [post, setPost] = useState([]);
   //
   const [deleteId, setDeleteId] = useState("");
@@ -24,6 +28,15 @@ const ListPost = () => {
     init();
   }, []);
   const init = () => {
+    topicService
+      .getAll("ALL")
+      .then((res) => {
+        setTopic(res.data.topic);
+        console.log("Topic", res.data.topic);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     postService
       .getAll("ALL")
       .then((response) => {
@@ -157,21 +170,120 @@ const ListPost = () => {
           </Link>
         </div>
       </div>
-      <Input.Search
-        style={{
-          paddingLeft: "20%",
-          paddingRight: "20%",
-          marginBottom: 10,
-        }}
-        onSearch={(value) => {
-          setSearch(value);
-        }}
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-        placehoder="Search here..."
-      />
-      <Table columns={columns} dataSource={post}></Table>
+
+      <Tabs
+        defaultActiveKey="home"
+        id="uncontrolled-tab-example"
+        className="mb-3"
+      >
+        <Tab eventKey="home" title="Chung">
+          <Input.Search
+            style={{
+              paddingLeft: "20%",
+              paddingRight: "20%",
+              marginBottom: 10,
+            }}
+            onSearch={(value) => {
+              setSearch(value);
+            }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            placehoder="Search here..."
+          />
+          <Table columns={columns} dataSource={post}></Table>
+        </Tab>
+        {topic
+          .filter((item) => {
+            return item.id != 1 && item.status == 1;
+          })
+          .map((item) => {
+            return (
+              <Tab eventKey={item.slug} title={item.name}>
+                <table class="table table-bordered" id="myTable">
+                  <thead>
+                    <th class="text-center" style={{ width: 20 }}>
+                      #
+                    </th>
+                    <th>Hình ảnh</th>
+                    <th>Tên Bài viết</th>
+                    <th>Slug</th>
+                    <th>Chức năng</th>
+                    <th>ID</th>
+                  </thead>
+                  <tbody>
+                    {(idTopic = item.id)}
+                    {post
+                      .filter((item) => {
+                        return item.topId == idTopic;
+                      })
+                      .map((item, index) => {
+                        return (
+                          <tr>
+                            <td class="text-center">
+                              <input name="checkid" type="checkbox" />
+                            </td>
+                            <td>
+                              <img
+                                src={item?.image[0]}
+                                alt=""
+                                style={{ maxWidth: 80 }}
+                              />
+                            </td>
+                            <td>{item.title}</td>
+                            <td>{item.slug}</td>
+                            <td className="text-center action">
+                              <div class="d-grid gap-2 d-md-block">
+                                {item.status == 1 ? (
+                                  <button
+                                    class="btn btn-success m-1 text-center"
+                                    type="button"
+                                    onClick={(e) =>
+                                      handleStatus(e, item.id, item.status)
+                                    }
+                                  >
+                                    <BsToggleOn className="text-white" />
+                                  </button>
+                                ) : (
+                                  <button
+                                    class="btn btn-danger m-1 text-center"
+                                    type="button"
+                                    onClick={(e) =>
+                                      handleStatus(e, item.id, item.status)
+                                    }
+                                  >
+                                    <BsToggleOff className="text-white" />
+                                  </button>
+                                )}
+                                <Link to={"./edit-post/" + item.id}>
+                                  <button
+                                    class="btn btn-warning m-1 text-center"
+                                    type="button"
+                                  >
+                                    <AiFillEdit className="text-white" />
+                                  </button>
+                                </Link>
+                                <button
+                                  onClick={(e) => handleDeleteOpen(item.id)}
+                                  class="btn btn-danger m-1 text-center"
+                                  type="button"
+                                >
+                                  <FaTrashAlt className="text-white" />
+                                </button>
+                              </div>
+                            </td>
+                            <td class="text-center">
+                              {item.id}--{item.topId}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </Tab>
+            );
+          })}
+      </Tabs>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Thông báo</Modal.Title>

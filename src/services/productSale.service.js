@@ -9,7 +9,7 @@ const update = (data) => {
   return httpClient.put("/edit-productsale", data);
 };
 const remove = (userId) => {
-  return httpClient.delete("/delete-productvalue", {
+  return httpClient.delete("/delete-productsale", {
     data: {
       id: userId,
     },

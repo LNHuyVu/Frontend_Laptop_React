@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import productSaleService from "../../../services/productSale.service";
 import { NumericFormat } from "react-number-format";
 
@@ -7,6 +7,7 @@ const EditProductSale = () => {
   let numeral = require("numeral");
   const param = useParams();
   let id = param.id;
+  const navigate = useNavigate();
   const [endDay, setEndDay] = useState("");
   const [startDay, setStartDay] = useState("");
   const [valueSale, setValueSale] = useState("");
@@ -42,12 +43,11 @@ const EditProductSale = () => {
       productSaleService
         .update(sale)
         .then((reponse) => {
-          console.log("OK");
+          navigate("../product");
         })
         .catch((error) => {
           console.log(error);
         });
-      console.log(sale);
     }
   };
   const checkValue = () => {

@@ -342,8 +342,6 @@ const AddProduct = () => {
     setType(type == "LT" ? "PK" : "LT");
     setDisable(disabled ? false : true);
   };
-  console.log("Gia ban", parseInt(price.replace(/,/g, "")));
-  console.log("Gia nhap", parseInt(importPrices.replace(/,/g, "")));
   return (
     <div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">

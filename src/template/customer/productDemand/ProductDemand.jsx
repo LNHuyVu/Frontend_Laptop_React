@@ -9,6 +9,11 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const ProductDemand = () => {
+  //Set time
+  const date = new Date();
+  const formatDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateNow = date.toLocaleDateString("vi-VN", formatDate);
+  //
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   var numeral = require("numeral");
   const dispatch = useDispatch();
@@ -59,6 +64,27 @@ const ProductDemand = () => {
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
     }
   };
+  //Check Product Sale
+  const checkProductSale = (sale, status, startD, endD) => {
+    let check = true;
+    if (sale == null) {
+      return (check = false);
+    }
+    if (status == 0) {
+      return (check = false);
+    }
+    if (
+      !(
+        new Date(dateNow.split("/").reverse().join("-")) >=
+          new Date(startD.split("/").reverse().join("-")) &&
+        new Date(dateNow.split("/").reverse().join("-")) <=
+          new Date(endD.split("/").reverse().join("-"))
+      )
+    ) {
+      return (check = false);
+    }
+    return check;
+  };
   return (
     <div>
       {demandProduct.map((item) => {
@@ -93,8 +119,12 @@ const ProductDemand = () => {
                                     className="card-img-top"
                                     alt="..."
                                   />
-                                  {child?.product.sale == null ||
-                                  child?.product.sale.status == 0 ? (
+                                  {checkProductSale(
+                                    child?.product?.sale,
+                                    child?.product?.sale?.status,
+                                    child?.product?.sale?.startDay,
+                                    child?.product?.sale?.endDay
+                                  ) == false ? (
                                     <></>
                                   ) : (
                                     <>
@@ -163,8 +193,12 @@ const ProductDemand = () => {
                                 </h5>
                                 <p className="card-text">
                                   <span>
-                                    {child?.product.sale == null ||
-                                    child?.product.sale.status == 0 ? (
+                                    {checkProductSale(
+                                      child?.product?.sale,
+                                      child?.product?.sale?.status,
+                                      child?.product?.sale?.startDay,
+                                      child?.product?.sale?.endDay
+                                    ) == false ? (
                                       <>
                                         <span
                                           className="px-2"
@@ -228,7 +262,9 @@ const ProductDemand = () => {
                                 </p>
                                 {child.product.store.number == 0 ? (
                                   <>
-                                    <h4 className="text-center btn-light">Đã hết</h4>
+                                    <h4 className="text-center btn-light">
+                                      Đã hết
+                                    </h4>
                                   </>
                                 ) : (
                                   <>
@@ -239,9 +275,12 @@ const ProductDemand = () => {
                                           child.product.id,
                                           child.product.nameProduct,
                                           child.product.imgData?.link[0],
-                                          // child.product.price,
-                                          child.product.sale == null ||
-                                            child.product.sale.status == 0
+                                          checkProductSale(
+                                            child?.product?.sale,
+                                            child?.product?.sale?.status,
+                                            child?.product?.sale?.startDay,
+                                            child?.product?.sale?.endDay
+                                          ) == false
                                             ? child.product.price
                                             : parseInt(
                                                 child.product.price -

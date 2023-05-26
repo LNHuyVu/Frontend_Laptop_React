@@ -50,13 +50,7 @@ const PostTechnology = (imagePost) => {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-          >
-            {/* <img
-              className="w-100"
-              src="https://res.cloudinary.com/duhwcwwyo/image/upload/v1679412600/cld-sample-2.jpg"
-              alt=""
-            /> */}
-          </div>
+          ></div>
         </div>
         <div className="col-md-9 ps-1 pe-0">
           <div className="p-2 posttechnology-child">

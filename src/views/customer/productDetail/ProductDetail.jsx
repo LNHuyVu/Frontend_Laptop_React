@@ -18,10 +18,14 @@ import { TiShoppingCart } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import ShowMoreText from "react-show-more-text";
 const ProductDetail = () => {
+  //Set time
+  const date = new Date();
+  const formatDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateNow = date.toLocaleDateString("vi-VN", formatDate);
   //
   const userRD = useSelector((state) => state.auth.login?.currentUser);
-
   const dispatch = useDispatch();
 
   //
@@ -102,7 +106,27 @@ const ProductDetail = () => {
       notifySuccess();
     }
   };
-  //Plugin FACEBOOK
+  //Check Product Sale
+  const checkProductSale = (sale, status, startD, endD) => {
+    let check = true;
+    if (sale == null) {
+      return (check = false);
+    }
+    if (status == 0) {
+      return (check = false);
+    }
+    if (
+      !(
+        new Date(dateNow.split("/").reverse().join("-")) >=
+          new Date(startD.split("/").reverse().join("-")) &&
+        new Date(dateNow.split("/").reverse().join("-")) <=
+          new Date(endD.split("/").reverse().join("-"))
+      )
+    ) {
+      return (check = false);
+    }
+    return check;
+  };
   return (
     <>
       <div className="row p-5 product-detail">
@@ -140,7 +164,12 @@ const ProductDetail = () => {
         <div className="col-md-6 product-data">
           <div className="text-center">
             <Like />
-            {product.sale == null ? (
+            {checkProductSale(
+              product.sale,
+              product?.sale?.status,
+              product?.sale?.startDay,
+              product?.sale?.endDay
+            ) == false ? (
               <h3>Giá: {numeral(product.price).format("0,0")}đ</h3>
             ) : (
               <div className="">
@@ -158,7 +187,12 @@ const ProductDetail = () => {
             )}
           </div>
           <div className="text-center div-price">Mua online giảm giá sốc</div>
-          {product.sale == null ? (
+          {checkProductSale(
+            product.sale,
+            product?.sale?.status,
+            product?.sale?.startDay,
+            product?.sale?.endDay
+          ) == false ? (
             <></>
           ) : (
             <>
@@ -188,7 +222,12 @@ const ProductDetail = () => {
                     product.id,
                     product.nameProduct,
                     product?.imgData.link[0],
-                    product?.sale == null
+                    checkProductSale(
+                      product.sale,
+                      product?.sale?.status,
+                      product?.sale?.startDay,
+                      product?.sale?.endDay
+                    ) == false
                       ? product.price
                       : parseInt(product.price - product.sale.valueSale),
                     product.proId,
@@ -257,13 +296,22 @@ const ProductDetail = () => {
       </div>
       {option ? (
         <>
-          <div className="detail">
+          <div className="detail container">
             <h3>Giới thiệu</h3>
-            <div
-              // className="text-center"
-              style={{ background: "#fff" }}
-              dangerouslySetInnerHTML={{ __html: product?.detail }}
-            ></div>
+            <div>
+              <ShowMoreText
+                lines={5}
+                more="Xem thêm"
+                less="Thu gọn"
+                anchorClass=""
+                expanded={false}
+              >
+                <div
+                  style={{ background: "#fff" }}
+                  dangerouslySetInnerHTML={{ __html: product?.detail }}
+                ></div>
+              </ShowMoreText>
+            </div>
           </div>
         </>
       ) : (
@@ -278,7 +326,9 @@ const ProductDetail = () => {
                 {/* Get Product "LT" => Demand */}
                 {productSimilar
                   .filter((item) => {
-                    return item?.product?.id !== product?.id && item.product!=null;
+                    return (
+                      item?.product?.id !== product?.id && item.product != null
+                    );
                   })
                   .map((item) => {
                     return (

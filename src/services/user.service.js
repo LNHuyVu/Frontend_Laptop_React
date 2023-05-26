@@ -14,16 +14,18 @@ const update = (data, Token) => {
     headers: { token: `Bearer ${Token.accessToken}` },
   });
 };
+const changPassword = (data, Token) => {
+  return httpClient.post("/change-password-user", data, {
+    headers: { token: `Bearer ${Token.accessToken}` },
+  });
+};
 const remove = (userId, Token) => {
   //   console.log("data", userId);
-  return httpClient.delete(
-    "/delete-user",
-    {
-      headers: { token: `Bearer ${Token.accessToken}` },
-      data: {
-        id: userId,
-      },
+  return httpClient.delete("/delete-user", {
+    headers: { token: `Bearer ${Token.accessToken}` },
+    data: {
+      id: userId,
     },
-  );
+  });
 };
-export default { create, getAll, update, remove };
+export default { create, getAll, update, remove, changPassword };

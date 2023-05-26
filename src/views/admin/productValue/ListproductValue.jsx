@@ -162,7 +162,7 @@ const ListproductValue = () => {
         activeKey={key}
         onSelect={(k) => setKey(k)}
       >
-        <Tab eventKey="home" title="Cấu hình">
+        <Tab eventKey="home" title="Chung">
           <Input.Search
             style={{
               paddingLeft: "20%",
@@ -181,7 +181,7 @@ const ListproductValue = () => {
         </Tab>
         {productValue
           .filter((child) => {
-            return child.parentIdValue == "0" && child.statusValue == "1";
+            return child.parentIdValue == "0";
           })
           .map((child, index) => {
             return (
@@ -200,9 +200,7 @@ const ListproductValue = () => {
                     {(test = child.id)}
                     {productValue
                       .filter((item) => {
-                        return (
-                          item.statusValue == "1" && item.parentIdValue == test
-                        );
+                        return item.parentIdValue == test;
                       })
                       .map((item, index) => {
                         return (

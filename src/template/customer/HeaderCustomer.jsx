@@ -255,7 +255,7 @@ const HeaderCustomer = () => {
             <Link to="/contact" className="link text-white">
               <span>
                 <HiOutlineMail className="mx-1" />
-                Hoi Dap
+                Liên hệ
               </span>
             </Link>
           </div>

@@ -165,26 +165,27 @@ const AdminHeader = () => {
           <li className="nav-heading">Pages</li>
 
           <li className="nav-item">
-            <a className="nav-link collapsed" href="users-profile.html">
+            <a className="nav-link collapsed">
               <i className="bi bi-person"></i>
               <span>Profile</span>
             </a>
           </li>
           <Link to="./contact">
             <li className="nav-item">
-              <a className="nav-link collapsed" href="pages-contact.html">
+              <a className="nav-link collapsed">
                 <i className="bi bi-envelope"></i>
                 <span>Liên hệ</span>
               </a>
             </li>
           </Link>
-
-          <li className="nav-item">
-            <a className="nav-link collapsed" href="pages-register.html">
-              <i className="bi bi-card-list"></i>
-              <span>Đăng ký</span>
-            </a>
-          </li>
+          <Link to="./user/add-user">
+            <li className="nav-item">
+              <a className="nav-link collapsed">
+                <i className="bi bi-card-list"></i>
+                <span>Đăng ký</span>
+              </a>
+            </li>
+          </Link>
 
           <li className="nav-item" onClick={handleLogout}>
             <ul className="nav-link collapsed">

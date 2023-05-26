@@ -20,7 +20,7 @@ const Featuredcategory = () => {
   return (
     <div className="featuredcategory row text-center mb-3 p-3 mx-0">
       <div className="container">
-        <h3>Featuredcategory</h3>
+        <h3>Danh mục nổi bật</h3>
         <div className="row row-cols-4 row-cols-lg-6 g-2 g-lg-3">
           {category
             .filter((item) => {

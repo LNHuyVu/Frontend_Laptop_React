@@ -8,7 +8,7 @@ import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import postService from "../../../services/post.service";
-const ListProductSale = (props) => {
+const ListProductSale = (props, onClick) => {
   const [productSale, setProductSale] = useState([]);
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState("");
@@ -49,9 +49,12 @@ const ListProductSale = (props) => {
   const handleDeleteClose = (value) => {
     handleClose();
     if (value == true) {
-      postService
+      productSaleService
         .remove(deleteId)
         .then((reponse) => {
+          //Render sale CPN Parent
+          props.onClick();
+          //
           init();
         })
         .catch((error) => {
@@ -96,7 +99,9 @@ const ListProductSale = (props) => {
   ];
   for (const element of productSale) {
     element.nameProduct = (
-      <div onClick={()=>test(element.id)} style={{ maxWidth: 150 }}>{element.productSale.nameProduct}</div>
+      <div onClick={() => test(element.id)} style={{ maxWidth: 150 }}>
+        {element.productSale.nameProduct}
+      </div>
     );
     element.image = (
       <img
@@ -131,7 +136,7 @@ const ListProductSale = (props) => {
           </button>
         </Link>
         <button
-          onClick={(e) => handleDeleteOpen(element.id, element.proId)}
+          onClick={(e) => handleDeleteOpen(element.id)}
           class="btn btn-danger m-1 text-center"
           type="button"
         >
@@ -142,7 +147,6 @@ const ListProductSale = (props) => {
   }
   return (
     <div className="listproductsale">
-      ListProductSale
       <div className="main-content">
         <Input.Search
           style={{

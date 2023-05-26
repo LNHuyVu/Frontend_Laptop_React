@@ -8,6 +8,12 @@ import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import orderDetailService from "../../../services/orderDetail.service";
 const ProducHot = () => {
+  //Set time
+  const date = new Date();
+  const formatDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateNow = date.toLocaleDateString("vi-VN", formatDate);
+  //
+
   const numeral = require("numeral");
   const [productHot, setProductHot] = useState([]);
 
@@ -43,9 +49,29 @@ const ProducHot = () => {
         console.log("Loi", error);
       });
   };
+  const checkProductSale = (sale, status, startD, endD) => {
+    let check = true;
+    if (sale == null) {
+      return (check = false);
+    }
+    if (status == 0) {
+      return (check = false);
+    }
+    if (
+      !(
+        new Date(dateNow.split("/").reverse().join("-")) >=
+          new Date(startD.split("/").reverse().join("-")) &&
+        new Date(dateNow.split("/").reverse().join("-")) <=
+          new Date(endD.split("/").reverse().join("-"))
+      )
+    ) {
+      return (check = false);
+    }
+    return check;
+  };
   return (
     <div className="producthot p-2 mt-2">
-      <h3>Bán chạy</h3>
+      <h3 style={{ color: "#fff" }}>Bán chạy</h3>
       <Carousel responsive={responsive}>
         {productHot?.map((item) => {
           return (
@@ -57,8 +83,12 @@ const ProducHot = () => {
                     className="card-img-top"
                     alt="..."
                   />
-                  {item?.product.sale == null ||
-                  item?.product.sale.status == 0 ? (
+                  {checkProductSale(
+                    item?.product?.sale,
+                    item?.product?.sale?.status,
+                    item?.product?.sale?.startDay,
+                    item?.product?.sale?.endDay
+                  ) == false ? (
                     <></>
                   ) : (
                     <>
@@ -112,8 +142,12 @@ const ProducHot = () => {
                 </h5>
                 <div className="card-text">
                   <div className="d-flex justify-content-lg-between">
-                    {item?.product.sale == null ||
-                    item?.product.sale.status == 0 ? (
+                    {checkProductSale(
+                      item?.product?.sale,
+                      item?.product?.sale?.status,
+                      item?.product?.sale?.startDay,
+                      item?.product?.sale?.endDay
+                    ) == false ? (
                       <>
                         <span
                           className="px-2"

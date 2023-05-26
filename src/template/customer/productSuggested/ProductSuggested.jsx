@@ -11,6 +11,11 @@ import "react-toastify/dist/ReactToastify.css";
 //
 import "./productsuggested.scss";
 const ProductSuggested = () => {
+  //Set time
+  const date = new Date();
+  const formatDate = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateNow = date.toLocaleDateString("vi-VN", formatDate);
+  //
   const userRD = useSelector((state) => state.auth.login?.currentUser);
 
   const [productCount, setProductCount] = useState(10);
@@ -66,10 +71,31 @@ const ProductSuggested = () => {
   const handleShowMoreClick = () => {
     setProductCount(productCount + 10);
   };
+  //Check Product Sale
+  const checkProductSale = (sale, status, startD, endD) => {
+    let check = true;
+    if (sale == null) {
+      return (check = false);
+    }
+    if (status == 0) {
+      return (check = false);
+    }
+    if (
+      !(
+        new Date(dateNow.split("/").reverse().join("-")) >=
+          new Date(startD.split("/").reverse().join("-")) &&
+        new Date(dateNow.split("/").reverse().join("-")) <=
+          new Date(endD.split("/").reverse().join("-"))
+      )
+    ) {
+      return (check = false);
+    }
+    return check;
+  };
   return (
     <div>
-      <div className="product-type" style={{ background: "orangered" }}>
-        <h3 className="text-white">Gợi ý hôm nay</h3>
+      <div className="product-type" >
+        <h3>Gợi ý hôm nay</h3>
         <div className="px-2 row row-cols-3 row-cols-lg-5 g-2 g-lg-3">
           {product.slice(0, productCount).map((child) => {
             return (
@@ -83,7 +109,12 @@ const ProductSuggested = () => {
                           className="card-img-top"
                           alt="..."
                         />
-                        {child?.sale == null || child?.sale.status == 0 ? (
+                        {checkProductSale(
+                          child?.sale,
+                          child?.sale?.status,
+                          child?.sale?.startDay,
+                          child?.sale?.endDay
+                        ) == false ? (
                           <></>
                         ) : (
                           <>
@@ -143,7 +174,12 @@ const ProductSuggested = () => {
                       </h5>
                       <p className="card-text">
                         <span>
-                          {child?.sale == null || child?.sale.status == 0 ? (
+                          {checkProductSale(
+                            child?.sale,
+                            child?.sale?.status,
+                            child?.sale?.startDay,
+                            child?.sale?.endDay
+                          ) == false ? (
                             <>
                               <span
                                 className="px-2"
@@ -212,8 +248,12 @@ const ProductSuggested = () => {
                             child.id,
                             child.nameProduct,
                             child.imgData?.link[0],
-                            // child.product.price,
-                            child.sale == null || child.sale.status == 0
+                            checkProductSale(
+                              child?.sale,
+                              child?.sale?.status,
+                              child?.sale?.startDay,
+                              child?.sale?.endDay
+                            ) == false
                               ? child.price
                               : parseInt(child.price - child.sale.valueSale),
                             child.proId,
