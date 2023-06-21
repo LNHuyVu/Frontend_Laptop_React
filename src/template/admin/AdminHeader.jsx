@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/apiRequest";
 
 const AdminHeader = () => {
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
   //Logout
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,10 +30,10 @@ const AdminHeader = () => {
         className="header fixed-top d-flex align-items-center"
       >
         <div className="d-flex align-items-center justify-content-between">
-          <a href="/dashboard" className="logo d-flex align-items-center">
-            {/* <img src="image/logo/nhen.png" alt="" /> */}
-            <span className="d-none d-lg-block">Admin</span>
-          </a>
+          <Link to="/dashboard/info-user" className="logo d-flex align-items-center">
+            <img src={userRD?.user?.img} alt="" />
+            <span className="d-none d-lg-block">{userRD?.user.name}</span>
+          </Link>
           <i
             className="bi bi-list toggle-sidebar-btn"
             onClick={() => handletogglesidebar()}
@@ -57,21 +57,15 @@ const AdminHeader = () => {
             </button>
           </form>
         </div>
-
-        <nav className="header-nav ms-auto px-3">
-          <ul className="d-flex align-items-center fw-bold">
-            <li>{user?.user.name}</li>
-          </ul>
-        </nav>
       </header>
 
       {/* <!-- ======= Sidebar ======= --> */}
       <aside id="sidebar" className="sidebar">
         <ul className="sidebar-nav" id="sidebar-nav">
           <li className="nav-item">
-            <Link className="nav-link " to="./">
+            <Link className="nav-link " to="/dashboard">
               <i className="bi bi-grid"></i>
-              <span>Dashboard</span>
+              <span>Trang chủ</span>
             </Link>
           </li>
           <Accordion>
@@ -101,9 +95,13 @@ const AdminHeader = () => {
                 <Link to="./user">
                   <li className="nav-link ">Tất cả tài khoản</li>
                 </Link>
-                <Link to="./user/add-user">
-                  <li className="nav-link ">Thêm tài khoản</li>
-                </Link>
+                {userRD?.user?.roles === "T1" ? (
+                  <Link to="./user/add-user">
+                    <li className="nav-link ">Thêm tài khoản</li>
+                  </Link>
+                ) : (
+                  <></>
+                )}
               </ul>
             </AccordionItem>
             <AccordionItem header="Quản lí cấu hình" className="nav-item ">
@@ -164,12 +162,6 @@ const AdminHeader = () => {
 
           <li className="nav-heading">Pages</li>
 
-          <li className="nav-item">
-            <a className="nav-link collapsed">
-              <i className="bi bi-person"></i>
-              <span>Profile</span>
-            </a>
-          </li>
           <Link to="./contact">
             <li className="nav-item">
               <a className="nav-link collapsed">
@@ -178,15 +170,6 @@ const AdminHeader = () => {
               </a>
             </li>
           </Link>
-          <Link to="./user/add-user">
-            <li className="nav-item">
-              <a className="nav-link collapsed">
-                <i className="bi bi-card-list"></i>
-                <span>Đăng ký</span>
-              </a>
-            </li>
-          </Link>
-
           <li className="nav-item" onClick={handleLogout}>
             <ul className="nav-link collapsed">
               <i className="bi bi-box-arrow-in-right"></i>

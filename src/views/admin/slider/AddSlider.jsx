@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import sliderService from "../../../services/slider.service";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 const AddSlider = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
@@ -16,9 +18,9 @@ const AddSlider = () => {
 
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
-  const [position, setPosition] = useState("0");
+  const [position, setPosition] = useState("1");
   const [createdBy, setCreatedBy] = useState("");
-  const [status, setStatus] = useState("0");
+  const [status, setStatus] = useState("1");
   const handleSubmit = () => {
     const slider = {
       name,
@@ -86,20 +88,27 @@ const AddSlider = () => {
   };
   //Array Position
   const arrPosition = [
-    { name: "Banner", positon: 1 },
-    { name: "Slider", positon: 2 },
-    { name: "Main", positon: 3 },
-    { name: "Post", positon: 4 },
-    { name: "Accessory", positon: 5 },
+    { name: "Banner", position: 1 },
+    { name: "Slider", position: 2 },
+    { name: "Main", position: 3 },
+    { name: "Post", position: 4 },
+    { name: "Accessory", position: 5 },
   ];
+  console.log("position", position);
   return (
     <div className="row">
+      <div>
+        <Helmet>
+          <title>Thêm Slider</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center">
         <div>
           <Link to="/dashboard/slider">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>
@@ -152,7 +161,7 @@ const AddSlider = () => {
           onChange={(e) => setPosition(e.target.value)}
         >
           {arrPosition.map((item) => {
-            return <option value={item.positon}>{item.name}</option>;
+            return <option value={item.position}>{item.name}</option>;
           })}
         </select>
       </div>
@@ -167,7 +176,6 @@ const AddSlider = () => {
           onChange={(e) => setStatus(e.target.value)}
         >
           {/* <option selected>Status</option> */}
-          <option value="0">Kiểm duyệt</option>
           <option value="1">Xuất bản</option>
         </select>
       </div>

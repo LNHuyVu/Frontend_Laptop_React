@@ -12,9 +12,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "./listorder.scss";
+import { Helmet } from "react-helmet";
+
 const ListOrder = () => {
   let numeral = require("numeral");
   let total_payment = 0;
+  const [user, setUser] = useState([]);
   const [order, setOrder] = useState([]);
   const [orderId, setOrderId] = useState([]);
   const [search, setSearch] = useState("");
@@ -49,10 +52,11 @@ const ListOrder = () => {
       });
   };
   //
-  const showOrderDetail = (element, content, id, status) => {
+  const showOrderDetail = (element, content, user, status) => {
     total_payment = 0;
     setContentModal(content);
     setOrderId(element);
+    setUser(user);
     handleShow();
   };
   //
@@ -174,7 +178,9 @@ const ListOrder = () => {
           </button>
         </div>
         <button
-          onClick={() => showOrderDetail(element, element.orderDetail)}
+          onClick={() =>
+            showOrderDetail(element, element.orderDetail, element.user)
+          }
           class="btn text-center border border-primary"
           type="button"
         >
@@ -185,6 +191,12 @@ const ListOrder = () => {
   }
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Đơn hàng</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">Danh sách đơn hàng</h3>
       <div>
         <Input.Search
@@ -204,6 +216,7 @@ const ListOrder = () => {
           <Modal.Title>Thông tin chi tiết</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <h4 className="text-center">Đơn hàng của tài khoản: {user.email}</h4>
           <table className="w-100">
             <tr>
               <th>Tên người nhận:</th>
@@ -214,7 +227,7 @@ const ListOrder = () => {
               <td>{orderId.phone}</td>
             </tr>
             <tr>
-              <th>Email:</th>
+              <th>Email người nhận:</th>
               <td>{orderId.email}</td>
             </tr>
             <tr>

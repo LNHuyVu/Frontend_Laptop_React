@@ -1,4 +1,5 @@
 import axios from "axios";
+import LinkContainer from "react-bootstrap";
 import {
   loginFailed,
   loginStart,
@@ -16,7 +17,26 @@ export const loginUser = async (user, dispatch, navigate) => {
     const res = await axios.post("http://localhost:8080/api/login", user);
     if (res.data.errCode == 0) {
       dispatch(loginSuccess(res.data));
-      res.data.user.roles == "T3" ? navigate("../") : navigate("/dashboard");
+      return { value: res.data.errCode };
+    } else {
+      dispatch(loginFailed());
+      return { value: res.data.message };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const loginAdmin = async (user, dispatch, navigate) => {
+  dispatch(loginStart());
+  try {
+    const res = await axios.post("http://localhost:8080/api/login", user);
+    if (res.data.errCode == 0) {
+      dispatch(loginSuccess(res.data));
+      if (res.data.user.roles != "T3") {
+        return { value: res.data.errCode };
+      } else {
+        return { value: "Tài khoản không có quyền truy cập!" };
+      }
     } else {
       dispatch(loginFailed());
       return { value: res.data.message };

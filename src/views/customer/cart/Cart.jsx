@@ -12,6 +12,8 @@ import {
   removeToCart,
 } from "../../../redux/slice/cartSlice";
 import { AiOutlineClose } from "react-icons/ai";
+import { Helmet } from "react-helmet";
+
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
@@ -36,6 +38,12 @@ const Cart = () => {
   //
   return (
     <div className="container py-2">
+      <div>
+        <Helmet>
+          <title>Giỏ hàng</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="row">
         <div className="col-md-8 ">
           <div className="content-cart p-2 border border-2 rounded-5">

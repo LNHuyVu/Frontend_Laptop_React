@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import productSaleService from "../../../services/productSale.service";
 import { NumericFormat } from "react-number-format";
+import { Helmet } from "react-helmet";
 
 const EditProductSale = () => {
   let numeral = require("numeral");
@@ -76,6 +77,12 @@ const EditProductSale = () => {
   };
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa thông tin khuyến mãi</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">Khuyến mãi</h3>
       <div className="row">
         <div className="card mb-3" style={{ maxHeight: 300 }}>

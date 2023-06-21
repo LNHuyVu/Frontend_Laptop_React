@@ -8,6 +8,8 @@ import uploadfileService from "../../../services/uploadfile.service";
 import { BsCameraFill, BsFillTrashFill } from "react-icons/bs";
 import Loading from "../../../component/loading/Loading";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 const EditSlider = () => {
   const param = useParams();
   let id = param.id;
@@ -105,14 +107,20 @@ const EditSlider = () => {
     return isValue;
   };
   const arrPosition = [
-    { name: "Banner", positon: 1 },
-    { name: "Slider", positon: 2 },
-    { name: "Main", positon: 3 },
-    { name: "Post", positon: 4 },
-    { name: "Accessory", positon: 5 },
+    { name: "Banner", position: 1 },
+    { name: "Slider", position: 2 },
+    { name: "Main", position: 3 },
+    { name: "Post", position: 4 },
+    { name: "Accessory", position: 5 },
   ];
   return (
     <div className="row">
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa Slider</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center">
         <div></div>
 
@@ -166,7 +174,7 @@ const EditSlider = () => {
           {arrPosition.map((item) => {
             return item.positon == position ? (
               <>
-                <option value={item.positon} selected>
+                <option value={item.position} selected>
                   {item.name}
                 </option>
               </>

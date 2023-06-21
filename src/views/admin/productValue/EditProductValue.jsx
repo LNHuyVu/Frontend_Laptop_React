@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import productValueService from "../../../services/productValue.service";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
+
 const EditProductValue = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
 
@@ -15,6 +17,7 @@ const EditProductValue = () => {
   const [parentIdValue, setParentIdValue] = useState("0");
   const [statusValue, setStatusValue] = useState("0");
   const [productValue, setProductValue] = useState([]);
+
   useEffect(() => {
     init();
     initParentId();
@@ -42,12 +45,8 @@ const EditProductValue = () => {
         console.log(error);
       });
   };
-  // console.log(nameValue, parentIdValue, statusValue);
-  // console.log(productValue);
   const handleUpdate = (e) => {
     e.preventDefault();
-    // console.log(parentIdValue);
-    // if (parentIdValue == "") setParentIdValue(0);
     const data_update = {
       id,
       nameValue,
@@ -55,7 +54,6 @@ const EditProductValue = () => {
       parentIdValue,
       statusValue,
     };
-    // console.log(data_update);
     productValueService
       .update(data_update, userRD)
       .then((response) => {
@@ -67,9 +65,15 @@ const EditProductValue = () => {
         console.log(error);
       });
   };
-  //   console.log('productValue:',productValue)
   return (
-    <div className="row">
+    <div className="row mt-2">
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa cấu hình</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
+      <h3 className="text-center">Chỉnh sửa cấu hình</h3>
       <div className="col-md-6">
         <label for="exampleInputEmail1" className="form-label">
           Tên cấu hình
@@ -84,7 +88,7 @@ const EditProductValue = () => {
       </div>
       <div className="col-md-6">
         <label for="" className="form-label">
-          Cấp cha
+          Loại
         </label>
         <select
           className="form-select"

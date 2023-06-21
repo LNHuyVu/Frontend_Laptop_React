@@ -68,7 +68,7 @@ const ProductSale = () => {
     return check;
   };
   return (
-    <div className="productsale p-2 mt-4 mb-1">
+    <div className="productsale p-2 mt-2 mb-1">
       <h3 style={{color: "#fff"}}>Khuyến mãi</h3>
       <Carousel responsive={responsive}>
         {productSale
@@ -111,7 +111,7 @@ const ProductSale = () => {
                         {item?.nameProduct}
                       </span>
                     </Link>
-                    <div className="mt-1 container overflow-hidden">
+                    <div className="mt-1 container overflow-hidden" style={{height: 32}}>
                       <div className="row gx-2">
                         <div className="col">
                           <div
@@ -125,6 +125,7 @@ const ProductSale = () => {
                             {item?.option?.ramName ? "Ram" : ""}
                             {item?.option?.ramName.nameValue}
                           </div>
+                          {item?.option?.ramName ? "" : <br/>}
                         </div>
                         <div class="col">
                           <div
@@ -147,8 +148,8 @@ const ProductSale = () => {
                         className="px-2"
                         style={{
                           fontWeight: "bold",
-                          color: "blue",
-                          background: "#9370D8",
+                          color: "white",
+                          background: "#005eff",
                           borderRadius: 10,
                         }}
                       >
@@ -166,7 +167,7 @@ const ProductSale = () => {
                         <u>đ</u>
                       </span>
                     </div>
-                    {item?.option?.ramName ? (
+                    {/* {item?.option?.ramName ? (
                       <>
                         {item?.option?.screenName ? "Màng hình: " : ""}
                         {item?.option?.screenName.nameValue}
@@ -184,7 +185,7 @@ const ProductSale = () => {
                       </>
                     ) : (
                       <></>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>

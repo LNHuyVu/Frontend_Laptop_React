@@ -7,6 +7,8 @@ import Loading from "../../../component/loading/Loading";
 import { BsCameraFill, BsFillTrashFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import productImgService from "../../../services/productImg.service";
+import { Helmet } from "react-helmet";
+
 const EditUser = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -21,7 +23,7 @@ const EditUser = () => {
     {
       value: "0",
       nameGender: "Nữ",
-    }
+    },
   ];
   const ROLES = [
     {
@@ -53,12 +55,12 @@ const EditUser = () => {
   useEffect(() => {
     init();
   }, []);
-  const userRD=useSelector((state)=>state.auth.login?.currentUser);
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
 
   const init = () => {
     //GET ID
     userService
-      .getAll(id,userRD)
+      .getAll(id, userRD)
       .then((response) => {
         console.log("User", response.data);
         setName(response.data.users.name);
@@ -135,7 +137,6 @@ const EditUser = () => {
       status,
       id,
     };
-    console.log("User Update", user_edit);
     if (CheckValidate()) {
       userService
         .update(user_edit, userRD)
@@ -150,6 +151,12 @@ const EditUser = () => {
   };
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa tài khoản</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">Chỉnh Sửa Tài Khoản</h3>
       <div className="row">
         <div className="col-md-3">
@@ -218,8 +225,12 @@ const EditUser = () => {
                 onChange={(e) => setGender(e.target.value)}
               >
                 {GENDER.map((item) => {
-                  return (
-                    item.value==gender?(<option value={item.value} selected>{item.nameGender}</option>):(<option value={item.value}>{item.nameGender}</option>)
+                  return item.value == gender ? (
+                    <option value={item.value} selected>
+                      {item.nameGender}
+                    </option>
+                  ) : (
+                    <option value={item.value}>{item.nameGender}</option>
                   );
                 })}
               </select>
@@ -275,9 +286,13 @@ const EditUser = () => {
                 onChange={(e) => setRoles(e.target.value)}
               >
                 {ROLES.map((item) => {
-                  return (
-                    item.value==roles?(<option value={item.value} selected>{item.name}</option>):(<option value={item.value}>{item.name}</option>)
-                  )
+                  return item.value == roles ? (
+                    <option value={item.value} selected>
+                      {item.name}
+                    </option>
+                  ) : (
+                    <option value={item.value}>{item.name}</option>
+                  );
                 })}
               </select>
             </div>
@@ -291,7 +306,7 @@ const EditUser = () => {
                 name="status"
                 onChange={(e) => setStatus(e.target.value)}
               >
-               {status == 0 ? (
+                {status == 0 ? (
                   <>
                     <option value="0">Kiểm duyệt</option>
                     <option value="1">Xuất bản</option>
@@ -308,20 +323,12 @@ const EditUser = () => {
         </div>
       </div>
       <div className="">
-        <h4 className="text-center">Action</h4>
+        <h4 className="text-center">Chức năng</h4>
         <button
           className="btn btn-info w-100 m-1"
           onClick={(e) => updateUser(e)}
         >
-          Save
-        </button>
-        <button
-          //   onClick={() => {
-          //     handleClear();
-          //   }}
-          className="btn btn-danger w-100 m-1"
-        >
-          Clear
+          Lưu
         </button>
       </div>
     </div>

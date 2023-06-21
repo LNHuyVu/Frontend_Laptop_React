@@ -11,6 +11,8 @@ import uploadfileService from "../../../services/uploadfile.service";
 //
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet";
+
 const AddCategory = () => {
   //
   const notifyError = () =>
@@ -129,12 +131,18 @@ const AddCategory = () => {
 
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Thêm Danh Mục Sản Phẩm</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/dashboard/category">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>
@@ -183,6 +191,23 @@ const AddCategory = () => {
             </select>
           </div>
           <div className="mb-3">
+            <label for="" className="form-label">
+              Trạng thái
+            </label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              name="status"
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              {/* <option selected>Status</option> */}
+              <option value="0">Kiểm duyệt</option>
+              <option value="1">Xuất bản</option>
+            </select>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="mb-3">
             <div className="row m-0 p-0 mt-2">
               <div className="col-md-12 p-0" style={{}}>
                 <label
@@ -222,29 +247,13 @@ const AddCategory = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6">
-          <div className="w-100">
-            <label for="" className="form-label">
-              Trạng thái
-            </label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              name="status"
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              {/* <option selected>Status</option> */}
-              <option value="0">Kiểm duyệt</option>
-              <option value="1">Xuất bản</option>
-            </select>
-          </div>
-          <h4 className="text-center">Action</h4>
+
+          {/* <h4 className="text-center">Chức năng</h4>
           <button
             className="btn btn-info w-100 m-1"
             onClick={(e) => saveUser(e)}
           >
-            Save
+            Lưu
           </button>
           <button
             onClick={() => {
@@ -252,8 +261,8 @@ const AddCategory = () => {
             }}
             className="btn btn-danger w-100 m-1"
           >
-            Clear
-          </button>
+            Xóa
+          </button> */}
         </div>
       </div>
       <ToastContainer

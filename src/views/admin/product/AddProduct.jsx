@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 //QuillJs
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
+import { Helmet } from "react-helmet";
 
 const AddProduct = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -344,12 +345,18 @@ const AddProduct = () => {
   };
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Thêm sản phẩm</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/dashboard/product">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>

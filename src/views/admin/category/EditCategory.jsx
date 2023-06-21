@@ -7,6 +7,8 @@ import { BsCameraFill, BsFillTrashFill } from "react-icons/bs";
 import Loading from "../../../component/loading/Loading";
 import uploadfileService from "../../../services/uploadfile.service";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
+
 const EditCategory = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
 
@@ -68,7 +70,7 @@ const EditCategory = () => {
       id,
     };
     categoryService
-      .update(category_update,userRD)
+      .update(category_update, userRD)
       .then((response) => {
         console.log("data updated successfully", response.data);
         navigate("/dashboard/category", { replace: true });
@@ -77,10 +79,6 @@ const EditCategory = () => {
       .catch((error) => {
         console.log("Songthing went wrong", error);
       });
-  };
-  // Clear
-  const handleClear = () => {
-    setName("");
   };
   //Handle File
   const handleFiles = async (e) => {
@@ -108,9 +106,14 @@ const EditCategory = () => {
   const handleDeleteImagePreview = (image) => {
     setImagesPreview((prev) => prev.filter((item) => item !== image));
   };
-  console.log("Img", imagesPreview);
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa Danh Mục Sản Phẩm</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">Chỉnh sửa Danh Mục Sản Phẩm</h3>
       <div className="row">
         <div className="col-md-6">
@@ -160,48 +163,6 @@ const EditCategory = () => {
             </select>
           </div>
           <div className="mb-3">
-            <div className="row m-0 p-0 mt-2">
-              <div className="col-md-12 p-0" style={{}}>
-                <label
-                  htmlFor="file"
-                  className="form-label image-labelU bg-light"
-                >
-                  {isLoading ? (
-                    <Loading />
-                  ) : (
-                    <span>
-                      <BsCameraFill className="icon-camera" />
-                    </span>
-                  )}
-                </label>
-                <input
-                  hidden
-                  id="file"
-                  type="file"
-                  className="form-control"
-                  name="file"
-                  onChange={handleFiles}
-                  multiple
-                />
-              </div>
-              {/*  */}
-              <div className="col-md-12 py-2 row row-cols-1 row-cols-lg-1 g-1 g-lg-1 justify-content-center">
-                {imagesPreview.map((item) => {
-                  return (
-                    <div key={item} className="col img-preview w-50">
-                      <img className="w-100 h-100" src={item} alt={item} />
-                      <span onClick={() => handleDeleteImagePreview(item)}>
-                        <BsFillTrashFill />
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="w-100">
             <label for="" className="form-label">
               Trạng thái
             </label>
@@ -225,21 +186,55 @@ const EditCategory = () => {
               )}
             </select>
           </div>
-          <h4 className="text-center">Action</h4>
-          <button
-            className="btn btn-info w-100 m-1"
-            onClick={(e) => handleUpdate(e)}
-          >
-            Save Update
-          </button>
-          <button
-            onClick={() => {
-              handleClear();
-            }}
-            className="btn btn-danger w-100 m-1"
-          >
-            Clear
-          </button>
+          <div className="mb-3">
+            <h4 className="text-center">Chức năng</h4>
+            <button
+              className="btn btn-info w-100 m-1"
+              onClick={(e) => handleUpdate(e)}
+            >
+              Lưu
+            </button>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="w-100">
+            <div className="col-md-12 p-0" style={{}}>
+              <label
+                htmlFor="file"
+                className="form-label image-labelU bg-light"
+              >
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <span>
+                    <BsCameraFill className="icon-camera" />
+                  </span>
+                )}
+              </label>
+              <input
+                hidden
+                id="file"
+                type="file"
+                className="form-control"
+                name="file"
+                onChange={handleFiles}
+                multiple
+              />
+            </div>
+            {/*  */}
+            <div className="col-md-12 py-2 row row-cols-1 row-cols-lg-1 g-1 g-lg-1 justify-content-center">
+              {imagesPreview.map((item) => {
+                return (
+                  <div key={item} className="col img-preview w-50">
+                    <img className="w-100 h-100" src={item} alt={item} />
+                    <span onClick={() => handleDeleteImagePreview(item)}>
+                      <BsFillTrashFill />
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

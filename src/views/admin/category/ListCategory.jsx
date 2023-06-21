@@ -10,6 +10,7 @@ import { Input, Table } from "antd";
 import { useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { Helmet } from "react-helmet";
 
 const ListCategory = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -148,9 +149,14 @@ const ListCategory = () => {
       </div>
     );
   }
-  console.log("CCC", category);
   return (
     <>
+      <div>
+        <Helmet>
+          <title>Danh mục sản phẩm</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
 

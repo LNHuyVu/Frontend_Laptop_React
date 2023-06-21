@@ -14,6 +14,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
 import { BsFillGrid3X2GapFill, BsListUl } from "react-icons/bs";
+//Panigation
+import { Helmet } from "react-helmet";
 
 const ProductCategory = () => {
   //Set time
@@ -161,8 +163,15 @@ const ProductCategory = () => {
     }
     return check;
   };
+  //Panigation
   return (
-    <div className="product-category">
+    <div className="product-category container-xxl">
+      <div>
+        <Helmet>
+          <title>{category?.name}</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="banner-category text-center">
         <img
           className="w-100"
@@ -621,6 +630,7 @@ const ProductCategory = () => {
           </div>
         </div>
       </div>
+
       <ToastContainer
         position="top-center"
         autoClose={500}

@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../redux/apiRequest";
+import { loginAdmin } from "../../redux/apiRequest";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,63 +20,71 @@ const Login = () => {
     };
     let valueLogin;
     let myPromise = new Promise((resolve, reject) => {
-      valueLogin = loginUser(user, dispatch, navigate);
+      valueLogin = loginAdmin(user, dispatch, navigate);
       resolve(valueLogin);
     });
     myPromise
       .then((result) => {
-        console.log(result);
-        setMessage(result.value);
+        if (result.value == 0) {
+          console.log(result);
+          navigate("/dashboard");
+        } else {
+          setMessage(result.value);
+        }
       })
       .catch((error) => {
         console.error(error);
       });
   };
   return (
-    <div className="login-form-user">
+    <div className="login-form-admin">
+      <div>
+        <Helmet>
+          <title>Đăng nhập</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="login-form">
         <form onSubmit={handleLogin}>
           <h1 className="title-login" style={{ textAlign: "center" }}>
-            Login
-            {/* <img src="../image/background/backgroundDN6.jpg" alt="" /> */}
+            Admin
           </h1>
-          <label>Username</label>
+          <label>Tài khoản</label>
           <div className="flex-row">
             <input
               name="username"
               className="lf--input"
-              placeholder="Username"
+              placeholder="Nhập email"
               type="text"
               // value={this.state.username}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <label>Password</label>
+          <label>Mật khẩu</label>
           <div className="flex-row">
             <input
               name="password"
+              type="password"
               className="lf--input"
-              placeholder="Password"
-              // type={this.state.isShowPassword?'text':'password'}
+              placeholder="Nhập mật khẩu"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span>
-              {/* onClick={() => this.handleShowHidenPassword()} */}
-              {/* <i class={this.state.isShowPassword ? "fas fa-eye-slash" : "far fa-eye"}></i> */}
-            </span>
           </div>
           <button className="lf--submit" type="submit">
-            LOGIN
+            Đăng nhập
           </button>
         </form>
-        <div className="col-12 rounded-pill my-1 text-center" style={{ backgroundColor: "red" }}>
+        <div
+          className="col-12 rounded-pill my-1 text-center"
+          style={{ backgroundColor: "red" }}
+        >
           {message}
         </div>
         <div className="d-flex justify-content-around">
-          <Link className="lf--forgot" to="../">
+          <Link className="lf--forgot" to="../" style={{ color: "#fff" }}>
             Quay lại
           </Link>
-          <Link className="lf--forgot" to="#">
+          <Link className="lf--forgot" to="#" style={{ color: "#fff" }}>
             Quên mật khẩu?
           </Link>
         </div>

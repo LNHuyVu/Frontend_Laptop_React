@@ -110,7 +110,7 @@ const ProducHot = () => {
                       {item?.product.nameProduct}
                     </span>
                   </Link>
-                  <div className="mt-1 container overflow-hidden">
+                  <div className="mt-1 container overflow-hidden" style={{height: 32}}>
                     <div className="row gx-2">
                       <div className="col">
                         <div
@@ -153,8 +153,8 @@ const ProducHot = () => {
                           className="px-2"
                           style={{
                             fontWeight: "bold",
-                            color: "blue",
-                            background: "#9370D8",
+                            color: "white",
+                            background: "#005eff",
                             borderRadius: 10,
                           }}
                         >
@@ -168,8 +168,8 @@ const ProducHot = () => {
                           className="px-2"
                           style={{
                             fontWeight: "bold",
-                            color: "blue",
-                            background: "#9370D8",
+                            color: "white",
+                            background: "#005eff",
                             borderRadius: 10,
                           }}
                         >
@@ -190,7 +190,7 @@ const ProducHot = () => {
                       </>
                     )}
                   </div>
-                  {item?.product.option?.ramName ? (
+                  {/* {item?.product.option?.ramName ? (
                     <>
                       {item?.product.option?.screenName ? "Màng hình: " : ""}
                       {item?.product.option?.screenName.nameValue}
@@ -208,7 +208,7 @@ const ProducHot = () => {
                     </>
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

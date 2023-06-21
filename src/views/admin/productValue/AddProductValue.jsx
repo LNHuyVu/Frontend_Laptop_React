@@ -9,9 +9,11 @@ import { Link } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
-///
+//
+import { Helmet } from "react-helmet";
+
 const AddProductValue = () => {
-  const userRD=useSelector((state)=>state.auth.login?.currentUser);
+  const userRD = useSelector((state) => state.auth.login?.currentUser);
   const slugname = require("slug");
 
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ const AddProductValue = () => {
     if (parentIdValue == "") setParentIdValue(0);
     const data = {
       nameValue,
-      slug:slugname(nameValue),
+      slug: slugname(nameValue),
       createdBy: String(userRD?.user.id),
       parentIdValue,
       statusValue,
@@ -79,20 +81,24 @@ const AddProductValue = () => {
         // navigate("/dashboard/product-configuration", { replace: true });
       })
       .catch((error) => {
-        // alert("Đã tồn tại cấu hình trên");
         notifyError();
         console.log(error);
       });
   };
-  //   console.log('productValue:',productValue)
   return (
     <div className="row">
+      <div>
+        <Helmet>
+          <title>Thêm cấu hình</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/dashboard/product-configuration">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>
@@ -124,7 +130,7 @@ const AddProductValue = () => {
       </div>
       <div className="col-md-6">
         <label for="" className="form-label">
-          Cấp cha
+          Loại
         </label>
         <select
           className="form-select"

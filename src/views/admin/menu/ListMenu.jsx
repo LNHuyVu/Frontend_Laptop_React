@@ -14,6 +14,8 @@ import categoryService from "../../../services/category.service";
 import topicService from "../../../services/topic.service";
 import postService from "../../../services/post.service";
 import "./listmenu.scss";
+import { Helmet } from "react-helmet";
+
 const ListMenu = () => {
   const [menu, setMenu] = useState([]);
   const [demand, setDemand] = useState([]);
@@ -364,6 +366,12 @@ const ListMenu = () => {
   }
   return (
     <div className="menu-admin">
+      <div>
+        <Helmet>
+          <title>Menu</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       ListMenu
       <div className="row">
         <div className="col-md-3">

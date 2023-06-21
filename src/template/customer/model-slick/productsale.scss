@@ -3,6 +3,7 @@
     background-color: #25304b;
     // background-image: linear-gradient(rgb(0, 0, 255), white);
     .box-zoom-out {
+        height: 170px;
         overflow: hidden;
         position: relative;
         .sale {
@@ -78,10 +79,8 @@
             }
         }
         .slider-child {
-            // background: rgb(255, 1, 1);
             padding: 10px;
             border: none;
-            // margin: 10px;
             .card {
                 background: yellow;
                 width: 100% !important;
@@ -89,7 +88,6 @@
         }
     }
     .seemore {
-        // border: 1px solid orange;
         margin-top: 5px;
         text-align: center;
         button {

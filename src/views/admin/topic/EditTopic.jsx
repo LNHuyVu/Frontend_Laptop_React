@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import topicService from "../../../services/topic.service";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet";
+
 const EditTopic = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -48,9 +50,6 @@ const EditTopic = () => {
       .catch((error) => {
         console.log("Get Data Failed ID");
       });
-  };
-  const handleClear = () => {
-    setName("");
   };
   const saveUser = (e) => {
     e.preventDefault();
@@ -97,7 +96,13 @@ const EditTopic = () => {
   };
   return (
     <div>
-      <h3 className="text-center">Chỉnh Sửa Danh Mục Bài Viết</h3>
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa chủ đề bài viết</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
+      <h3 className="text-center">Chỉnh Sửa Chủ Đề Bài Viết</h3>
       <div className="row">
         <div className="col-md-6">
           <div className="mb-3">
@@ -123,9 +128,15 @@ const EditTopic = () => {
               onChange={(e) => setParentId(e.target.value)}
             >
               <option value="0">Nomal</option>
-              {topic.map((item) => (
-                item.id==parentId?(<option value={item.id} selected>{item.name}</option>):(<option value={item.id}>{item.name}</option>)
-              ))}
+              {topic.map((item) =>
+                item.id == parentId ? (
+                  <option value={item.id} selected>
+                    {item.name}
+                  </option>
+                ) : (
+                  <option value={item.id}>{item.name}</option>
+                )
+              )}
             </select>
           </div>
 
@@ -154,20 +165,12 @@ const EditTopic = () => {
           </div>
         </div>
         <div className="col-md-6">
-          <h4 className="text-center">Action</h4>
+          <h4 className="text-center">Chức năng</h4>
           <button
             className="btn btn-info w-100 m-1"
             onClick={(e) => saveUser(e)}
           >
-            Save
-          </button>
-          <button
-            onClick={() => {
-              handleClear();
-            }}
-            className="btn btn-danger w-100 m-1"
-          >
-            Clear
+            Lưu
           </button>
         </div>
       </div>

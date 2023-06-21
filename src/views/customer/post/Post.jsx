@@ -5,6 +5,8 @@ import postService from "../../../services/post.service";
 import ReactHtmlParser from "react-html-parser";
 import "./post.scss";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 const Post = () => {
   const param = useParams();
   let slug = param.slug;
@@ -24,7 +26,6 @@ const Post = () => {
         postService
           .getTopId(topId)
           .then((reponse) => {
-            console.log(reponse.data);
             setPost(reponse.data.post);
           })
           .catch((error) => {
@@ -36,10 +37,16 @@ const Post = () => {
       });
   };
   return (
-    <>
+    <div className="container-xl">
+        <div>
+        <Helmet>
+          <title>{title}</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center pt-3">{title}</h3>
       <div className="row">
-        <div className="col-md-9 p-2">
+        <div className="col-md-12 p-2">
           {post
             .filter((item) => {
               return item.topId != 2;
@@ -85,9 +92,8 @@ const Post = () => {
               );
             })}
         </div>
-        <div className="col-md-3 p-2">Top bài viết Sản phẩm mới</div>
       </div>
-    </>
+    </div>
   );
 };
 

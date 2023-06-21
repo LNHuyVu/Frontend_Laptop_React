@@ -8,6 +8,8 @@ import Form from "react-bootstrap/Form";
 import { useQuill } from "react-quilljs";
 import { TiArrowBackOutline } from "react-icons/ti";
 import emailService from "../../../services/email.service";
+import { Helmet } from "react-helmet";
+
 const EditContact = () => {
   //Quilljs
   const { quill, quillRef } = useQuill();
@@ -62,12 +64,18 @@ const EditContact = () => {
   };
   return (
     <div className="edit-contact">
+      <div>
+        <Helmet>
+          <title>Phản hồi liên hệ</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/dashboard/contact">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>
@@ -124,7 +132,7 @@ const EditContact = () => {
             </div>
           </div>
           <button className="btn btn-info w-100" onClick={() => handleSubmit()}>
-            Send
+            Gửi
           </button>
         </div>
       </div>

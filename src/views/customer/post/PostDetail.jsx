@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import postService from "../../../services/post.service";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 import "./postdetail.scss";
 const PostDetail = () => {
   const param = useParams();
@@ -34,6 +36,12 @@ const PostDetail = () => {
   };
   return (
     <div className="container postdetail my-2">
+      <div>
+        <Helmet>
+          <title>{post.title}</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="row">
         <div className="col-md-8">
           <h2 className="post-title">{post.title}</h2>

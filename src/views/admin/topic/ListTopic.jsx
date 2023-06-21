@@ -4,14 +4,13 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { Input, Table } from "antd";
 import { FcPlus } from "react-icons/fc";
+import { Helmet } from "react-helmet";
 //Modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
-// import "./listcategory.scss";
-// import categoryService from "../../../services/category.service";
 import topicService from "../../../services/topic.service";
 import { Link } from "react-router-dom";
+
 const ListTopic = () => {
   const [search, setSearch] = useState("");
   const [topic, setTopic] = useState([]);
@@ -150,17 +149,23 @@ const ListTopic = () => {
   }
   return (
     <div className="card-body">
+      <div>
+        <Helmet>
+          <title>Chủ đề bài viết</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
 
         <div>
-          <h2>Danh Mục Bài Viết</h2>
+          <h2>Chủ đề Bài Viết</h2>
         </div>
         <div>
           <Link to="./add-topic">
             <button className="btn border border-3 border-success d-flex ">
               <FcPlus className="fs-4" />
-              <span className="">Thêm Danh Mục</span>
+              <span className="">Thêm Chủ đề</span>
             </button>
           </Link>
         </div>

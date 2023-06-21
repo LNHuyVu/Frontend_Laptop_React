@@ -9,6 +9,8 @@ import { FcPlus } from "react-icons/fc";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
+
 const AddUser = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   // console.log(userRD.user.id);
@@ -25,7 +27,7 @@ const AddUser = () => {
     {
       value: "0",
       nameGender: "Nữ",
-    }
+    },
   ];
   const ROLES = [
     {
@@ -133,12 +135,18 @@ const AddUser = () => {
   //Load parentid
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Thêm tài khoản</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/dashboard/user">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>
@@ -152,7 +160,7 @@ const AddUser = () => {
             className="btn border border-3 border-success d-flex "
           >
             <FcPlus className="fs-4" />
-            <span className="Lưu bài viết">Lưu bài viết</span>
+            <span className="Lưu bài viết">Lưu</span>
           </button>
         </div>
       </div>
@@ -312,17 +320,9 @@ const AddUser = () => {
         </div>
       </div>
       <div className="">
-        <h4 className="text-center">Action</h4>
+        <h4 className="text-center">Chức năng</h4>
         <button className="btn btn-info w-100 m-1" onClick={(e) => saveUser(e)}>
-          Save
-        </button>
-        <button
-          onClick={() => {
-            handleClear();
-          }}
-          className="btn btn-danger w-100 m-1"
-        >
-          Clear
+          Lưu
         </button>
       </div>
     </div>

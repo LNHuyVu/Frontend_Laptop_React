@@ -7,11 +7,20 @@ import sliderService from "../../../services/slider.service";
 import { Link } from "react-router-dom";
 import { Input, Table } from "antd";
 import { FcPlus } from "react-icons/fc";
+import { Helmet } from "react-helmet";
 
 const ListSlider = () => {
   const [search, setSearch] = useState("");
 
   const [slider, setSlider] = useState([]);
+  //Array Position
+  const arrPosition = [
+    { name: "Banner", position: 1 },
+    { name: "Slider", position: 2 },
+    { name: "Main", position: 3 },
+    { name: "Post", position: 4 },
+    { name: "Accessory", position: 5 },
+  ];
   useEffect(() => {
     init();
   }, []);
@@ -19,14 +28,12 @@ const ListSlider = () => {
     sliderService
       .getAll("ALL")
       .then((response) => {
-        console.log("Get Data OK", response.data);
         setSlider(response.data.slider);
       })
       .catch((error) => {
         console.log("Get Data Failed", error);
       });
   };
-  // console.log("category", category);
   //handle status
   const handleStatus = (e, id, status) => {
     e.preventDefault();
@@ -37,8 +44,6 @@ const ListSlider = () => {
     sliderService
       .update(slider_update)
       .then((response) => {
-        // console.log("data updated successfully", response.data);
-        // navigate("/", { replace: true });
         init();
       })
       .catch((error) => {
@@ -50,15 +55,12 @@ const ListSlider = () => {
     sliderService
       .remove(id)
       .then((reponse) => {
-        // console.log("Delete OK", reponse.data);
         init();
       })
       .catch((error) => {
         console.log("Delete Not OK", error);
       });
   };
-  console.log("sldier ALL", slider);
-
   //Table colums
   const columns = [
     {
@@ -74,8 +76,8 @@ const ListSlider = () => {
       },
     },
     {
-      title: "Link",
-      dataIndex: "link",
+      title: "Vị trí",
+      dataIndex: "positionExtra",
     },
     {
       title: "Ngày tạo",
@@ -92,6 +94,17 @@ const ListSlider = () => {
     },
   ];
   for (const element of slider) {
+    element.positionExtra = (
+      <div>
+        {arrPosition
+          .filter((item) => {
+            return element.position == item.position;
+          })
+          .map((item) => {
+            return <span>{item.name}</span>;
+          })}
+      </div>
+    );
     element.img = (
       <img
         style={{ maxWidth: 80 }}
@@ -136,6 +149,12 @@ const ListSlider = () => {
   }
   return (
     <div className="card-body">
+      <div>
+        <Helmet>
+          <title>Slider</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
         <div>

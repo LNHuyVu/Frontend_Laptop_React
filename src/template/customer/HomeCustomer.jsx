@@ -5,7 +5,7 @@ import { useState } from "react";
 import Slider from "react-slick";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import sliderService from "../../services/slider.service";
-
+import { Helmet } from "react-helmet";
 //
 const ProductSale = lazy(() => import("./model-slick/ProductSale"));
 const ProducHot = lazy(() => import("./model-slick/ProducHot"));
@@ -68,7 +68,13 @@ const HomeCustomer = () => {
   }
 
   return (
-    <div className="homecustomer">
+    <div className="homecustomer ">
+      <div>
+        <Helmet>
+          <title>VuStore</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       {/* Button Scroll */}
       <div
         className="button-scroll"
@@ -96,7 +102,7 @@ const HomeCustomer = () => {
               );
             })}
         </div>
-        <div className="parent-slider">
+        <div className="parent-slider container-xl">
           <div className="slider">
             <Slider
               {...settings}
@@ -113,8 +119,7 @@ const HomeCustomer = () => {
             </Slider>
           </div>
         </div>
-        {/* <BannerCustomer /> */}
-        <div className="w-100 container-fluid">
+        <div className="container-xxl">
           <div className="">
             <Suspense fallback={<div>Loading...</div>}>
               <ProductSale />

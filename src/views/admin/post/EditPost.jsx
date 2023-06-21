@@ -13,6 +13,8 @@ import "./postAD.scss";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 const EditPost = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -145,7 +147,13 @@ const EditPost = () => {
   };
   return (
     <div className="PostAddAD">
-      <h2 className="text-center fw-bolder">Chỉnh sửa bài viết mới</h2>
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa bài viết</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
+      <h2 className="text-center fw-bolder">Chỉnh sửa bài viết</h2>
       <Tabs
         id="controlled-tab-example"
         activeKey={key}

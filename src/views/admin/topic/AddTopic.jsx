@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 // import categoryService from "../../../services/category.service";
 import topicService from "../../../services/topic.service";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 const AddTopic = () => {
   const navigate = useNavigate();
   const slugname = require("slug");
@@ -76,6 +78,12 @@ const AddTopic = () => {
   console.log("topic", topic);
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Thêm chủ đề bài viết</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">Thêm Mới Danh Mục Bài Viết</h3>
       <div className="row">
         <div className="col-md-6">
@@ -125,20 +133,12 @@ const AddTopic = () => {
           </div>
         </div>
         <div className="col-md-6">
-          <h4 className="text-center">Action</h4>
+          <h4 className="text-center">Chức năng</h4>
           <button
             className="btn btn-info w-100 m-1"
             onClick={(e) => saveUser(e)}
           >
-            Save
-          </button>
-          <button
-            onClick={() => {
-              handleClear();
-            }}
-            className="btn btn-danger w-100 m-1"
-          >
-            Clear
+            Lưu
           </button>
         </div>
       </div>

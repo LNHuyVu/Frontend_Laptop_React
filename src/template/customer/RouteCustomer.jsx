@@ -15,13 +15,14 @@ import Search from "../../views/customer/search/Search";
 import Contact from "../../views/customer/contact/Contact";
 import User from "../../views/customer/user/User";
 import Page from "../../views/customer/page/Page";
+import PageNotFound from "../../component/pageNotFound/PageNotFound";
 const HomeCustomer = lazy(() => import("./HomeCustomer"));
 
 const RouteCustomer = () => {
   return (
     <div className="w-100 p-0" style={{ background: "#fff" }}>
       <HeaderCustomer />
-      <div className="container-xxl main-content">
+      <div className=" main-content">
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/" element={<HomeCustomer />} />
@@ -43,6 +44,7 @@ const RouteCustomer = () => {
             <Route path="/user" element={<User />} />
             {/* Page */}
             <Route path="/page/:slug" element={<Page />} />
+            <Route path="/*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
       </div>

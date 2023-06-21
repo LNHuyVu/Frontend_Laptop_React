@@ -15,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 //
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { Helmet } from "react-helmet";
+
 const Register = () => {
   const [imagesPreview, setImagesPreview] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -176,6 +178,12 @@ const Register = () => {
   };
   return (
     <div className="register-form-user">
+      <div>
+        <Helmet>
+          <title>Đăng ký</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <Modal show={show} fullscreen="md-down" onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>Thông báo</Modal.Title>
@@ -215,7 +223,7 @@ const Register = () => {
             <div className="d-flex justify-content-between">
               <div></div>
               <div>
-                <h3 className="text-center">Thêm Mới Tài Khoản</h3>
+                <h3 className="text-center">Đăng ký</h3>
               </div>
               <div className="pe-2">
                 <Link to="../">
@@ -268,7 +276,7 @@ const Register = () => {
               <div className="col-md-9 row">
                 <div className="col-md-6">
                   <div className="">
-                    <label for="exampleInputEmail1" className="form-label">
+                    <label for="exampleInputEmail1" className="form-label fs-5">
                       Tên người dùng
                     </label>
                     <input
@@ -281,7 +289,7 @@ const Register = () => {
                   </div>
 
                   <div>
-                    <label for="exampleInputEmail1" className="form-label">
+                    <label for="exampleInputEmail1" className="form-label fs-5">
                       Email
                     </label>
                     <input
@@ -293,7 +301,7 @@ const Register = () => {
                     />
                   </div>
                   <div className="">
-                    <label for="exampleInputEmail1" className="form-label">
+                    <label for="exampleInputEmail1" className="form-label fs-5">
                       Mật khẩu
                     </label>
                     <input
@@ -308,7 +316,7 @@ const Register = () => {
                 {/*  */}
                 <div className="col-md-6">
                   <div className="">
-                    <label for="exampleInputEmail1" className="form-label">
+                    <label for="exampleInputEmail1" className="form-label fs-5">
                       Số điện thoại
                     </label>
                     <input
@@ -320,7 +328,7 @@ const Register = () => {
                     />
                   </div>
                   <div className="">
-                    <label for="exampleInputEmail1" className="form-label">
+                    <label for="exampleInputEmail1" className="form-label fs-5">
                       Địa chỉ
                     </label>
                     <input
@@ -332,7 +340,7 @@ const Register = () => {
                     />
                   </div>
                   <div className="">
-                    <label for="exampleInputEmail1" className="form-label">
+                    <label for="exampleInputEmail1" className="form-label fs-5">
                       Giới tính
                     </label>
                     <select

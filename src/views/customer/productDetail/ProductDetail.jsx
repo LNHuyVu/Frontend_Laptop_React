@@ -19,6 +19,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
 import ShowMoreText from "react-show-more-text";
+import { Helmet } from "react-helmet";
+
 const ProductDetail = () => {
   //Set time
   const date = new Date();
@@ -128,7 +130,13 @@ const ProductDetail = () => {
     return check;
   };
   return (
-    <>
+    <div className="container-fluid">
+      <div>
+        <Helmet>
+          <title>{product.nameProduct}</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="row p-5 product-detail">
         <div className="col-md-6 product-img">
           <h4 className="text-center">{product.nameProduct}</h4>
@@ -703,7 +711,7 @@ const ProductDetail = () => {
         pauseOnHover
         theme="light"
       />
-    </>
+    </div>
   );
 };
 

@@ -7,6 +7,7 @@ import { TiShoppingCart } from "react-icons/ti";
 import { addToCart } from "../../../redux/slice/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Blocks } from "react-loader-spinner";
+import { Helmet } from "react-helmet";
 
 const Search = () => {
   //Set time
@@ -68,8 +69,16 @@ const Search = () => {
   };
   return (
     <div className="search mt-2">
+      <div>
+        <Helmet>
+          <title>Search {slug}</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="container">
-        <h3 style={{fontFamily: '"Times New Roman", Times, serif'}}>Kết quả tìm kiếm cho từ khóa: "{slug}"</h3>
+        <h3 style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+          Kết quả tìm kiếm cho từ khóa: "{slug}"
+        </h3>
         {isLoading ? (
           <div className="text-center">
             <Blocks
@@ -100,6 +109,7 @@ const Search = () => {
                           >
                             <div className="p-2 box-zoom-out">
                               <img
+                                style={{ maxHeight: 208 }}
                                 src={item?.imgData.link[0]}
                                 className="card-img-top"
                                 alt="..."

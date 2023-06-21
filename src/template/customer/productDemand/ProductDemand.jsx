@@ -204,8 +204,8 @@ const ProductDemand = () => {
                                           className="px-2"
                                           style={{
                                             fontWeight: "bold",
-                                            color: "blue",
-                                            background: "#9370D8",
+                                            color: "white",
+                                            background: "#005eff",
                                             borderRadius: 10,
                                           }}
                                         >
@@ -221,8 +221,8 @@ const ProductDemand = () => {
                                           className="px-2"
                                           style={{
                                             fontWeight: "bold",
-                                            color: "blue",
-                                            background: "#9370D8",
+                                            color: "white",
+                                            background: "#005eff",
                                             borderRadius: 10,
                                           }}
                                         >

@@ -4,7 +4,6 @@ import AdminHome from "./AdminHome";
 import AdminHeader from "./AdminHeader";
 import ListUser from "../../views/admin/user/ListUser";
 import ListProduct from "../../views/admin/product/ListProduct";
-import UserDetail from "../../views/admin/user/UserDetail";
 import ProductDetail from "../../views/admin/product/ProductDetail";
 import "./admin.scss";
 import AddProduct from "../../views/admin/product/AddProduct";
@@ -34,6 +33,8 @@ import EditContact from "../../views/admin/contact/EditContact";
 import ListOrder from "../../views/admin/order/ListOrder";
 import ListMenu from "../../views/admin/menu/ListMenu";
 import EditMenu from "../../views/admin/menu/EditMenu";
+import PageNotFound from "../../component/pageNotFound/PageNotFound";
+import InfoUser from "../../views/admin/info-user/InfoUser";
 
 const AdminRoute = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -64,6 +65,7 @@ const AdminRoute = () => {
           <div className="row">
             <Routes>
               <Route path="/" element={<AdminHome />} />
+              <Route path="/info-user" element={<InfoUser />} />
               <Route path="/category" element={<ListCategory />} />
               <Route path="/contact" element={<ListContact />} />
               <Route
@@ -79,7 +81,6 @@ const AdminRoute = () => {
               <Route path="/user/*" element={<ListUser />} />
               <Route path="/user/add-user" element={<AddUser />} />
               <Route path="/user/edit-user/:id" element={<EditUser />} />
-              <Route path="/user/userdetail" element={<UserDetail />} />
               {/* Product */}
               <Route path="/product" element={<ListProduct />} />
               <Route path="/product/add-product" element={<AddProduct />} />
@@ -124,7 +125,7 @@ const AdminRoute = () => {
               {/* Menu */}
               <Route path="/menu" element={<ListMenu />} />
               <Route path="/menu/edit-menu/:id" element={<EditMenu />} />
-
+              <Route path="/*" element={<PageNotFound />} />
             </Routes>
           </div>
         </section>

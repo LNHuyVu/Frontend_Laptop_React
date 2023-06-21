@@ -20,12 +20,12 @@ import { removeToCart } from "../../redux/slice/cartSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
-// import queryString from "query-string";
 const HeaderCustomer = () => {
   const slugName = require("slug");
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cartRD = useSelector((state) => state.cart?.cart);
   const handleLogout = () => {
     dispatch(removeToCart());
     logoutUser(dispatch, navigate);
@@ -47,163 +47,6 @@ const HeaderCustomer = () => {
         console.log(error);
       });
   };
-
-  const menu1 = [
-    {
-      id: 1,
-      name: "Nhu cầu",
-      parentid: 0,
-    },
-    {
-      id: 2,
-      name: "Laptop",
-      link: "category/laptop",
-      parentid: 0,
-    },
-    {
-      id: 3,
-      name: "Phụ kiện",
-      link: "phu-kien",
-      parentid: 0,
-    },
-    {
-      id: 10,
-      name: "Bài viết",
-      parentid: 0,
-    },
-    {
-      id: 4,
-      name: "Học tập",
-      link: "demand/hoc-tap-van-phong",
-      parentid: 1,
-    },
-    {
-      id: 21,
-      name: "Cao cấp sang trọng",
-      link: "demand/cao-cap-sang-trong",
-      parentid: 1,
-    },
-    {
-      id: 22,
-      name: "Đồ họa - Kỹ thuật",
-      link: "demand/do-hoa-ky-thuat",
-      parentid: 1,
-    },
-    {
-      id: 5,
-      name: "Gaming",
-      link: "demand/gaming",
-      parentid: 1,
-    },
-    {
-      id: 6,
-      name: "Tất cả Laptop",
-      link: "category/laptop",
-      parentid: 2,
-    },
-    {
-      id: 23,
-      name: "Laptop DELL",
-      link: "category/laptop-dell",
-      parentid: 2,
-    },
-    {
-      id: 7,
-      name: "Latop HP",
-      link: "category/laptop-hp",
-      parentid: 2,
-    },
-    {
-      id: 8,
-      name: "Tất cả phụ kiện",
-      link: "category/phu-kien",
-      parentid: 3,
-    },
-    {
-      id: 24,
-      name: "Bàn phím",
-      link: "category/ban-phim",
-      parentid: 3,
-    },
-    {
-      id: 9,
-      name: "Chuột",
-      link: "category/chuot",
-      parentid: 3,
-    },
-    {
-      id: 18,
-      name: "Thiết bị mạng",
-      link: "category/thiet-bi-mang",
-      parentid: 3,
-    },
-    {
-      id: 19,
-      name: "Túi chống sốc",
-      link: "category/tui-chong-soc",
-      parentid: 3,
-    },
-    {
-      id: 20,
-      name: "Miếng lót chuột",
-      link: "category/mieng-lot-chuot",
-      parentid: 3,
-    },
-    {
-      id: 11,
-      name: "Khuyến mãi",
-      link: "post/khuyen-mai",
-      parentid: 10,
-    },
-    {
-      id: 12,
-      name: "Mẹo hay",
-      link: "post/meo-hay",
-      parentid: 10,
-    },
-    {
-      id: 21,
-      name: "Tư vấn",
-      link: "post/tu-van",
-      parentid: 10,
-    },
-    {
-      id: 22,
-      name: "Laptop",
-      link: "post/laptop",
-      parentid: 10,
-    },
-    {
-      id: 13,
-      name: "Latop MSI",
-      link: "category/laptop-msi",
-      parentid: 2,
-    },
-    {
-      id: 14,
-      name: "Latop Acer",
-      link: "category/laptop-acer",
-      parentid: 2,
-    },
-    {
-      id: 15,
-      name: "Latop Asus",
-      link: "category/laptop-asus",
-      parentid: 2,
-    },
-    {
-      id: 16,
-      name: "Latop Lenovo",
-      link: "category/laptop-lenovo",
-      parentid: 2,
-    },
-    {
-      id: 17,
-      name: "Latop Macbook",
-      link: "category/laptop-macbook",
-      parentid: 2,
-    },
-  ];
   //Search
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -225,6 +68,10 @@ const HeaderCustomer = () => {
       progress: undefined,
       theme: "light",
     });
+  let number = 0;
+  cartRD?.forEach((item) => {
+    number += 1;
+  });
   return (
     <div className="header1">
       <div className="container-xxl">
@@ -238,7 +85,7 @@ const HeaderCustomer = () => {
             <form onSubmit={handleSubmit} class="d-flex">
               <div className="search row w-100">
                 <button className="col-2 text-center">
-                  <BsSearch className="icon-search" />
+                  <BsSearch className="icon-search" color="black" />
                 </button>
                 <div className="col-10">
                   <input
@@ -290,12 +137,24 @@ const HeaderCustomer = () => {
               </>
             )}
           </div>
-          <div className="col-md-2">
+          <div className="col-md-2 ">
             <Link to="/cart" className="link text-white">
-              <span>
-                <FaShoppingCart className="mx-1" />
-                Giỏ hàng
-              </span>
+              {userRD ? (
+                <>
+                  <span className="cart">
+                    <FaShoppingCart className="mx-1" />
+                    Giỏ hàng
+                    <span className="cart-number">{number}</span>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="">
+                    <FaShoppingCart className="mx-1" />
+                    Giỏ hàng
+                  </span>
+                </>
+              )}
             </Link>
           </div>
         </div>
@@ -313,7 +172,7 @@ const HeaderCustomer = () => {
             </Nav.Link>
             {menu
               .filter((item) => {
-                return item.parentId === 0;
+                return item.parentId === 0 && item.status == 1;
               })
               .map((item, index) => {
                 return (
@@ -340,9 +199,6 @@ const HeaderCustomer = () => {
                   </Nav>
                 );
               })}
-            {/* <Nav.Link as={Link} to="/post/gioi-thieu/gioi-thieu">
-              Giới thiệu
-            </Nav.Link> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>

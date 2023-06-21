@@ -12,6 +12,7 @@ import { addToCart } from "../../../redux/slice/cartSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import { Helmet } from "react-helmet";
 const ProductDemand = () => {
   //Set time
   const date = new Date();
@@ -142,7 +143,13 @@ const ProductDemand = () => {
     return check;
   };
   return (
-    <div className="productdemand">
+    <div className="productdemand container-xxl">
+      <div>
+        <Helmet>
+          <title>{productValue[0]?.product?.option?.demandName?.nameValue}</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">
         {productValue[0]?.product?.option?.demandName?.nameValue}
       </h3>

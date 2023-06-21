@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import { Helmet } from "react-helmet";
+
 const Contact = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -31,7 +33,10 @@ const Contact = () => {
       contactService
         .create(contact)
         .then((reponse) => {
-          navigate("./");
+          setName("");
+          setContent("");
+          setEmail("");
+          setPhone("");
         })
         .catch((error) => {
           console.log(error);
@@ -113,6 +118,12 @@ const Contact = () => {
   return (
     <>
       <div className="contact">
+        <div>
+          <Helmet>
+            <title>Liên hệ</title>
+            <meta name="description" content="Helmet application" />
+          </Helmet>
+        </div>
         <div class="container">
           <form id="contact">
             <h3 className="text-center">
@@ -122,7 +133,6 @@ const Contact = () => {
               <input
                 placeholder="Tên người liên hệ"
                 type="text"
-                //   tabindex="1"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -149,7 +159,6 @@ const Contact = () => {
             <fieldset>
               <textarea
                 placeholder="Nội dung..."
-                //   tabindex="5"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 required

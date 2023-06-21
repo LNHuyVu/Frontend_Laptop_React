@@ -11,6 +11,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import { Helmet } from "react-helmet";
+
 const ListPost = () => {
   let idTopic = "";
   const [search, setSearch] = useState("");
@@ -155,6 +157,12 @@ const ListPost = () => {
   }
   return (
     <div className="card-body">
+      <div>
+        <Helmet>
+          <title>Bài viết</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
 

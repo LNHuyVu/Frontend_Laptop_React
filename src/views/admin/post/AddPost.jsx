@@ -13,6 +13,7 @@ import "./postAD.scss";
 import { useSelector } from "react-redux";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const AddPost = () => {
   const navigate = useNavigate();
@@ -53,7 +54,6 @@ const AddPost = () => {
     e.stopPropagation();
     let images = [];
     const files = e.target.files;
-    // console.log("file", files);
     const formData = new FormData();
     for (let i of files) {
       formData.append("file", i);
@@ -62,7 +62,6 @@ const AddPost = () => {
         process.env.REACT_APP_UPLOAD_ASSETS_NAME
       );
       const reponse = await uploadfileService.apiUploadImages(formData);
-      // console.log('reponse',reponse);
       if (reponse.status === 200) {
         images = [reponse.data.secure_url];
       }
@@ -125,12 +124,18 @@ const AddPost = () => {
   };
   return (
     <div className="PostAddAD">
+      <div>
+        <Helmet>
+          <title>Thêm bài viết</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/dashboard/post">
             <button className="btn border border-3 border-primary d-flex ">
               <TiArrowBackOutline className="fs-4 text-primary" />
-              Quay xe
+              Quay lại
             </button>
           </Link>
         </div>

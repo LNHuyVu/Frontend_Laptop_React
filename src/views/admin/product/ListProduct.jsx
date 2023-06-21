@@ -24,6 +24,8 @@ import productSaleService from "../../../services/productSale.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import { Helmet } from "react-helmet";
+
 const ListProduct = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   const [arrProduct, setArrProduct] = useState([]);
@@ -59,15 +61,19 @@ const ListProduct = () => {
       newItem.createdBy = String(userRD?.user.id);
       return newItem;
     });
-    productSaleService
-      .create(newArr)
-      .then((response) => {
-        notifySuccess("Đã áp dụng khuyến mãi");
-        init();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (newArr.length > 0) {
+      productSaleService
+        .create(newArr)
+        .then((response) => {
+          notifySuccess("Đã áp dụng khuyến mãi");
+          init();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      notifyError("Hãy chọn sản phẩm khuyến mãi");
+    }
   };
   //
   const init = () => {
@@ -288,12 +294,30 @@ const ListProduct = () => {
       theme: "light",
     });
   };
+  const notifyError = (name) => {
+    toast.error(name, {
+      position: "top-center",
+      autoClose: 300,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
   //Child delete sale=>parent Render
   const handleRenderSale = useCallback(() => {
     init();
   }, []);
   return (
     <>
+      <div>
+        <Helmet>
+          <title>Sản phẩm</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="card-body">
         <div>
           <h2 className="text-center">Danh Mục Sản Phẩm</h2>

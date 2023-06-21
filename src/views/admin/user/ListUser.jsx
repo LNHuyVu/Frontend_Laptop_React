@@ -17,6 +17,8 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { loginSuccess } from "../../../redux/slice/authSlice";
 //
+import { Helmet } from "react-helmet";
+
 const ListUser = () => {
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState("");
@@ -104,10 +106,9 @@ const ListUser = () => {
       title: "Ngày tạo",
       dataIndex: "createdAt",
     },
-    ,
     {
-      title: "Chức năng",
-      dataIndex: "action",
+      title: userRD?.user?.roles == "T1" ? "Chức năng" : "",
+      dataIndex: userRD?.user?.roles == "T1" ? "action" : "",
     },
     {
       title: "Id",
@@ -118,6 +119,7 @@ const ListUser = () => {
     element.image = (
       <img style={{ maxWidth: 80 }} className="" src={element.img} alt="" />
     );
+
     element.action = (
       <div class="d-grid gap-2 d-md-block">
         {element.status === 1 ? (
@@ -154,6 +156,12 @@ const ListUser = () => {
   }
   return (
     <div className="card-body">
+      <div>
+        <Helmet>
+          <title>Tài khoản</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
 
@@ -161,12 +169,16 @@ const ListUser = () => {
           <h2>Tài Khoản</h2>
         </div>
         <div>
-          <Link to="./add-user">
-            <button className="btn border border-3 border-success d-flex ">
-              <FcPlus className="fs-4" />
-              <span className="">Thêm mới</span>
-            </button>
-          </Link>
+          {userRD?.user?.roles == "T1" ? (
+            <Link to="./add-user">
+              <button className="btn border border-3 border-success d-flex ">
+                <FcPlus className="fs-4" />
+                <span className="">Thêm mới</span>
+              </button>
+            </Link>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <Input.Search

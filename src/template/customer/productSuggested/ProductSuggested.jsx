@@ -94,7 +94,7 @@ const ProductSuggested = () => {
   };
   return (
     <div>
-      <div className="product-type" >
+      <div className="product-type">
         <h3>Gợi ý hôm nay</h3>
         <div className="px-2 row row-cols-3 row-cols-lg-5 g-2 g-lg-3">
           {product.slice(0, productCount).map((child) => {
@@ -139,7 +139,10 @@ const ProductSuggested = () => {
                             {child.nameProduct}
                           </span>
                         </Link>
-                        <div className="mt-1 container overflow-hidden">
+                        <div
+                          className="mt-1 container overflow-hidden"
+                          style={{ height: 32 }}
+                        >
                           <div className="row gx-2">
                             <div className="col">
                               <div
@@ -185,8 +188,8 @@ const ProductSuggested = () => {
                                 className="px-2"
                                 style={{
                                   fontWeight: "bold",
-                                  color: "blue",
-                                  background: "#9370D8",
+                                  color: "white",
+                                  background: "#005eff",
                                   borderRadius: 10,
                                 }}
                               >
@@ -200,8 +203,8 @@ const ProductSuggested = () => {
                                 className="px-2"
                                 style={{
                                   fontWeight: "bold",
-                                  color: "blue",
-                                  background: "#9370D8",
+                                  color: "white",
+                                  background: "#005eff",
                                   borderRadius: 10,
                                 }}
                               >
@@ -224,6 +227,7 @@ const ProductSuggested = () => {
                           )}
                         </span>
                         <br />
+
                         {child.option ? (
                           <>
                             <span>Màng hình: </span>

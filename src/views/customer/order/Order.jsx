@@ -17,6 +17,8 @@ import productStoreService from "../../../services/productStore.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import { Helmet } from "react-helmet";
+
 const Order = () => {
   const d = new Date();
   let code = d.getTime();
@@ -163,7 +165,13 @@ const Order = () => {
     });
   };
   return (
-    <div>
+    <div className="container-xxl">
+        <div>
+        <Helmet>
+          <title>Thanh toán</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="row">
         <div className="col-md-6">
           <h3 className="text-center ">Thông tin người nhận</h3>

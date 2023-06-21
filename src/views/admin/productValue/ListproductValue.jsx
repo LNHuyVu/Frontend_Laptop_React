@@ -12,6 +12,7 @@ import { FcPlus } from "react-icons/fc";
 import { useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { Helmet } from "react-helmet";
 
 const ListproductValue = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -140,6 +141,12 @@ const ListproductValue = () => {
   let test = "";
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Cấu hình</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div className="text-center d-flex justify-content-between align-items-center mb-3">
         <div></div>
 

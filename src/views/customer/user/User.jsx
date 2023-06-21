@@ -13,6 +13,8 @@ import userService from "../../../services/user.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //
+import { Helmet } from "react-helmet";
+
 const User = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
   const [user, setUser] = useState([]);
@@ -297,8 +299,13 @@ const User = () => {
   //Order is purchased
   const ordersPurchased = order.filter((order) => order.status == 3);
   return (
-    <div className="user container">
-      User{userRD.user.name}
+    <div className="user container mt-2">
+      <div>
+        <Helmet>
+          <title>Thông tin tài khoản</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <div>
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
           <Row>

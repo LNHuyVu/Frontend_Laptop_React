@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 //
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
+import { Helmet } from "react-helmet";
 
 const EditProduct = () => {
   const userRD = useSelector((state) => state.auth.login?.currentUser);
@@ -201,7 +202,7 @@ const EditProduct = () => {
     return isValue;
   };
   //Handle Submit
-  const handleUpdate = async(e) => {
+  const handleUpdate = async (e) => {
     // e.preventDefault();
     //Product
     const product = {
@@ -261,7 +262,7 @@ const EditProduct = () => {
               .catch((error) => {
                 console.log("Songthing img went wrong", error);
               });
-              productStoreService
+            productStoreService
               .update(product_store)
               .then((response) => {
                 console.log("data store successfully", response.data);
@@ -269,7 +270,7 @@ const EditProduct = () => {
               .catch((error) => {
                 console.log("Songthing store went wrong", error);
               });
-              productOptionService
+            productOptionService
               .update(product_option)
               .then((response) => {
                 console.log("data option successfully", response.data);
@@ -320,9 +321,6 @@ const EditProduct = () => {
     }
   };
   // Clear
-  const handleClear = () => {
-    setNameProduct("");
-  };
   const handleFiles = async (e) => {
     setIsLoading(true);
     e.stopPropagation();
@@ -352,9 +350,14 @@ const EditProduct = () => {
     setNameProduct(e.target.value);
     setSlugProduct(slugname(e.target.value));
   };
-  console.log("isCategory", isCategory);
   return (
     <div>
+      <div>
+        <Helmet>
+          <title>Chỉnh sửa sản phẩm</title>
+          <meta name="description" content="Helmet application" />
+        </Helmet>
+      </div>
       <h3 className="text-center">Chỉnh Sửa Thông Tin Sản Phẩm</h3>
       <Tabs
         id="controlled-tab-example"
@@ -785,21 +788,12 @@ const EditProduct = () => {
           </div>
         </Tab>
       </Tabs>
-
-      <h4 className="text-center">Action</h4>
+      <h4 className="text-center">Chức năng</h4>
       <button
         className="btn btn-info w-100 m-1"
         onClick={(e) => handleUpdate(e)}
       >
-        Save Update
-      </button>
-      <button
-        onClick={() => {
-          handleClear();
-        }}
-        className="btn btn-danger w-100 m-1"
-      >
-        Clear
+        Lưu thay đổi
       </button>
     </div>
   );
