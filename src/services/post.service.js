@@ -2,6 +2,10 @@ import httpClient from "../http-common";
 const getAll = (id) => {
   return httpClient.get(`/get-all-post?id=${id}`);
 };
+const getAllCus = (slug) => {
+  return httpClient.get(`/get-post-customer?id=${slug}`);
+};
+
 const getTopId = (id) => {
   return httpClient.get(`/customer/get-all-post?topId=${id}`);
 };
@@ -20,4 +24,4 @@ const remove = (Id) => {
     },
   });
 };
-export default { create, getAll, update, remove, getTopId };
+export default { create, getAll, update, remove, getTopId, getAllCus };

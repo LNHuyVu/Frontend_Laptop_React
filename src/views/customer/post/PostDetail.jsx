@@ -16,7 +16,7 @@ const PostDetail = () => {
   }, [id]);
   const init = () => {
     postService
-      .getAll(id)
+      .getAllCus(id)
       .then((reponse) => {
         setPost(reponse.data.post);
         console.log("POST", reponse.data);

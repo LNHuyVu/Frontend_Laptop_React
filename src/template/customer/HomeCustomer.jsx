@@ -135,7 +135,7 @@ const HomeCustomer = () => {
                 })}
             </div>
             <Suspense fallback={<div>Loading...</div>}>
-              <ProducHot />
+              {/* <ProducHot /> */}
               <Featuredcategory />
             </Suspense>
             {/*Start Product by Demand*/}

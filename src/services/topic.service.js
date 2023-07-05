@@ -2,6 +2,10 @@ import httpClient from "../http-common";
 const getAll = (id) => {
   return httpClient.get(`/get-all-topic?id=${id}`);
 };
+const getAllCus = (id) => {
+  return httpClient.get(`/get-topic-cus?id=${id}`);
+};
+
 const create = (data) => {
   return httpClient.post("/create-new-topic", data);
 };
@@ -17,4 +21,4 @@ const remove = (userId) => {
     },
   });
 };
-export default { create, getAll, update, remove };
+export default { create, getAll, update, remove, getAllCus };

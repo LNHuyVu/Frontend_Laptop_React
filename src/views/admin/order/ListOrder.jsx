@@ -256,12 +256,12 @@ const ListOrder = () => {
                   >
                     <img
                       className="w-100"
-                      src={item.product.imgData.link[0]}
+                      src={item.product?.imgData.link[0]}
                       alt=""
                     />
                   </td>
                   <td className="border border-3 ">
-                    {item.product.nameProduct}
+                    {item.product?.nameProduct}
                   </td>
                   <td className="border border-3 text-center">
                     {item.quantity}

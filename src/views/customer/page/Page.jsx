@@ -12,7 +12,7 @@ const Page = () => {
   }, [slug]);
   const init = () => {
     postService
-      .getAll(slug)
+      .getAllCus(slug)
       .then((res) => {
         console.log(res.data);
         setPost(res.data.post);

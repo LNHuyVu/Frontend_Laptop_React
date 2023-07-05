@@ -100,14 +100,14 @@ const ListProductSale = (props, onClick) => {
   for (const element of productSale) {
     element.nameProduct = (
       <div onClick={() => test(element.id)} style={{ maxWidth: 150 }}>
-        {element.productSale.nameProduct}
+        {element.productSale?.nameProduct}
       </div>
     );
     element.image = (
       <img
         style={{ maxWidth: 80 }}
         className=""
-        src={element.productSale.imgData.link[0]}
+        src={element.productSale?.imgData.link[0]}
         alt=""
       />
     );

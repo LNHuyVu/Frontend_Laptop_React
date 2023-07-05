@@ -18,7 +18,7 @@ const Post = () => {
   }, [slug]);
   const init = () => {
     topicService
-      .getAll(slug)
+      .getAllCus(slug)
       .then((reponse) => {
         setTitle(reponse.data.topic.name);
         console.log(reponse.data);
@@ -38,7 +38,7 @@ const Post = () => {
   };
   return (
     <div className="container-xl">
-        <div>
+      <div>
         <Helmet>
           <title>{title}</title>
           <meta name="description" content="Helmet application" />
