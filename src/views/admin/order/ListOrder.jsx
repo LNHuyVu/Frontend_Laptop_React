@@ -216,7 +216,7 @@ const ListOrder = () => {
           <Modal.Title>Thông tin chi tiết</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4 className="text-center">Đơn hàng của tài khoản: {user.email}</h4>
+          <h4 className="text-center">Đơn hàng của tài khoản: {user?.email}</h4>
           <table className="w-100">
             <tr>
               <th>Tên người nhận:</th>

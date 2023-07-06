@@ -94,11 +94,11 @@ const ProductDemand = () => {
               <div className="product-type">
                 <div className="title-demand d-flex justify-content-between mb-1">
                   <h3 className="fw-bold">
-                    {item[0].product?.option.demandName.nameValue}
+                    {item[0]?.product?.option?.demandName.nameValue}
                   </h3>
                   <Link
                     className="link fs-5"
-                    to={`./demand/${item[0].product?.option.demandName.slug}`}
+                    to={`./demand/${item[0]?.product?.option.demandName.slug}`}
                   >
                     Xem thêm
                   </Link>

@@ -14,7 +14,10 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post("http://localhost:8080/api/login", user);
+    const res = await axios.post(
+      "https://api-laptoplnhv.onrender.com/api/login",
+      user
+    );
     if (res.data.errCode == 0) {
       dispatch(loginSuccess(res.data));
       return { value: res.data.errCode };
@@ -22,14 +25,17 @@ export const loginUser = async (user, dispatch, navigate) => {
       dispatch(loginFailed());
       return { value: res.data.message };
     }
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    throw new Error(e);
   }
 };
 export const loginAdmin = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post("http://localhost:8080/api/login", user);
+    const res = await axios.post(
+      "https://api-laptoplnhv.onrender.com/api/login",
+      user
+    );
     if (res.data.errCode == 0) {
       dispatch(loginSuccess(res.data));
       if (res.data.user.roles != "T3") {
@@ -48,7 +54,10 @@ export const loginAdmin = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    const res = await axios.post("http://localhost:8080/api/register", user);
+    const res = await axios.post(
+      "https://api-laptoplnhv.onrender.com/api/register",
+      user
+    );
     console.log(res);
     if (res.data.errCode == 0) {
       dispatch(registerSuccess(res.data));
@@ -63,7 +72,9 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const logoutUser = async (dispatch, navigate) => {
   dispatch(logoutStart());
   try {
-    const res = await axios.post("http://localhost:8080/api/logout");
+    const res = await axios.post(
+      "https://api-laptoplnhv.onrender.com/api/logout"
+    );
     dispatch(logoutSuccess(res.data));
     navigate("../");
   } catch (err) {
