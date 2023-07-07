@@ -7,20 +7,30 @@ import { HiOutlineMail } from "react-icons/hi";
 import { TbLogout } from "react-icons/tb";
 import { FiUserPlus } from "react-icons/fi";
 
-import menuService from "../../services/menu.service";
-
-import "./headercustomer.scss";
+//
+import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Offcanvas from "react-bootstrap/Offcanvas";
+//
+
+import menuService from "../../services/menu.service";
+
+import "./headercustomer.scss";
+// import Container from "react-bootstrap/Container";
+// import Nav from "react-bootstrap/Nav";
+// import Navbar from "react-bootstrap/Navbar";
+// import NavDropdown from "react-bootstrap/NavDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/apiRequest";
 import { removeToCart } from "../../redux/slice/cartSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
-const HeaderCustomer = () => {
+const HeaderCustomer = (args) => {
   const slugName = require("slug");
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
@@ -81,7 +91,7 @@ const HeaderCustomer = () => {
               <img className="w-50" src="image/logo/LOGOLTW.png" alt="" />
             </Link>
           </div>
-          <div className="col-md-4">
+          <div className="col-sm-12 col-md-4">
             <form onSubmit={handleSubmit} class="d-flex">
               <div className="search row w-100">
                 <button className="col-2 text-center">
@@ -98,7 +108,7 @@ const HeaderCustomer = () => {
               </div>
             </form>
           </div>
-          <div className="col-md-2 ">
+          <div className="col-4 col-md-2 px-1">
             <Link to="/contact" className="link text-white">
               <span>
                 <HiOutlineMail className="mx-1" />
@@ -106,17 +116,17 @@ const HeaderCustomer = () => {
               </span>
             </Link>
           </div>
-          <div className="col-md-2 account-cart px-2">
+          <div className="col-4 col-md-2 account-cart px-2">
             {!userRD ? (
               <>
                 <Link to="./login" className="link text-white">
-                  <span>
+                  <span className="p-0">
                     <FaUserAlt className="mx-1" />
                     Đăng nhập
                   </span>
                 </Link>
                 <Link to="./register" className="link text-white">
-                  <span>
+                  <span className="p-0">
                     <FiUserPlus className="mx-1" />
                     Đăng ký
                   </span>
@@ -125,19 +135,19 @@ const HeaderCustomer = () => {
             ) : (
               <>
                 <Link to="./user">
-                  <span className="w-100" style={{ display: "inline-block" }}>
+                  <span className="w-100 p-0" style={{ display: "inline-block" }}>
                     <FaUserAlt className="mx-1" />
                     {userRD?.user.name}
                   </span>
                 </Link>
-                <span onClick={handleLogout}>
+                <span className="p-0" onClick={handleLogout}>
                   <TbLogout className="mx-1" />
                   Đăng xuất
                 </span>
               </>
             )}
           </div>
-          <div className="col-md-2 ">
+          <div className="col-4 col-md-2 px-1">
             <Link to="/cart" className="link text-white">
               {userRD ? (
                 <>
@@ -149,7 +159,7 @@ const HeaderCustomer = () => {
                 </>
               ) : (
                 <>
-                  <span className="">
+                  <span className="0">
                     <FaShoppingCart className="mx-1" />
                     Giỏ hàng
                   </span>
@@ -160,48 +170,74 @@ const HeaderCustomer = () => {
         </div>
         {/* Navbar */}
       </div>
-      <Navbar className="py-0" bg="dark" expand="lg">
-        <Container>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className="d-flex justify-content-evenly"
+      {/* Menu */}
+      <div>
+        {["xl"].map((expand) => (
+          <Navbar
+            style={{ background: "#f7d800" }}
+            key={expand}
+            expand={expand}
+            className="bg-body-tertiary mb-0 p-0"
           >
-            <Nav.Link as={Link} to="/">
-              Trang chủ
-            </Nav.Link>
-            {menu
-              .filter((item) => {
-                return item.parentId === 0 && item.status == 1;
-              })
-              .map((item, index) => {
-                return (
-                  <Nav className="me-auto">
-                    <NavDropdown
-                      title={item.name}
-                      className="m-0"
-                      id="basic-nav-dropdown"
+            <Container fluid>
+              <Navbar.Toggle
+                aria-controls={`offcanvasNavbar-expand-${expand}`}
+              />
+              <Navbar.Offcanvas
+                id={`offcanvasNavbar-expand-${expand}`}
+                aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
+                placement="end"
+              >
+                <Offcanvas.Header closeButton>
+                  <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
+                    VuStore
+                  </Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                  <Nav className="justify-content-center flex-grow-1 pe-3">
+                    <Nav.Link
+                      as={Link}
+                      to="/"
+                      style={{ margin: "0 30px", color: "#000000" }}
                     >
-                      {menu
-                        .filter((child) => {
-                          return (
-                            child.parentId === item.id && child.status === 1
-                          );
-                        })
-                        .map((child, index) => {
-                          return (
-                            <NavDropdown.Item as={Link} to={child?.link}>
-                              {child.name}
-                            </NavDropdown.Item>
-                          );
-                        })}
-                    </NavDropdown>
+                      Trang chủ
+                    </Nav.Link>
+                    {menu
+                      .filter((item) => {
+                        return item.parentId === 0 && item.status == 1;
+                      })
+                      .map((item, index) => {
+                        return (
+                          <NavDropdown
+                            style={{ margin: "0 30px" }}
+                            title={item.name}
+                            id={`offcanvasNavbarDropdown-expand-${expand}`}
+                          >
+                            {menu
+                              .filter((child) => {
+                                return (
+                                  child.parentId === item.id &&
+                                  child.status === 1
+                                );
+                              })
+                              .map((child, index) => {
+                                return (
+                                  <NavDropdown.Item as={Link} to={child?.link}>
+                                    {child.name}
+                                  </NavDropdown.Item>
+                                );
+                              })}
+                          </NavDropdown>
+                        );
+                      })}
                   </Nav>
-                );
-              })}
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+                </Offcanvas.Body>
+              </Navbar.Offcanvas>
+            </Container>
+          </Navbar>
+        ))}
+      </div>
+      {/* End Menu */}
       <ToastContainer
         position="top-center"
         autoClose={5000}
