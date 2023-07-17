@@ -42,7 +42,8 @@
     "redux-react-hook": "^4.0.3",
     "slick-carousel": "^1.8.1",
     "slug": "^8.2.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

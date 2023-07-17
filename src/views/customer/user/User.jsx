@@ -289,7 +289,7 @@ const User = () => {
     return true;
   }
   function validatePassword(password) {
-    if (isNaN(password) || password.length < 5) {
+    if (password.length < 5) {
       return false;
     }
     return true;
