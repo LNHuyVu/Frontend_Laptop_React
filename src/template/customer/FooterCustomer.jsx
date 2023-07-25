@@ -11,7 +11,6 @@ const FooterCustomer = () => {
     menuService
       .getAll("ALL")
       .then((res) => {
-        console.log(res.data.menu);
         setMenu(res.data.menu);
       })
       .catch((error) => {

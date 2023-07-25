@@ -45,6 +45,12 @@
             transform: scale(1);
         }
     }
+    .text-graphics-card {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 }
 .card-text-home {
     display: -webkit-box;

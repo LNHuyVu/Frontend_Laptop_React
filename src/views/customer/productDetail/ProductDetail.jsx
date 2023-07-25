@@ -163,7 +163,7 @@ const ProductDetail = () => {
             Bộ sản phẩm gồm: Sách hướng dẫn, Thùng máy, Cáp ( Type C )
           </span>
           {/* Plugin FACEBOOK */}
-          <div>
+          <div className="container">
             <Share link={product.slugProduct} />
             <Comment link={product.slugProduct} />
           </div>
@@ -171,7 +171,7 @@ const ProductDetail = () => {
         {/*  */}
         <div className="col-md-6 product-data">
           <div className="text-center">
-            <Like />
+            {/* <Like /> */}
             {checkProductSale(
               product.sale,
               product?.sale?.status,
@@ -391,7 +391,7 @@ const ProductDetail = () => {
                                       style={{
                                         borderRadius: 5,
                                         background: "#fff",
-                                        fontSize: "80%",
+                                        fontSize: "70%",
                                       }}
                                     >
                                       Ram{" "}
@@ -404,7 +404,7 @@ const ProductDetail = () => {
                                       style={{
                                         borderRadius: 5,
                                         background: "#fff",
-                                        fontSize: "80%",
+                                        fontSize: "70%",
                                       }}
                                     >
                                       {
@@ -419,13 +419,13 @@ const ProductDetail = () => {
                             <div className="card-text">
                               <div className="d-flex justify-content-lg-between">
                                 {item?.product?.sale == null ? (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
@@ -434,15 +434,17 @@ const ProductDetail = () => {
                                       )}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    <br />
+                                    <span>&nbsp;</span>
+                                  </div>
                                 ) : (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
@@ -452,7 +454,9 @@ const ProductDetail = () => {
                                       ).format("0,0")}
                                       <u>đ</u>
                                     </span>
+                                    <br />
                                     <span
+                                      className="px-2"
                                       style={{
                                         "text-decoration-line": "line-through",
                                       }}
@@ -462,18 +466,37 @@ const ProductDetail = () => {
                                       )}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    {/* % sale */}
+                                    <span
+                                      className="px-1 bg-light"
+                                      style={{
+                                        color: "#005eff",
+                                        borderRadius: "5px",
+                                        fontSize: "3vmin",
+                                      }}
+                                    >
+                                      -
+                                      {numeral(
+                                        parseFloat(
+                                          item?.product?.sale?.valueSale /
+                                            item?.product.price
+                                        ) * 100
+                                      ).format("0,0")}
+                                      %
+                                    </span>
+                                  </div>
                                 )}
                               </div>
-                              <br />
-                              <span>Màng hình: </span>
-                              {item.product?.option.screenName.nameValue}
-                              <br />
-                              <span>CPU: </span>
-                              {item.product?.option.cpuName.nameValue},
-                              {item.product?.option.cpuGenName.nameValue}
-                              <br />
-                              <span className="">
+                              <span className="text-graphics-card">
+                                Màng hình:
+                                {item.product?.option.screenName.nameValue}
+                              </span>
+                              <span className="text-graphics-card">
+                                CPU:
+                                {item.product?.option.cpuName.nameValue},
+                                {item.product?.option.cpuGenName.nameValue}
+                              </span>
+                              <span className="text-graphics-card">
                                 Card: {item.product?.option.cardName.nameValue}
                               </span>
                             </div>
@@ -542,7 +565,7 @@ const ProductDetail = () => {
                               ) : (
                                 <>
                                   <span className="sale px-2">
-                                    Giảm giá:{" "}
+                                    Giảm:{" "}
                                     {numeral(item?.sale.valueSale).format(
                                       "0,0"
                                     )}
@@ -602,28 +625,30 @@ const ProductDetail = () => {
                               <div className="d-flex justify-content-lg-between">
                                 {item?.sale == null ||
                                 item?.sale.status == 0 ? (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
                                       {numeral(item?.price).format("0,0")}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    <br />
+                                    <span>&nbsp;</span>
+                                  </div>
                                 ) : (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
@@ -633,6 +658,7 @@ const ProductDetail = () => {
                                       ).format("0,0")}
                                       <u>đ</u>
                                     </span>
+                                    <br />
                                     <span
                                       style={{
                                         "text-decoration-line": "line-through",
@@ -641,7 +667,25 @@ const ProductDetail = () => {
                                       {numeral(item?.price).format("0,0")}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    {/* % sale */}
+                                    <span
+                                      className="px-1 bg-light"
+                                      style={{
+                                        color: "#005eff",
+                                        borderRadius: "5px",
+                                        fontSize: "3vmin",
+                                      }}
+                                    >
+                                      {" "}
+                                      -
+                                      {numeral(
+                                        parseFloat(
+                                          item?.sale?.valueSale / item?.price
+                                        ) * 100
+                                      ).format("0,0")}
+                                      %
+                                    </span>
+                                  </div>
                                 )}
                               </div>
                               <br />

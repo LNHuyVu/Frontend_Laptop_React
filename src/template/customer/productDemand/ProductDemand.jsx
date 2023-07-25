@@ -133,7 +133,7 @@ const ProductDemand = () => {
                                     ) : (
                                       <>
                                         <span className="sale px-2">
-                                          Giảm giá:{" "}
+                                          Giảm:{" "}
                                           {numeral(
                                             child?.product.sale.valueSale
                                           ).format("0,0")}
@@ -167,7 +167,7 @@ const ProductDemand = () => {
                                             style={{
                                               borderRadius: 5,
                                               background: "#fff",
-                                              fontSize: "80%",
+                                              fontSize: "70%",
                                             }}
                                           >
                                             Ram{" "}
@@ -183,7 +183,7 @@ const ProductDemand = () => {
                                             style={{
                                               borderRadius: 5,
                                               background: "#fff",
-                                              fontSize: "80%",
+                                              fontSize: "70%",
                                             }}
                                           >
                                             {
@@ -196,7 +196,7 @@ const ProductDemand = () => {
                                     </div>
                                   </h5>
                                   <p className="card-text">
-                                    <span>
+                                    <div className="">
                                       {checkProductSale(
                                         child?.product?.sale,
                                         child?.product?.sale?.status,
@@ -218,6 +218,8 @@ const ProductDemand = () => {
                                             ).format("0,0")}
                                             <u>đ</u>
                                           </span>
+                                          <br />
+                                          <span>&nbsp;</span>
                                         </>
                                       ) : (
                                         <>
@@ -236,11 +238,14 @@ const ProductDemand = () => {
                                             ).format("0,0")}
                                             <u>đ</u>
                                           </span>
+                                          <br />
                                           <span
+                                            className="px-2"
                                             style={{
                                               "text-decoration-line":
                                                 "line-through",
-                                              fontSize: "90%",
+                                              fontSize: "3vmin",
+                                              // fontWeight: "bold",
                                             }}
                                           >
                                             {numeral(
@@ -248,23 +253,43 @@ const ProductDemand = () => {
                                             ).format("0,0")}
                                             <u>đ</u>
                                           </span>
+                                          {/* % sale */}
+                                          <span
+                                            className="px-1 bg-light"
+                                            style={{
+                                              color: "#005eff",
+                                              borderRadius: "5px",
+                                              fontSize: "3vmin",
+                                            }}
+                                          >
+                                            -
+                                            {numeral(
+                                              parseFloat(
+                                                child?.product.sale?.valueSale /
+                                                  child?.product?.price
+                                              ) * 100
+                                            ).format("0,0")}
+                                            %
+                                          </span>
                                         </>
                                       )}
-                                    </span>
-                                    <br />
+                                    </div>
+                                    {/* <br /> */}
                                     <span>Màng hình: </span>
                                     {
                                       child.product?.option.screenName
                                         ?.nameValue
                                     }
                                     <br />
-                                    <span>CPU: </span>
-                                    {child.product?.option.cpuName?.nameValue},
-                                    {
-                                      child.product?.option.cpuGenName
-                                        ?.nameValue
-                                    }
-                                    <br />
+                                    <span className="text-graphics-card">
+                                      CPU:{" "}
+                                      {child.product?.option.cpuName?.nameValue}
+                                      ,
+                                      {
+                                        child.product?.option.cpuGenName
+                                          ?.nameValue
+                                      }
+                                    </span>
                                     <span className="text-graphics-card">
                                       Card:{" "}
                                       {

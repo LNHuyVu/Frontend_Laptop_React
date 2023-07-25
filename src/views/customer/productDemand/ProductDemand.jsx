@@ -88,7 +88,7 @@ const ProductDemand = () => {
       dispatch(addToCart({ id, title, image, price, proId, userid, number }));
     }
   };
-
+  //Filter Product
   function updateFilters(checked, categoryFilter) {
     if (checked) {
       setcategoryFilters((prev) => new Set(prev).add(categoryFilter));
@@ -101,12 +101,12 @@ const ProductDemand = () => {
       });
     }
   }
-
+  //View product after filter
   const filteredProducts =
     categoryFilters.size === 0
       ? productValue
       : productValue.filter((p) => categoryFilters.has(p.product?.catId));
-
+  // View LIST or GRID
   const handleView = (value) => {
     if (value == "grid") {
       setGrid("block");
@@ -146,7 +146,9 @@ const ProductDemand = () => {
     <div className="productdemand container-xxl">
       <div>
         <Helmet>
-          <title>{productValue[0]?.product?.option?.demandName?.nameValue}</title>
+          <title>
+            {productValue[0]?.product?.option?.demandName?.nameValue}
+          </title>
           <meta name="description" content="Helmet application" />
         </Helmet>
       </div>
@@ -313,13 +315,13 @@ const ProductDemand = () => {
                                 child?.product?.sale?.startDay,
                                 child?.product?.sale?.endDay
                               ) == false ? (
-                                <>
+                                <div>
                                   <span
                                     className="px-2"
                                     style={{
                                       fontWeight: "bold",
-                                      color: "blue",
-                                      background: "#9370D8",
+                                      color: "#fff",
+                                      background: "#005eff",
                                       borderRadius: 10,
                                     }}
                                   >
@@ -328,15 +330,17 @@ const ProductDemand = () => {
                                     )}
                                     <u>đ</u>
                                   </span>
-                                </>
+                                  <br />
+                                  <span>&nbsp;</span>
+                                </div>
                               ) : (
-                                <>
+                                <div>
                                   <span
                                     className="px-2"
                                     style={{
                                       fontWeight: "bold",
-                                      color: "blue",
-                                      background: "#9370D8",
+                                      color: "#fff",
+                                      background: "#005eff",
                                       borderRadius: 10,
                                     }}
                                   >
@@ -346,6 +350,8 @@ const ProductDemand = () => {
                                     ).format("0,0")}
                                     <u>đ</u>
                                   </span>
+                                  <br />
+                                  {/* old price and percent */}
                                   <span
                                     style={{
                                       "text-decoration-line": "line-through",
@@ -356,18 +362,37 @@ const ProductDemand = () => {
                                     )}
                                     <u>đ</u>
                                   </span>
-                                </>
+                                  {/* % sale */}
+                                  <span
+                                    className="px-1 bg-light"
+                                    style={{
+                                      color: "#005eff",
+                                      borderRadius: "5px",
+                                      fontSize: "3vmin",
+                                    }}
+                                  >
+                                    {" "}
+                                    -
+                                    {numeral(
+                                      parseFloat(
+                                        child?.product?.sale?.valueSale /
+                                          child?.product.price
+                                      ) * 100
+                                    ).format("0,0")}
+                                    %
+                                  </span>
+                                </div>
                               )}
                             </div>
-                            <br />
-                            <span>Màn hình: </span>
-                            {child.product?.option.screenName.nameValue}
-                            <br />
-                            <span>CPU: </span>
-                            {child.product?.option.cpuName.nameValue},
-                            {child.product?.option.cpuGenName.nameValue}
-                            <br />
-                            <span className="">
+                            <span className="text-graphics-card">
+                              Màn hình:
+                              {child.product?.option.screenName.nameValue}
+                            </span>
+                            <span className="text-graphics-card">
+                              CPU: {child.product?.option.cpuName.nameValue},
+                              {child.product?.option.cpuGenName.nameValue}
+                            </span>
+                            <span className="text-graphics-card">
                               Card: {child.product?.option.cardName.nameValue}
                             </span>
                           </div>
@@ -508,8 +533,8 @@ const ProductDemand = () => {
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
@@ -520,13 +545,13 @@ const ProductDemand = () => {
                                     </span>
                                   </>
                                 ) : (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
@@ -536,6 +561,7 @@ const ProductDemand = () => {
                                       ).format("0,0")}
                                       <u>đ</u>
                                     </span>
+                                    <br />
                                     <span
                                       className="mx-2"
                                       style={{
@@ -547,7 +573,26 @@ const ProductDemand = () => {
                                       )}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    {/* % sale */}
+                                    <span
+                                      className="px-1 bg-light"
+                                      style={{
+                                        color: "#005eff",
+                                        borderRadius: "5px",
+                                        fontSize: "3vmin",
+                                      }}
+                                    >
+                                      {" "}
+                                      -
+                                      {numeral(
+                                        parseFloat(
+                                          child?.product?.sale?.valueSale /
+                                            child?.product.price
+                                        ) * 100
+                                      ).format("0,0")}
+                                      %
+                                    </span>
+                                  </div>
                                 )}
                               </div>
                               <br />

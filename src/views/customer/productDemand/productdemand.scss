@@ -90,6 +90,12 @@
         }
     }
     .card {
+        .text-graphics-card {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
         .card-text-home {
             &:hover {
                 font-weight: bold !important;
@@ -102,13 +108,15 @@
                 -webkit-transform: scale(1.1);
                 transform: scale(1.1);
             }
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow:
+                0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
     }
-    .sort{
-        .grid-list-view{
-            .icon-view{
-                .active{
+    .sort {
+        .grid-list-view {
+            .icon-view {
+                .active {
                     color: #dd6c03;
                 }
             }

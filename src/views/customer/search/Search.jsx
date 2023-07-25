@@ -188,28 +188,30 @@ const Search = () => {
                                   item?.sale?.startDay,
                                   item?.sale?.endDay
                                 ) == false ? (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
                                       {numeral(item?.price).format("0,0")}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    <br />
+                                    <span>&nbsp;</span>
+                                  </div>
                                 ) : (
-                                  <>
+                                  <div>
                                     <span
                                       className="px-2"
                                       style={{
                                         fontWeight: "bold",
-                                        color: "blue",
-                                        background: "#9370D8",
+                                        color: "#fff",
+                                        background: "#005eff",
                                         borderRadius: 10,
                                       }}
                                     >
@@ -219,6 +221,7 @@ const Search = () => {
                                       ).format("0,0")}
                                       <u>đ</u>
                                     </span>
+                                    <br />
                                     <span
                                       style={{
                                         "text-decoration-line": "line-through",
@@ -227,19 +230,38 @@ const Search = () => {
                                       {numeral(item?.price).format("0,0")}
                                       <u>đ</u>
                                     </span>
-                                  </>
+                                    {/* % sale */}
+                                    <span
+                                      className="px-1 bg-light"
+                                      style={{
+                                        color: "#005eff",
+                                        borderRadius: "5px",
+                                        fontSize: "3vmin",
+                                      }}
+                                    >
+                                      {" "}
+                                      -
+                                      {numeral(
+                                        parseFloat(
+                                          item?.sale?.valueSale / item?.price
+                                        ) * 100
+                                      ).format("0,0")}
+                                      %
+                                    </span>
+                                  </div>
                                 )}
                               </div>
-                              <br />
-                              {item?.option?.screenName ? "Màn hình: " : ""}
-                              {item?.option?.screenName.nameValue}
-                              <br />
-                              {item?.option?.cpuName ? "CPU: " : ""}
-                              {item?.option?.cpuName.nameValue}
-                              {item?.option?.cpuName ? "," : ""}
-                              {item?.option?.cpuGenName.nameValue}
-                              <br />
-                              <span className="card-text">
+                              <span className="text-graphics-card">
+                                {item?.option?.screenName ? "Màn hình: " : ""}
+                                {item?.option?.screenName.nameValue}
+                              </span>
+                              <span className="text-graphics-card">
+                                {item?.option?.cpuName ? "CPU: " : ""}
+                                {item?.option?.cpuName.nameValue}
+                                {item?.option?.cpuName ? "," : ""}
+                                {item?.option?.cpuGenName.nameValue}
+                              </span>
+                              <span className="card-text text-graphics-card">
                                 {item?.option?.cardName ? "Card:" : ""}
 
                                 {item?.option?.cardName.nameValue}

@@ -69,7 +69,7 @@ const ProductSale = () => {
   };
   return (
     <div className="productsale p-2 mt-2 mb-1">
-      <h3 style={{color: "#fff"}}>Khuyến mãi</h3>
+      <h3 style={{ color: "#fff" }}>Khuyến mãi</h3>
       <Carousel responsive={responsive}>
         {productSale
           .filter((item) => {
@@ -95,7 +95,7 @@ const ProductSale = () => {
 
                     <>
                       <span className="sale px-2">
-                        Giảm giá: {numeral(item?.sale.valueSale).format("0,0")}đ
+                        Giảm: {numeral(item?.sale.valueSale).format("0,0")}đ
                       </span>
                     </>
                   </div>
@@ -111,7 +111,10 @@ const ProductSale = () => {
                         {item?.nameProduct}
                       </span>
                     </Link>
-                    <div className="mt-1 container overflow-hidden" style={{height: 32}}>
+                    <div
+                      className="mt-1 container overflow-hidden"
+                      style={{ height: 32 }}
+                    >
                       <div className="row gx-2">
                         <div className="col">
                           <div
@@ -125,7 +128,7 @@ const ProductSale = () => {
                             {item?.option?.ramName ? "Ram" : ""}
                             {item?.option?.ramName.nameValue}
                           </div>
-                          {item?.option?.ramName ? "" : <br/>}
+                          {item?.option?.ramName ? "" : <br />}
                         </div>
                         <div class="col">
                           <div
@@ -143,7 +146,7 @@ const ProductSale = () => {
                     </div>
                   </h5>
                   <div className="card-text">
-                    <div className="d-flex justify-content-lg-between">
+                    <div className="">
                       <span
                         className="px-2"
                         style={{
@@ -158,34 +161,33 @@ const ProductSale = () => {
                         ).format("0,0")}
                         <u>đ</u>
                       </span>
+                      <br />
                       <span
+                        className="px-2"
                         style={{
                           "text-decoration-line": "line-through",
+                          fontSize: "3vmin",
                         }}
                       >
                         {numeral(item?.price).format("0,0")}
                         <u>đ</u>
                       </span>
+                      {/* % sale */}
+                      <span
+                        className="px-1 bg-light"
+                        style={{
+                          color: "#005eff",
+                          borderRadius: "5px",
+                          fontSize: "3vmin",
+                        }}
+                      >
+                        -
+                        {numeral(
+                          parseFloat(item?.sale?.valueSale / item?.price) * 100
+                        ).format("0,0")}
+                        %
+                      </span>
                     </div>
-                    {/* {item?.option?.ramName ? (
-                      <>
-                        {item?.option?.screenName ? "Màng hình: " : ""}
-                        {item?.option?.screenName.nameValue}
-                        <br />
-                        {item?.option?.cpuName ? "CPU: " : ""}
-                        {item?.option?.cpuName.nameValue}
-                        {item?.option?.cpuName ? "," : ""}
-                        {item?.option?.cpuGenName.nameValue}
-                        <br />
-                        <span className="card-text text-graphics-card">
-                          {item?.option?.cardName ? "Card:" : ""}
-
-                          {item?.option?.cardName.nameValue}
-                        </span>
-                      </>
-                    ) : (
-                      <></>
-                    )} */}
                   </div>
                 </div>
               </div>

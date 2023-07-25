@@ -96,7 +96,7 @@ const ProductSuggested = () => {
     <div>
       <div className="product-type">
         <h3>Gợi ý hôm nay</h3>
-        <div className="px-2 row row-cols-3 row-cols-lg-5 g-2 g-lg-3">
+        <div className="px-2 row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
           {product.slice(0, productCount).map((child) => {
             return (
               <div className="col">
@@ -119,7 +119,7 @@ const ProductSuggested = () => {
                         ) : (
                           <>
                             <span className="sale px-2">
-                              Giảm giá:{" "}
+                              Giảm:{" "}
                               {numeral(child?.sale.valueSale).format("0,0")}đ
                             </span>
                           </>
@@ -196,6 +196,8 @@ const ProductSuggested = () => {
                                 {numeral(child?.price).format("0,0")}
                                 <u>đ</u>
                               </span>
+                              <br />
+                              <span>&nbsp;</span>
                             </>
                           ) : (
                             <>
@@ -214,14 +216,32 @@ const ProductSuggested = () => {
                                 ).format("0,0")}
                                 <u>đ</u>
                               </span>
+                              <br />
                               <span
+                                className=""
                                 style={{
                                   "text-decoration-line": "line-through",
-                                  fontSize: "85%",
+                                  // fontSize: "85%",
                                 }}
                               >
                                 {numeral(child?.price).format("0,0")}
                                 <u>đ</u>
+                              </span>
+                              {/* % sale */}
+                              <span
+                                className=" bg-light"
+                                style={{
+                                  color: "#005eff",
+                                  borderRadius: "5px",
+                                }}
+                              >
+                                -
+                                {numeral(
+                                  parseFloat(
+                                    child?.sale?.valueSale / child?.price
+                                  ) * 100
+                                ).format("0,0")}
+                                %
                               </span>
                             </>
                           )}
@@ -233,10 +253,10 @@ const ProductSuggested = () => {
                             <span>Màng hình: </span>
                             {child.option?.screenName?.nameValue}
                             <br />
-                            <span>CPU: </span>
-                            {child.option?.cpuName?.nameValue},
-                            {child.option?.cpuGenName?.nameValue}
-                            <br />
+                            <span className="text-graphics-card">
+                              CPU: {child.option?.cpuName?.nameValue},
+                              {child.option?.cpuGenName?.nameValue}
+                            </span>
                             <span className="text-graphics-card">
                               Card: {child.option?.cardName?.nameValue}
                             </span>
