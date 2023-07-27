@@ -14,10 +14,12 @@ const ProductDemand = lazy(() => import("./productDemand/ProductDemand"));
 const ProductSuggested = lazy(() =>
   import("./productSuggested/ProductSuggested")
 );
+
 const PostTechnology = lazy(() => import("./postTechnology/PostTechnology"));
 
-const HomeCustomer = () => {
+const HomeCustomer = (props) => {
   const [slider, setSlider] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   let imgSlider = [];
   let imgPost = [];
   useEffect(() => {
@@ -51,6 +53,7 @@ const HomeCustomer = () => {
     slidesToShow: 2,
     slidesToScroll: 2,
   };
+
   const init = () => {
     sliderService
       .getAll("ALL")
@@ -68,7 +71,7 @@ const HomeCustomer = () => {
   }
 
   return (
-    <div className="homecustomer ">
+    <div className="homecustomer">
       <div>
         <Helmet>
           <title>VuStore</title>
