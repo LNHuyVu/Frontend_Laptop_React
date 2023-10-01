@@ -63,7 +63,7 @@ const Register = () => {
       createdBy: "VIP",
       status,
     };
-    console.log(user_create);
+    // console.log(user_create);
     let validate = CheckValidate(user_create);
     if (validate.isValue == false) {
       notifyError(validate.message);
@@ -75,7 +75,7 @@ const Register = () => {
       });
       myPromise
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           if (result.errCode != 0) {
             notifyError(result.value);
           } else {
@@ -125,22 +125,35 @@ const Register = () => {
     }
     return (checkUser = { isValue, message });
   };
+  //Xử lí thêm file img
   const handleFiles = async (e) => {
-    setIsLoading(true);
     e.stopPropagation();
     let images = [];
-    const files = e.target.files;
+    const files = e.target.files[0];
+    // console.log(files);
     const formData = new FormData();
-    for (let i of files) {
-      formData.append("file", i);
-      formData.append(
-        "upload_preset",
-        process.env.REACT_APP_UPLOAD_ASSETS_NAME
-      );
-      const reponse = await productImgService.apiUploadImages(formData);
-      if (reponse.status === 200) {
-        images = [reponse.data.secure_url];
-      }
+    // Kiểm tra dung lượng file
+    if (files.size > 500000) {
+      notifyError("Dung lượng tối đa cho phép là 500kb");
+      return;
+    }
+
+    // Kiểm tra định dạng file
+    const fileType = files.type;
+    if (
+      fileType !== "image/png" &&
+      fileType !== "image/jpg" &&
+      fileType !== "image/jpeg"
+    ) {
+      notifyError("Chỉ chấp nhận file png và jpg");
+      return;
+    }
+    setIsLoading(true);
+    formData.append("file", files);
+    formData.append("upload_preset", process.env.REACT_APP_UPLOAD_ASSETS_NAME);
+    const reponse = await productImgService.apiUploadImages(formData);
+    if (reponse.status === 200) {
+      images = [reponse.data.secure_url];
     }
     setIsLoading(false);
     setImagesPreview(images);
@@ -254,6 +267,7 @@ const Register = () => {
                       className="form-control"
                       name="file"
                       onChange={handleFiles}
+                      max="500000"
                     />
                   </div>
                   {/*  */}

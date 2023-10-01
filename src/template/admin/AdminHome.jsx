@@ -49,10 +49,10 @@ const AdminHome = () => {
     }
     return orderIdList;
   }, []);
-  console.log("Number", numberProduct);
-  console.log("Total", totalRevenue);
-  console.log("NumberOrder", numberOrder.length);
-  console.log("User", user.length);
+  // console.log("Number", numberProduct);
+  // console.log("Total", totalRevenue);
+  // console.log("NumberOrder", numberOrder.length);
+  // console.log("User", user.length);
   return (
     <>
       <div>

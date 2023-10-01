@@ -34,7 +34,6 @@ const ListPost = () => {
       .getAll("ALL")
       .then((res) => {
         setTopic(res.data.topic);
-        console.log("Topic", res.data.topic);
       })
       .catch((error) => {
         console.log(error);
@@ -42,7 +41,6 @@ const ListPost = () => {
     postService
       .getAll("ALL")
       .then((response) => {
-        console.log("Get Data OK", response.data);
         setPost(response.data.post);
       })
       .catch((error) => {

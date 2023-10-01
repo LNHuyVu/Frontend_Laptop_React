@@ -26,7 +26,6 @@ const EditProductSale = () => {
         setStartDay(response.data.productsale.startDay);
         setValueSale(response.data.productsale.valueSale);
         setStatus(response.data.productsale.status);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

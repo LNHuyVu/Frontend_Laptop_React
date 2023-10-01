@@ -83,12 +83,10 @@ const AddPost = () => {
       createdBy,
       status,
     };
-    console.log(post);
     if (CheckValidate()) {
       postService
         .create(post)
         .then((reponse) => {
-          console.log("Ok", reponse.data);
           navigate("/dashboard/post", { replace: true });
         })
         .catch((error) => {
@@ -115,7 +113,6 @@ const AddPost = () => {
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
-        // console.log("Ngu", item);
         alert("Vui lòng nhập:" + item);
         break;
       }

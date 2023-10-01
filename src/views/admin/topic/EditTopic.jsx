@@ -29,7 +29,6 @@ const EditTopic = () => {
     topicService
       .getAll(id)
       .then((response) => {
-        console.log("Topic", response.data);
         setName(response.data.topic.name);
         setSlug(response.data.topic.slug);
         setParentId(response.data.topic.parentId);
@@ -44,7 +43,6 @@ const EditTopic = () => {
     topicService
       .getAll("ALL")
       .then((response) => {
-        console.log("ALLTopic", response.data.topic);
         setTopic(response.data.topic);
       })
       .catch((error) => {
@@ -66,7 +64,6 @@ const EditTopic = () => {
       topicService
         .update(Topic_update)
         .then((response) => {
-          console.log("Created Topic Successflly!", response.data);
           navigate("/dashboard/topic", { replace: true });
         })
         .catch((error) => {
@@ -84,7 +81,6 @@ const EditTopic = () => {
       "Danh mục": parentId,
       "Người tạo": createdBy,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;

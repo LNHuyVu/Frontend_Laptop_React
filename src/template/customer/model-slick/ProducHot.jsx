@@ -46,7 +46,7 @@ const ProducHot = () => {
         setProductHot(reponse.data.productHot);
       })
       .catch((error) => {
-        console.log("Loi", error);
+        console.log(error);
       });
   };
   const checkProductSale = (sale, status, startD, endD) => {
@@ -110,7 +110,10 @@ const ProducHot = () => {
                       {item?.product.nameProduct}
                     </span>
                   </Link>
-                  <div className="mt-1 container overflow-hidden" style={{height: 32}}>
+                  <div
+                    className="mt-1 container overflow-hidden"
+                    style={{ height: 32 }}
+                  >
                     <div className="row gx-2">
                       <div className="col">
                         <div

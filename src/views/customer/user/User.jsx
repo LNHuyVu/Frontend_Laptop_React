@@ -56,7 +56,6 @@ const User = () => {
         setGender(response.data.users.gender);
         setUser(response.data.users);
         setOrder(response.data.users.cart);
-        console.log("User", response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -182,7 +181,6 @@ const User = () => {
           userService
             .update(update, userRD)
             .then((res) => {
-              console.log(res.data);
               notifySuccess("Thành công");
               init();
               setPassword("");
@@ -208,7 +206,6 @@ const User = () => {
           userService
             .update(update, userRD)
             .then((res) => {
-              console.log(res.data);
               notifySuccess("Thành công");
               init();
               setPassword("");

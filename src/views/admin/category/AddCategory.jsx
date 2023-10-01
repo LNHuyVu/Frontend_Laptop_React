@@ -54,13 +54,11 @@ const AddCategory = () => {
       createdBy: String(userRD?.user.id),
       status,
     };
-    console.log("Category new", category_create);
     // CheckValidate();
     if (CheckValidate()) {
       categoryService
         .create(category_create, userRD)
         .then((response) => {
-          console.log("Created User Successflly!", response.data);
           navigate("/dashboard/category", { replace: true });
         })
         .catch((error) => {
@@ -78,7 +76,6 @@ const AddCategory = () => {
     categoryService
       .getAll("ALL", userRD)
       .then((response) => {
-        console.log("Get Data OK", response.data);
         setCategory(response.data.category);
       })
       .catch((error) => {

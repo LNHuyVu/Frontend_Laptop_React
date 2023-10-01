@@ -14,7 +14,6 @@ const Page = () => {
     postService
       .getAllCus(slug)
       .then((res) => {
-        console.log(res.data);
         setPost(res.data.post);
       })
       .catch((error) => {

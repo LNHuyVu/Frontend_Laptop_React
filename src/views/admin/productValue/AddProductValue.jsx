@@ -61,7 +61,6 @@ const AddProductValue = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(parentIdValue);
     if (parentIdValue == "") setParentIdValue(0);
     const data = {
       nameValue,
@@ -74,7 +73,6 @@ const AddProductValue = () => {
     productValueService
       .create(data, userRD)
       .then((response) => {
-        console.log(response.data);
         console.log("Success OK");
 
         notifySuccess();

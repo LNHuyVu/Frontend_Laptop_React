@@ -113,14 +113,35 @@ const AddProduct = () => {
         console.log("Get Data Product Value Failed");
       });
   };
-  // console.log("product", productValue);
+  // Check định dạng file hình
+  const validateFile = (files) => {
+    for (let i of files) {
+      if (i.size > 500000) {
+        alert("Dung lượng tối đa cho phép là 500kb");
+        return false;
+      }
+      // Kiểm tra định dạng file
+      if (
+        i.type !== "image/png" &&
+        i.type !== "image/jpg" &&
+        i.type !== "image/jpeg"
+      ) {
+        alert("Chỉ chấp nhận file png và jpg");
+        return false;
+      }
+    }
+    return true;
+  };
   //Handle File
   const handleFiles = async (e) => {
-    setIsLoading(true);
     e.stopPropagation();
     let images = [];
     const files = e.target.files;
     const formData = new FormData();
+    if (!validateFile(files)) {
+      return;
+    }
+    setIsLoading(true);
     for (let i of files) {
       formData.append("file", i);
       formData.append(
@@ -128,7 +149,6 @@ const AddProduct = () => {
         process.env.REACT_APP_UPLOAD_ASSETS_NAME
       );
       const reponse = await productImgService.apiUploadImages(formData);
-      // console.log('reponse',reponse);
       if (reponse.status === 200) {
         images = [...images, reponse.data.secure_url];
       }
@@ -175,11 +195,9 @@ const AddProduct = () => {
       "Thế hệ CPU": cpuGen,
       "Số lượng": number,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
-        // console.log("Ngu", item);
         alert("Vui lòng nhập:" + item);
         break;
       }
@@ -208,7 +226,6 @@ const AddProduct = () => {
       "Số lượng": number,
       "Nội dung": content,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
@@ -234,14 +251,12 @@ const AddProduct = () => {
       createdBy: "VIP",
       status,
     };
-    console.log("Product: ", product);
     //Product IMG
     const product_img = {
       link: imagesPreview,
       imgId: code,
       status: statusImg,
     };
-    console.log("Img: ", product_img);
     //Product Option
     const product_option = {
       optionId: code,
@@ -254,43 +269,34 @@ const AddProduct = () => {
       card,
       cpuGen,
     };
-    console.log("Option: ", product_option);
     const product_store = {
       storeId: code,
       importPrices: parseInt(importPrices.replace(/,/g, "")),
       number,
     };
-    console.log("Store: ", product_store);
     if (type == "LT") {
       if (CheckValidateLT()) {
         productService
           .create(product)
           .then((reponse) => {
-            console.log("Product OK", reponse.data);
             //IMG
             productImgService
               .create(product_img)
-              .then((response) => {
-                console.log("IMG OK", response.data);
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.log(error);
               });
             //Option
             productOptionService
               .create(product_option)
-              .then((reponse) => {
-                console.log("Product Option", reponse.data);
-              })
+              .then((reponse) => {})
               .catch((error) => {
                 console.log(error);
               });
             //Store
             productStoreService
               .create(product_store)
-              .then((reponse) => {
-                console.log("Product Store", reponse.data);
-              })
+              .then((reponse) => {})
               .catch((error) => {
                 console.log(error);
               });
@@ -308,22 +314,17 @@ const AddProduct = () => {
         productService
           .create(product)
           .then((reponse) => {
-            console.log("Product OK", reponse.data);
             //IMG
             productImgService
               .create(product_img)
-              .then((response) => {
-                console.log("IMG OK", response.data);
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.log(error);
               });
             //Store
             productStoreService
               .create(product_store)
-              .then((reponse) => {
-                console.log("Product Store", reponse.data);
-              })
+              .then((reponse) => {})
               .catch((error) => {
                 console.log(error);
               });

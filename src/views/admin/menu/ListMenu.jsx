@@ -86,7 +86,6 @@ const ListMenu = () => {
     categoryService
       .getAll("ALL", userRD)
       .then((res) => {
-        console.log(res.data);
         setCategory(res.data.category);
       })
       .catch((error) => {
@@ -103,7 +102,6 @@ const ListMenu = () => {
     topicService
       .getAll("ALL")
       .then((res) => {
-        console.log("Topic", res.data);
         setTopic(res.data.topic);
       })
       .catch((error) => {
@@ -113,7 +111,6 @@ const ListMenu = () => {
       .getAll("ALL")
       .then((res) => {
         setPost(res.data.post);
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -251,11 +248,9 @@ const ListMenu = () => {
       status: 0,
       createdBy: String(userRD?.user.id),
     };
-    console.log("Check main", mainMenu);
     menuService
       .create(mainMenu)
       .then((response) => {
-        console.log("OK");
         setName("");
         setLink("");
         initList();

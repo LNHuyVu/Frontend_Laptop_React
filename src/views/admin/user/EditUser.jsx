@@ -62,7 +62,6 @@ const EditUser = () => {
     userService
       .getAll(id, userRD)
       .then((response) => {
-        console.log("User", response.data);
         setName(response.data.users.name);
         setAddress(response.data.users.address);
         setRoles(response.data.users.roles);
@@ -112,7 +111,6 @@ const EditUser = () => {
       "Địa chỉ": address,
       "Số điện thoại": phone,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
@@ -141,7 +139,6 @@ const EditUser = () => {
       userService
         .update(user_edit, userRD)
         .then((response) => {
-          console.log("Created User Successflly!", response.data);
           navigate("/dashboard/user", { replace: true });
         })
         .catch((error) => {

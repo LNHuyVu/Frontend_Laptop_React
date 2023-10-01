@@ -48,7 +48,6 @@ const EditPost = () => {
     postService
       .getAll(id)
       .then((response) => {
-        console.log("Post ID:", response.data);
         setTitle(response.data.post.title);
         setSlug(response.data.post.slug);
         setType(response.data.post.type);
@@ -106,12 +105,10 @@ const EditPost = () => {
       image: imagesPreview,
       status,
     };
-    console.log("Post Update", post);
     if (CheckValidate()) {
       postService
         .update(post)
         .then((reponse) => {
-          console.log("Ok", reponse.data);
           navigate("/dashboard/post");
         })
         .catch((error) => {

@@ -30,12 +30,10 @@ const AddSlider = () => {
       image: imagesPreview,
       createdBy: String(userRD?.user.id),
     };
-    console.log(slider);
     if (CheckValidate()) {
       sliderService
         .create(slider)
         .then((reponse) => {
-          console.log("Add Slider Ok", reponse.data);
           navigate("/dashboard/slider");
         })
         .catch((error) => {
@@ -79,7 +77,6 @@ const AddSlider = () => {
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
-        // console.log("Ngu", item);
         alert("Vui lòng nhập:" + item);
         break;
       }
@@ -94,7 +91,6 @@ const AddSlider = () => {
     { name: "Post", position: 4 },
     { name: "Accessory", position: 5 },
   ];
-  console.log("position", position);
   return (
     <div className="row">
       <div>

@@ -46,7 +46,6 @@ const EditContact = () => {
     contactService
       .update(contact_reply)
       .then((response) => {
-        console.log("OK");
         navigate("/dashboard/contact");
       })
       .catch((error) => {
@@ -54,9 +53,7 @@ const EditContact = () => {
       });
     emailService
       .sendEmailContact({ contact, contact_reply })
-      .then((response) => {
-        console.log("OK");
-      })
+      .then((response) => {})
       .catch((error) => {
         console.log(error);
       });

@@ -42,16 +42,14 @@ const EditCategory = () => {
         setImagesPreview(response.data.category.image);
         setParentId(response.data.category.parentId);
         setStatus(response.data.category.status);
-        console.log("GET ID", response.data);
       })
       .catch((error) => {
-        console.log("Get Data Failed ID", error);
+        console.log(error);
       });
     // //GET OPTION
     categoryService
       .getAll("ALL", userRD)
       .then((response) => {
-        console.log("Get Data OK", response.data.category);
         setCategory(response.data.category);
       })
       .catch((error) => {
@@ -72,7 +70,6 @@ const EditCategory = () => {
     categoryService
       .update(category_update, userRD)
       .then((response) => {
-        console.log("data updated successfully", response.data);
         navigate("/dashboard/category", { replace: true });
         init();
       })

@@ -26,7 +26,6 @@ const Login = () => {
     myPromise
       .then((result) => {
         if (result.value == 0) {
-          console.log(result);
           navigate("/dashboard");
         } else {
           setMessage(result.value);

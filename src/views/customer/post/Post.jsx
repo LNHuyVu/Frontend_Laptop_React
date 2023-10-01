@@ -21,7 +21,6 @@ const Post = () => {
       .getAllCus(slug)
       .then((reponse) => {
         setTitle(reponse.data.topic.name);
-        console.log(reponse.data);
         topId = reponse.data.topic.id == 1 ? "ALL" : reponse.data.topic.id;
         postService
           .getTopId(topId)

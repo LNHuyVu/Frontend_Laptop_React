@@ -67,7 +67,6 @@ const AddUser = () => {
       createdBy: String(userRD?.user.id),
       status,
     };
-    console.log("User new", user_create);
     if (CheckValidate()) {
       userService
         .create(user_create, userRD)
@@ -94,7 +93,6 @@ const AddUser = () => {
       "Địa chỉ": address,
       "Số điện thoại": phone,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;

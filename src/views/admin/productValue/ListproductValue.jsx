@@ -50,7 +50,6 @@ const ListproductValue = () => {
     productValueService
       .update(product_update, userRD)
       .then((response) => {
-        console.log("data updated successfuly", response.data);
         // navigate("/", { replace: true });
         initValue();
       })

@@ -7,7 +7,7 @@ const getAll = (id) => {
 //   return httpClient.post("/create-new-productimage", data);
 // };
 const create = (data) => {
-  console.log("data", data.link);
+  // console.log("data", data.link);
   return httpClient.post("/create-new-productimage", {
     imgId: data.imgId,
     link: data.link,

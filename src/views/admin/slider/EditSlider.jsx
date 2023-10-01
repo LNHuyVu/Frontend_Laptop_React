@@ -31,7 +31,6 @@ const EditSlider = () => {
     sliderService
       .getAll(id)
       .then((reponse) => {
-        console.log("ok ", reponse.data);
         setName(reponse.data.slider.name);
         setImagesPreview(reponse.data.slider.image);
         setLink(reponse.data.slider.link);
@@ -52,12 +51,10 @@ const EditSlider = () => {
       status,
       image: imagesPreview,
     };
-    console.log(slider);
     if (CheckValidate()) {
       sliderService
         .update(slider)
         .then((reponse) => {
-          console.log("Add Slider Ok", reponse.data);
           navigate("/dashboard/slider");
         })
         .catch((error) => {
@@ -99,7 +96,6 @@ const EditSlider = () => {
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
-        // console.log("Ngu", item);
         alert("Vui lòng nhập:" + item);
         break;
       }

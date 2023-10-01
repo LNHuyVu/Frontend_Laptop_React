@@ -12,20 +12,28 @@ const searchProduct = (slug) => {
   return httpClient.get(`/customer/search-product?slug=${slug}`);
 };
 const create = (data) => {
-  console.log("http", httpClient);
+  // console.log("http", httpClient);
 
   return httpClient.post("/create-new-product", data);
 };
 const update = (data) => {
-//   console.log('update', data)
+  //   console.log('update', data)
   return httpClient.put("/edit-product", data);
 };
 const remove = (userId) => {
-//   console.log("data", userId);
+  //   console.log("data", userId);
   return httpClient.delete("/delete-product", {
     data: {
-      id: userId
-    }
+      id: userId,
+    },
   });
 };
-export default { create, getAll, update, remove, getProductId, getProductCat, searchProduct};
+export default {
+  create,
+  getAll,
+  update,
+  remove,
+  getProductId,
+  getProductCat,
+  searchProduct,
+};

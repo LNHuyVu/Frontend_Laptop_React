@@ -41,7 +41,6 @@ const ProductDemand = () => {
     productValueService
       .getProductValueCustomer(slug)
       .then((reponse) => {
-        console.log(reponse.data.productvalue);
         setProductValue(reponse.data.productvalue);
       })
       .catch((error) => {
@@ -172,7 +171,7 @@ const ProductDemand = () => {
               })
               .map((item, index) => {
                 return (
-                  <div className="form-check p-0" key={index}>
+                  <div className="form-check p-0" key={item.id}>
                     <label className="form-check-label">
                       <input
                         className="form-check-input"
@@ -229,7 +228,11 @@ const ProductDemand = () => {
                 })
                 .map((child) => {
                   return (
-                    <div className="col" style={{ display: grid }}>
+                    <div
+                      className="col"
+                      style={{ display: grid }}
+                      key={child.product?.id}
+                    >
                       <div className="card">
                         <Link
                           to={`/product/productdetail/${child.product?.slugProduct}`}
@@ -445,7 +448,11 @@ const ProductDemand = () => {
                 })
                 .map((child) => {
                   return (
-                    <div class="card mb-3" style={{ display: list }}>
+                    <div
+                      class="card mb-3"
+                      style={{ display: list }}
+                      key={child.product?.id}
+                    >
                       <div class="row g-0 p-2">
                         <div class="col-md-4 p-1">
                           <Link

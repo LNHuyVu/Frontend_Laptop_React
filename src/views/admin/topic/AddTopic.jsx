@@ -22,7 +22,6 @@ const AddTopic = () => {
       createdBy,
       status,
     };
-    console.log("Topic new", Topic_create);
     if (CheckValidate()) {
       topicService
         .create(Topic_create)
@@ -45,7 +44,6 @@ const AddTopic = () => {
       "Danh mục": parentId,
       "Người tạo": createdBy,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
@@ -75,7 +73,6 @@ const AddTopic = () => {
         console.log("Get Data Failed");
       });
   };
-  console.log("topic", topic);
   return (
     <div>
       <div>

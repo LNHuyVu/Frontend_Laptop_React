@@ -1,5 +1,4 @@
 import axios from "axios";
-import LinkContainer from "react-bootstrap";
 import {
   loginFailed,
   loginStart,
@@ -16,6 +15,7 @@ export const loginUser = async (user, dispatch, navigate) => {
   try {
     const res = await axios.post(
       "https://api-laptoplnhv.onrender.com/api/login",
+      // "http://localhost:8080/api/login",
       user
     );
     if (res.data.errCode == 0) {
@@ -34,6 +34,7 @@ export const loginAdmin = async (user, dispatch, navigate) => {
   try {
     const res = await axios.post(
       "https://api-laptoplnhv.onrender.com/api/login",
+      // "http://localhost:8080/api/login",
       user
     );
     if (res.data.errCode == 0) {
@@ -55,10 +56,11 @@ export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
     const res = await axios.post(
+      // "http://localhost:8080/api/register",
       "https://api-laptoplnhv.onrender.com/api/register",
       user
     );
-    console.log(res);
+    // console.log(res);
     if (res.data.errCode == 0) {
       dispatch(registerSuccess(res.data));
       return { value: res.data.message, errCode: res.data.errCode };
@@ -74,6 +76,7 @@ export const logoutUser = async (dispatch, navigate) => {
   try {
     const res = await axios.post(
       "https://api-laptoplnhv.onrender.com/api/logout"
+      // "http://localhost:8080/api/logout"
     );
     dispatch(logoutSuccess(res.data));
     navigate("../");

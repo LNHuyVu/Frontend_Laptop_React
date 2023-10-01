@@ -19,12 +19,10 @@ const PostDetail = () => {
       .getAllCus(id)
       .then((reponse) => {
         setPost(reponse.data.post);
-        console.log("POST", reponse.data);
         postService
           .getTopId(reponse.data.post.topId)
           .then((reponse) => {
             setRelatedPosts(reponse.data.post);
-            console.log("TopID", reponse.data.post);
           })
           .catch((error) => {
             console.log(error);

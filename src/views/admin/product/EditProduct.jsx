@@ -70,11 +70,9 @@ const EditProduct = () => {
   }, []);
   const init = () => {
     //GET ID
-    console.log(id);
     productService
       .getAll(id)
       .then((response) => {
-        console.log("hihi", response.data.product);
         //Start Product
         setNameProduct(response.data.product.nameProduct);
         setCatId(response.data.product.catId);
@@ -159,11 +157,9 @@ const EditProduct = () => {
       "Thế hệ CPU": cpuGen,
       "Số lượng": number,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
-        // console.log("Ngu", item);
         alert("Vui lòng nhập:" + item);
         break;
       }
@@ -190,7 +186,6 @@ const EditProduct = () => {
       "Giá nhập": importPrices,
       "Số lượng": number,
     };
-    console.log("count", check.length);
     for (const item in check) {
       if (!check[item] || check[item] == "") {
         isValue = false;
@@ -217,14 +212,12 @@ const EditProduct = () => {
       status,
       id,
     };
-    console.log("Product: ", product);
     //Product IMG
     const product_img = {
       id: imgId,
       link: imagesPreview,
       status: 1,
     };
-    console.log("Img: ", product_img);
     //Product Option
     const product_option = {
       id: optionId,
@@ -237,43 +230,32 @@ const EditProduct = () => {
       card: parseInt(card),
       cpuGen: parseInt(cpuGen),
     };
-    console.log("Option: ", product_option);
     const product_store = {
       id: storeId,
       importPrices: parseInt(String(importPrices).replace(/,/g, "")),
       number,
     };
-    console.log("Store: ", product_store);
     if (type == "LT") {
       if (CheckValidateLT()) {
         // console.log(type);
-        console.log("product", product);
-        console.log("option", product_option);
-        console.log("img", product_img);
         await productService
           .update(product)
           .then((response) => {
-            console.log("data product successfully", response.data);
             productImgService
               .update(product_img)
-              .then((response) => {
-                console.log("data img successfully", response.data);
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.log("Songthing img went wrong", error);
               });
             productStoreService
               .update(product_store)
-              .then((response) => {
-                console.log("data store successfully", response.data);
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.log("Songthing store went wrong", error);
               });
             productOptionService
               .update(product_option)
               .then((response) => {
-                console.log("data option successfully", response.data);
                 navigate("/dashboard/product", { replace: true });
                 init();
               })
@@ -290,22 +272,17 @@ const EditProduct = () => {
         productService
           .update(product)
           .then((reponse) => {
-            console.log("Product OK", reponse.data);
             //IMG
             productImgService
               .update(product_img)
-              .then((response) => {
-                console.log("IMG OK", response.data);
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.log(error);
               });
             //Store
             productStoreService
               .update(product_store)
-              .then((reponse) => {
-                console.log("Product Store", reponse.data);
-              })
+              .then((reponse) => {})
               .catch((error) => {
                 console.log(error);
               });

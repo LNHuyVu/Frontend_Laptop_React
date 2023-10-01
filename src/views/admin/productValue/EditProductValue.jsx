@@ -57,8 +57,6 @@ const EditProductValue = () => {
     productValueService
       .update(data_update, userRD)
       .then((response) => {
-        console.log(response.data);
-        console.log("Success OK");
         navigate("/dashboard/product-configuration", { replace: true });
       })
       .catch((error) => {

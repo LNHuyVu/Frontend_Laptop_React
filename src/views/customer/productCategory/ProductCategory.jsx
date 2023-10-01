@@ -56,7 +56,6 @@ const ProductCategory = () => {
     categoryService
       .getIdCat(slug)
       .then((reponse) => {
-        console.log("CB", reponse.data);
         setCategory(reponse.data.category);
         productService
           .getProductCat(reponse.data.category.id)
